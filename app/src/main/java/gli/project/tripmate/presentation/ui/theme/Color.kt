@@ -1,4 +1,4 @@
-package gli.project.tripmate.ui.theme
+package gli.project.tripmate.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
