@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.screen.lobby.component
+package gli.project.tripmate.presentation.ui.screen.main.lobby.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border

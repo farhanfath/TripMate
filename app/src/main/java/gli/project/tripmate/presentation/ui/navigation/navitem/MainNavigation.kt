@@ -1,0 +1,27 @@
+package gli.project.tripmate.presentation.ui.navigation.navitem
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class MainNavigation {
+    @Serializable
+    data object Main : MainNavigation()
+
+    @Serializable
+    data object Lobby : MainNavigation()
+
+    @Serializable
+    data object Favorite : MainNavigation()
+
+    @Serializable
+    data object Profile : MainNavigation()
+
+    @Serializable
+    data object ChatAI : MainNavigation()
+
+    /**
+     * Detail
+     */
+    @Serializable
+    data object DetailTour : MainNavigation()
+}

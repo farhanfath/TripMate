@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.screen.lobby
+package gli.project.tripmate.presentation.ui.screen.main.lobby
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,14 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import gli.project.tripmate.presentation.ui.screen.lobby.component.Feature
-import gli.project.tripmate.presentation.ui.screen.lobby.component.Greeting
-import gli.project.tripmate.presentation.ui.screen.lobby.component.HistoryView
-import gli.project.tripmate.presentation.ui.screen.lobby.component.Nearby
-import gli.project.tripmate.presentation.ui.screen.lobby.component.SearchBar
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Feature
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.HistoryView
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Nearby
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.SearchBar
 
 @Composable
-fun LobbyScreen() {
+fun LobbyScreen(
+    onDetailClick: () -> Unit
+) {
     Scaffold(
         topBar = {
             Box(
@@ -63,10 +65,14 @@ fun LobbyScreen() {
                 Feature()
             }
             item {
-                HistoryView()
+                HistoryView(
+                    onDetailClick = onDetailClick
+                )
             }
             item {
-                Nearby()
+                Nearby(
+                    onDetailClick = onDetailClick
+                )
             }
         }
     }
@@ -75,5 +81,7 @@ fun LobbyScreen() {
 @Preview
 @Composable
 fun LobbyScreenPreview() {
-    LobbyScreen()
+    LobbyScreen(
+        onDetailClick = {}
+    )
 }

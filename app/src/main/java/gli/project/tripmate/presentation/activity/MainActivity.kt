@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import gli.project.tripmate.presentation.ui.screen.lobby.LobbyScreen
+import androidx.navigation.compose.rememberNavController
+import gli.project.tripmate.presentation.ui.navigation.MainNavHost
 import gli.project.tripmate.presentation.ui.theme.TripMateTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,8 +14,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
+
             MainApp {
-                LobbyScreen()
+                MainNavHost(navController = navController)
             }
         }
     }

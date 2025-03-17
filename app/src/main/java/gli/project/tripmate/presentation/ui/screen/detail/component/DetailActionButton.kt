@@ -17,7 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DetailActionButton(modifier: Modifier = Modifier) {
+fun DetailActionButton(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(vertical = 20.dp, horizontal = 20.dp)
@@ -31,7 +34,9 @@ fun DetailActionButton(modifier: Modifier = Modifier) {
                 containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ),
-            onClick = {}
+            onClick = {
+                onBackClick()
+            }
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
