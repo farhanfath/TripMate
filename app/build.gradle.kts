@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,6 +21,10 @@ plugins {
     id("kotlin-parcelize")
 }
 
+val localProperties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
+}
+
 android {
     namespace = "gli.project.tripmate"
     compileSdk = 35
@@ -31,6 +37,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val geoApiBaseUrl = localProperties.getProperty("GEO_API_BASE_URL")
+        val apiKey = localProperties.getProperty("API_KEY")
+        buildConfigField("String", "BASE_URL", "\"$geoApiBaseUrl\"")
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -51,6 +62,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
