@@ -1,13 +1,16 @@
 package gli.project.tripmate.presentation.ui.screen.detail.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
@@ -22,9 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import gli.project.tripmate.domain.model.DetailPlace
 
 @Composable
-fun DetailInformation() {
+fun DetailInformation(
+    data: DetailPlace
+) {
     Row(
         modifier = Modifier
             .padding(top = 40.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
@@ -33,12 +39,17 @@ fun DetailInformation() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Text(
-                text = "Telecabin",
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold
+            Box(
+                modifier = Modifier.width(160.dp)
+            ) {
+                Text(
+                    text = data.name,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.basicMarquee()
                 )
-            )
+            }
             Spacer(modifier = Modifier.size(10.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -50,12 +61,17 @@ fun DetailInformation() {
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(16.dp)
                 )
-                Text(
-                    text = "Jakarta, Indonesia",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                Box(
+                    modifier = Modifier.width(150.dp)
+                ) {
+                    Text(
+                        text = data.address,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        modifier = Modifier.basicMarquee()
                     )
-                )
+                }
             }
         }
 

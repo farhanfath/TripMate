@@ -6,10 +6,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.usecase.PlacesUseCase
 import gli.project.tripmate.domain.util.ResultResponse
+import gli.project.tripmate.presentation.ui.state.PlacesState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,8 +19,8 @@ import javax.inject.Inject
 class PlacesViewModel @Inject constructor(
     private val useCase: PlacesUseCase
 ) : ViewModel() {
-    private val _nearbyState = MutableStateFlow<ResultResponse<List<Place>>>(ResultResponse.Loading)
-    val nearbyState = _nearbyState.asStateFlow()
+    private val _placesState = MutableStateFlow(PlacesState())
+    val placesState = _placesState.asStateFlow()
 
     init {
         getNearbyPlaces(
@@ -32,14 +34,26 @@ class PlacesViewModel @Inject constructor(
         viewModelScope.launch {
             useCase.getNearbyPlaces(categories, filter, limit)
                 .onStart {
-                    _nearbyState.value = ResultResponse.Loading
+                    _placesState.update { it.copy(nearbyPlaces = ResultResponse.Loading) }
                 }
-                .catch {
-                    _nearbyState.value = ResultResponse.Error(it.message.toString())
+                .catch { e ->
+                    _placesState.update { it.copy(nearbyPlaces = ResultResponse.Error(e.message.toString())) }
                 }
                 .collect { result ->
-                    _nearbyState.value = result
+                    _placesState.update { it.copy(nearbyPlaces = result) }
                 }
+        }
+    }
+
+    fun getDetailPlaces(placeId: String) {
+        viewModelScope.launch {
+            _placesState.update { it.copy(detailPlace = ResultResponse.Loading) }
+            try {
+                val result = useCase.getDetailPlace(placeId)
+                _placesState.update { it.copy(detailPlace = result) }
+            } catch (e: Exception) {
+                _placesState.update { it.copy(detailPlace = ResultResponse.Error(e.message.toString())) }
+            }
         }
     }
 }

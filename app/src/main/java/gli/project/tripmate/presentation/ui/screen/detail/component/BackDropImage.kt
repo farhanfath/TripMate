@@ -1,11 +1,8 @@
 package gli.project.tripmate.presentation.ui.screen.detail.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -15,18 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
-import gli.project.tripmate.R
+import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 
 @Composable
 fun BoxScope.BackDropImage(
-    currentImageHeight: Dp
+    currentImageHeight: Dp,
+    imageUrl: String
 ) {
-    Image(
-        painter = painterResource(R.drawable.ic_launcher_background),
-        contentDescription = "",
-        contentScale = ContentScale.Crop,
+    CustomImageLoader(
+        url = imageUrl,
+        scale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth()
             .height(currentImageHeight)

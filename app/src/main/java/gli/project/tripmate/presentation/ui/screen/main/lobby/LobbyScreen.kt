@@ -17,19 +17,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Feature
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.HistoryView
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Nearby
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.SearchBar
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun LobbyScreen(
-    onDetailClick: () -> Unit,
+    onDetailClick: (placeId: String) -> Unit,
     viewModel: PlacesViewModel
 ) {
-    val nearbyPlaces = viewModel.nearbyState.collectAsState()
+    val nearbyPlaces = viewModel.placesState.map { it.nearbyPlaces }.collectAsState(ResultResponse.Loading).value
 
     Scaffold(
         topBar = {
@@ -70,13 +72,13 @@ fun LobbyScreen(
             }
             item {
                 HistoryView(
-                    onDetailClick = onDetailClick
+                    onDetailClick = {}
                 )
             }
             item {
                 Nearby(
                     onDetailClick = onDetailClick,
-                    placeData = nearbyPlaces.value
+                    placeData = nearbyPlaces
                 )
             }
         }

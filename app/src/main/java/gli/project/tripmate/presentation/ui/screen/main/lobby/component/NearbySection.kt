@@ -47,7 +47,7 @@ import gli.project.tripmate.presentation.util.HandlerResponseCompose
 
 @Composable
 fun Nearby(
-    onDetailClick: () -> Unit,
+    onDetailClick: (placeId: String) -> Unit,
     placeData: ResultResponse<List<Place>>
 ) {
     Column {
@@ -94,7 +94,9 @@ fun Nearby(
                 ) {
                     items(placeList) { place ->
                         NearbyItem(
-                            onDetailClick = onDetailClick,
+                            onDetailClick = {
+                                onDetailClick(place.placeId)
+                            },
                             place = place
                         )
                     }

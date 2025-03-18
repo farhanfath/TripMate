@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
@@ -24,16 +25,22 @@ fun MainNavHost(
         ) {
             composable<MainNavigation.Lobby> {
                 MainNavScreen(
-                    onDetailClick = {
-                        navController.navigate(MainNavigation.DetailTour)
+                    onDetailClick = { placeId ->
+                        navController.navigate(
+                            MainNavigation.DetailTour(
+                                placeId = placeId
+                            )
+                        )
                     },
                     viewModel = viewModel
                 )
             }
         }
 
-        composable<MainNavigation.DetailTour> {
+        composable<MainNavigation.DetailTour> {entry ->
+            val detailPlace = entry.toRoute<MainNavigation.DetailTour>()
             DetailScreen(
+                placeId = detailPlace.placeId,
                 onBackClick = {
                     navController.navigateUp()
                 }

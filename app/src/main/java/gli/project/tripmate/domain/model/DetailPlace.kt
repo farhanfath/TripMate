@@ -7,8 +7,9 @@ data class DetailPlace(
     val state: String,
     val city: String,
     val address: String,
-    val openingHours: String,
-    val websiteUrl: String,
+    val openingHours: String?,
+    val websiteUrl: String?,
+    val imageUrl: String?,
 
     // for google map
     val lat: Double,

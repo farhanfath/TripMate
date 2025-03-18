@@ -1,5 +1,6 @@
 package gli.project.tripmate.presentation.ui.screen.detail
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -8,6 +9,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -22,6 +24,8 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,19 +40,34 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import gli.project.tripmate.domain.util.ResultResponse
+import gli.project.tripmate.presentation.ui.component.CustomShimmer
 import gli.project.tripmate.presentation.ui.screen.detail.component.BackDropImage
 import gli.project.tripmate.presentation.ui.screen.detail.component.DetailInformation
 import gli.project.tripmate.presentation.ui.screen.detail.component.DetailActionButton
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.about.AboutTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.GalleryTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.ReviewTab
+import gli.project.tripmate.presentation.util.HandlerResponseCompose
+import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreen(
-    onBackClick: () -> Unit
+    placeId : String,
+    onBackClick: () -> Unit,
 ) {
+    val viewModel : PlacesViewModel = hiltViewModel()
+    val placeDetailState = viewModel.placesState.map { it.detailPlace }.collectAsState(ResultResponse.Loading).value
+
+    LaunchedEffect(Unit) {
+        viewModel.getDetailPlaces(placeId)
+    }
+
+
     /**
      * image and scroll behavior
      */
@@ -84,96 +103,114 @@ fun DetailScreen(
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Scaffold { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .nestedScroll(nestedScrollConnection)
-        ) {
-            BackDropImage(currentImageHeight)
+        HandlerResponseCompose(
+            response = placeDetailState,
+            onLoading = {
+                CustomShimmer(
+                    modifier = Modifier.fillMaxSize()
+                )
+            },
+            onSuccess = { detailData ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .nestedScroll(nestedScrollConnection)
+                ) {
+                    BackDropImage(
+                        currentImageHeight = currentImageHeight,
+                        imageUrl = "${detailData.imageUrl}"
+                    )
 
-            DetailActionButton(
-                modifier = Modifier.padding(innerPadding),
-                onBackClick = onBackClick
-            )
+                    DetailActionButton(
+                        modifier = Modifier.padding(innerPadding),
+                        onBackClick = onBackClick
+                    )
 
-            /**
-             * detail Content
-             */
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset {
-                        IntOffset(0, currentImageHeight.roundToPx())
-                    },
-                contentPadding = PaddingValues(bottom = currentImageHeight)
-            ) {
-                item {
-                    DetailInformation()
-                }
-                
-                stickyHeader {
-                    TabRow(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        containerColor = MaterialTheme.colorScheme.background,
-                        selectedTabIndex = selectedTabIndex,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicator = { tabPositions ->
-                            Box(
-                                Modifier
-                                    .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                                    .height(5.dp)
-                                    .padding(horizontal = 16.dp)
-                                    .width(tabPositions[selectedTabIndex].width)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        shape = RoundedCornerShape(10.dp)
-                                    )
-                            )
-                        }
-                    ) {
-                        tabs.forEachIndexed { index, title ->
-                            Tab(
-                                text = { Text(title) },
-                                selected = selectedTabIndex == index,
-                                onClick = {
-                                    scope.launch {
-                                        selectedTabIndex = index
-                                    }
-                                }
-                            )
-                        }
-                    }
-                }
-
-                item {
-                    Box(
+                    /**
+                     * detail Content
+                     */
+                    LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .offset {
+                                IntOffset(0, currentImageHeight.roundToPx())
+                            },
+                        contentPadding = PaddingValues(bottom = currentImageHeight)
                     ) {
-                        AnimatedContent(
-                            targetState = selectedTabIndex,
-                            transitionSpec = {
-                                // Definisikan animasi slide berdasarkan indeks sebelumnya dan sekarang
-                                if (targetState > initialState) {
-                                    slideInHorizontally { width -> width } togetherWith
-                                            slideOutHorizontally { width -> -width }
-                                } else {
-                                    slideInHorizontally { width -> -width } togetherWith
-                                            slideOutHorizontally { width -> width }
+                        item {
+                            DetailInformation(
+                                data = detailData
+                            )
+                        }
+
+                        stickyHeader {
+                            TabRow(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                containerColor = MaterialTheme.colorScheme.background,
+                                selectedTabIndex = selectedTabIndex,
+                                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                indicator = { tabPositions ->
+                                    Box(
+                                        Modifier
+                                            .tabIndicatorOffset(tabPositions[selectedTabIndex])
+                                            .height(5.dp)
+                                            .padding(horizontal = 16.dp)
+                                            .width(tabPositions[selectedTabIndex].width)
+                                            .background(
+                                                color = MaterialTheme.colorScheme.primary,
+                                                shape = RoundedCornerShape(10.dp)
+                                            )
+                                    )
+                                }
+                            ) {
+                                tabs.forEachIndexed { index, title ->
+                                    Tab(
+                                        text = { Text(title) },
+                                        selected = selectedTabIndex == index,
+                                        onClick = {
+                                            scope.launch {
+                                                selectedTabIndex = index
+                                            }
+                                        }
+                                    )
                                 }
                             }
-                        ) { targetTabIndex ->
-                            when(targetTabIndex) {
-                                0 -> AboutTab()
-                                1 -> GalleryTab()
-                                2 -> ReviewTab()
+                        }
+
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                AnimatedContent(
+                                    targetState = selectedTabIndex,
+                                    transitionSpec = {
+                                        // Definisikan animasi slide berdasarkan indeks sebelumnya dan sekarang
+                                        if (targetState > initialState) {
+                                            slideInHorizontally { width -> width } togetherWith
+                                                    slideOutHorizontally { width -> -width }
+                                        } else {
+                                            slideInHorizontally { width -> -width } togetherWith
+                                                    slideOutHorizontally { width -> width }
+                                        }
+                                    }
+                                ) { targetTabIndex ->
+                                    when(targetTabIndex) {
+                                        0 -> AboutTab()
+                                        1 -> GalleryTab()
+                                        2 -> ReviewTab()
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            },
+            onError = {
+                Log.d("DetailScreen", "Error: $it")
             }
-        }
+        )
     }
 }
 
@@ -181,6 +218,7 @@ fun DetailScreen(
 @Composable
 fun DetailScreenPreview() {
     DetailScreen(
+        placeId = "",
         onBackClick = {}
     )
 }

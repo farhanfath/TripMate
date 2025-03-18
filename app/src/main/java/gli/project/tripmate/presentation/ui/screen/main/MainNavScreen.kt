@@ -37,7 +37,7 @@ import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 @Composable
 fun MainNavScreen(
     navController: NavHostController = rememberNavController(),
-    onDetailClick: () -> Unit,
+    onDetailClick: (placeId: String) -> Unit,
     viewModel: PlacesViewModel
 ) {
     var selectedItemIndex by rememberSaveable {
@@ -105,7 +105,9 @@ fun MainNavScreen(
         ) {
             composable<MainNavigation.Lobby> {
                 LobbyScreen(
-                    onDetailClick = onDetailClick,
+                    onDetailClick = { placeId ->
+                        onDetailClick(placeId)
+                    },
                     viewModel = viewModel
                 )
             }
