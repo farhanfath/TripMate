@@ -103,6 +103,9 @@ fun Nearby(
                 }
             },
             onError = {
+                /**
+                 * TODO: change to error handling
+                 */
                 Log.d("Nearby", "Error: $it")
             }
         )

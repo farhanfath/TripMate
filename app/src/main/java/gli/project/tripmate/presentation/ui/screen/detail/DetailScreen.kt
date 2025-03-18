@@ -197,7 +197,7 @@ fun DetailScreen(
                                     }
                                 ) { targetTabIndex ->
                                     when(targetTabIndex) {
-                                        0 -> AboutTab()
+                                        0 -> AboutTab(detailData)
                                         1 -> GalleryTab()
                                         2 -> ReviewTab()
                                     }
@@ -208,6 +208,9 @@ fun DetailScreen(
                 }
             },
             onError = {
+                /**
+                 * TODO: change to error handling
+                 */
                 Log.d("DetailScreen", "Error: $it")
             }
         )

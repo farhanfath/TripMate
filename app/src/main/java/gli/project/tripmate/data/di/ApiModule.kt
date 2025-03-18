@@ -51,7 +51,6 @@ object ApiModule {
     @Singleton
     @Named("ApiKey")
     fun provideApiKey(): String {
-        Log.d("ApiModule", "API Key provided: $API_KEY") // Log untuk debug
         return API_KEY
     }
 

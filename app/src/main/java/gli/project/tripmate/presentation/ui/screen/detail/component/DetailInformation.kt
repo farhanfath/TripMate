@@ -39,17 +39,13 @@ fun DetailInformation(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Box(
-                modifier = Modifier.width(160.dp)
-            ) {
-                Text(
-                    text = data.name,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.basicMarquee()
-                )
-            }
+            Text(
+                text = data.name,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.width(190.dp),
+            )
             Spacer(modifier = Modifier.size(10.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,

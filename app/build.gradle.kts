@@ -19,6 +19,9 @@ plugins {
 
     // parcelize
     id("kotlin-parcelize")
+
+    // google map
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 val localProperties = Properties().apply {
@@ -40,8 +43,10 @@ android {
 
         val geoApiBaseUrl = localProperties.getProperty("GEO_API_BASE_URL")
         val apiKey = localProperties.getProperty("API_KEY")
+        val mapApiKey = localProperties.getProperty("MAPS_API_KEY")
         buildConfigField("String", "BASE_URL", "\"$geoApiBaseUrl\"")
         buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapApiKey\"")
     }
 
     buildTypes {
@@ -157,4 +162,8 @@ dependencies {
 
     // paging compose
     implementation(libs.androidx.paging.compose)
+
+    // maps
+    implementation("com.google.maps.android:maps-compose:2.11.4")
+    implementation("com.google.android.gms:play-services-maps:19.1.0")
 }
