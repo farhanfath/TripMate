@@ -50,7 +50,7 @@ data class Properties(
 	val nameInternational: NameInternational,
 
 	@field:SerializedName("wiki_and_media")
-	val wikiAndMedia: WikiAndMedia,
+	val wikiAndMedia: WikiAndMedia?,
 
 	@field:SerializedName("historic")
 	val historic: Historic,
@@ -164,7 +164,7 @@ data class Restrictions(
 data class Raw(
 
 	@field:SerializedName("osm_id")
-	val osmId: Int,
+	val osmId: Long,
 
 	@field:SerializedName("osm_type")
 	val osmType: String,

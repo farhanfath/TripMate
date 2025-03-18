@@ -13,20 +13,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Feature
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.HistoryView
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Nearby
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.SearchBar
+import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
 fun LobbyScreen(
-    onDetailClick: () -> Unit
+    onDetailClick: () -> Unit,
+    viewModel: PlacesViewModel
 ) {
+    val nearbyPlaces = viewModel.nearbyState.collectAsState()
+
     Scaffold(
         topBar = {
             Box(
@@ -71,17 +75,10 @@ fun LobbyScreen(
             }
             item {
                 Nearby(
-                    onDetailClick = onDetailClick
+                    onDetailClick = onDetailClick,
+                    placeData = nearbyPlaces.value
                 )
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun LobbyScreenPreview() {
-    LobbyScreen(
-        onDetailClick = {}
-    )
 }

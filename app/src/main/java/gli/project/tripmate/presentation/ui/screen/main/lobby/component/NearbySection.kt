@@ -1,6 +1,6 @@
 package gli.project.tripmate.presentation.ui.screen.main.lobby.component
 
-import androidx.compose.foundation.Image
+import android.util.Log
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.NotListedLocation
@@ -35,16 +36,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import gli.project.tripmate.R
+import gli.project.tripmate.domain.model.Place
+import gli.project.tripmate.domain.util.ResultResponse
+import gli.project.tripmate.presentation.ui.component.CustomImageLoader
+import gli.project.tripmate.presentation.ui.component.CustomShimmer
+import gli.project.tripmate.presentation.util.HandlerResponseCompose
 
 @Composable
 fun Nearby(
-    onDetailClick: () -> Unit
+    onDetailClick: () -> Unit,
+    placeData: ResultResponse<List<Place>>
 ) {
     Column {
         Row(
@@ -68,29 +72,45 @@ fun Nearby(
                 )
             )
         }
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 10.dp)
-        ) {
-            items(10) {
-                NearbyItem(
-                    onDetailClick = onDetailClick
-                )
+        HandlerResponseCompose(
+            response = placeData,
+            onLoading = {
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 10.dp)
+                ) {
+                    items(5) {
+                        CustomShimmer(
+                            modifier = Modifier
+                                .padding(vertical = 10.dp, horizontal = 4.dp)
+                                .height(200.dp)
+                                .width(180.dp)
+                        )
+                    }
+                }
+            },
+            onSuccess ={ placeList->
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 10.dp)
+                ) {
+                    items(placeList) { place ->
+                        NearbyItem(
+                            onDetailClick = onDetailClick,
+                            place = place
+                        )
+                    }
+                }
+            },
+            onError = {
+                Log.d("Nearby", "Error: $it")
             }
-        }
+        )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NearbyPreview(modifier: Modifier = Modifier) {
-    Nearby(
-        onDetailClick = {}
-    )
 }
 
 @Composable
 fun NearbyItem(
-    onDetailClick: () -> Unit
+    onDetailClick: () -> Unit,
+    place: Place
 ) {
     Card(
         modifier = Modifier
@@ -110,14 +130,13 @@ fun NearbyItem(
                 modifier = Modifier
                     .height(130.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = "",
+                CustomImageLoader(
+                    url = "${place.image}.jpg",
                     modifier = Modifier
                         .height(130.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .fillMaxWidth(),
-                    contentScale = ContentScale.Crop
+                    scale = ContentScale.Crop
                 )
                 Column(
                     modifier = Modifier
@@ -185,9 +204,14 @@ fun NearbyItem(
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth()
             ) {
-                Text(
-                    text = "Canary Hill"
-                )
+                Box(
+                    modifier = Modifier.width(80.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.basicMarquee(),
+                        text = "${place.name}"
+                    )
+                }
                 Text(
                     text = "from $250",
                     style = MaterialTheme.typography.labelSmall.copy(
@@ -218,7 +242,7 @@ fun NearbyItem(
                     ) {
                         Text(
                             modifier = Modifier.basicMarquee(),
-                            text = "Jakarta, Indonesia",
+                            text = place.city,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                             style = MaterialTheme.typography.labelSmall
                         )

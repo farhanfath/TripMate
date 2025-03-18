@@ -9,10 +9,10 @@ fun PlacesResponse.toDomain() : List<Place> {
 
         Place(
             placeId = properties.placeId,
-            name = properties.name,
+            name = properties?.name ?: "",
             country = properties.country,
             city = properties.city,
-            image = properties.wikiAndMedia.image,
+            image = properties.wikiAndMedia?.image ?: "",
             lat = properties.lat,
             lon = properties.lon
         )

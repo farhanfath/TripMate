@@ -8,10 +8,12 @@ import androidx.navigation.compose.navigation
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
+import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
 fun MainNavHost(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: PlacesViewModel
 ) {
     NavHost(
         navController = navController,
@@ -24,7 +26,8 @@ fun MainNavHost(
                 MainNavScreen(
                     onDetailClick = {
                         navController.navigate(MainNavigation.DetailTour)
-                    }
+                    },
+                    viewModel = viewModel
                 )
             }
         }
