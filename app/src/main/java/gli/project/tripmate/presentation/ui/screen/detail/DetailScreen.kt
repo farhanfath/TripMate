@@ -67,7 +67,6 @@ fun DetailScreen(
         viewModel.getDetailPlaces(placeId)
     }
 
-
     /**
      * image and scroll behavior
      */

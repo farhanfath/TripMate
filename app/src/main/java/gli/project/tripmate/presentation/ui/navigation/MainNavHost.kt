@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
+import gli.project.tripmate.presentation.ui.screen.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
@@ -32,6 +33,11 @@ fun MainNavHost(
                             )
                         )
                     },
+                    onChatAIClick = {
+                        navController.navigate(
+                            MainNavigation.ChatAI
+                        )
+                    },
                     viewModel = viewModel
                 )
             }
@@ -48,7 +54,7 @@ fun MainNavHost(
         }
 
         composable<MainNavigation.ChatAI> {
-
+            ChatScreen()
         }
     }
 }
