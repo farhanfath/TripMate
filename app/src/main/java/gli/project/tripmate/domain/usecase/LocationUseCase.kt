@@ -7,5 +7,4 @@ import kotlinx.coroutines.flow.Flow
 interface LocationUseCase {
     suspend fun getCurrentLocation() : Flow<ResultResponse<LocationModel>>
     fun isLocationServiceEnabled() : Boolean
-    fun requestEnableLocationService()
 }

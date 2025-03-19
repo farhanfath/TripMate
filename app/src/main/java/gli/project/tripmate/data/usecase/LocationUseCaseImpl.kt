@@ -17,8 +17,4 @@ class LocationUseCaseImpl @Inject constructor(
     override fun isLocationServiceEnabled(): Boolean {
         return locationRepository.isLocationServiceEnabled()
     }
-
-    override fun requestEnableLocationService() {
-        locationRepository.requestEnableLocationService()
-    }
 }

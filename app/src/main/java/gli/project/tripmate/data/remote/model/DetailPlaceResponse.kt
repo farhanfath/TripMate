@@ -280,7 +280,7 @@ data class DetailRaw(
 	val buildingMaterial: String? = null,
 
 	@field:SerializedName("osm_id")
-	val osmId: Int? = null,
+	val osmId: Long? = null,
 
 	@field:SerializedName("name:vi")
 	val nameVi: String? = null,

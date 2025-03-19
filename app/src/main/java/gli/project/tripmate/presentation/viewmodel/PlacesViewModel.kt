@@ -3,7 +3,7 @@ package gli.project.tripmate.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import gli.project.tripmate.domain.model.Place
+import gli.project.tripmate.data.helper.LocationDataStore
 import gli.project.tripmate.domain.usecase.PlacesUseCase
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.state.PlacesState
@@ -17,17 +17,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlacesViewModel @Inject constructor(
-    private val useCase: PlacesUseCase
+    private val useCase: PlacesUseCase,
+    private val locationDataStore: LocationDataStore
 ) : ViewModel() {
     private val _placesState = MutableStateFlow(PlacesState())
     val placesState = _placesState.asStateFlow()
 
     init {
-        getNearbyPlaces(
-            categories = "tourism",
-            filter = "circle:106.8456,-6.2088,5000",
-            limit = 5
-        )
+        viewModelScope.launch {
+            locationDataStore.currentLocation.collect { location ->
+                location?.let { (lat, lon) ->
+                    getNearbyPlaces(
+                        categories = "tourism",
+                        filter = "circle:$lon,$lat,5000",
+                        limit = 10
+                    )
+                }
+            }
+        }
     }
 
     fun getNearbyPlaces(categories: String, filter: String, limit: Int) {

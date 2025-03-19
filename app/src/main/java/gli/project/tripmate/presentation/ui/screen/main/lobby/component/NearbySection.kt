@@ -1,6 +1,5 @@
 package gli.project.tripmate.presentation.ui.screen.main.lobby.component
 
-import android.util.Log
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +43,7 @@ import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
 import gli.project.tripmate.presentation.util.HandlerResponseCompose
+import gli.project.tripmate.presentation.util.LogUtil
 
 @Composable
 fun Nearby(
@@ -106,7 +106,7 @@ fun Nearby(
                 /**
                  * TODO: change to error handling
                  */
-                Log.d("Nearby", "Error: $it")
+                LogUtil.d("Nearby", "Error: $it")
             }
         )
     }

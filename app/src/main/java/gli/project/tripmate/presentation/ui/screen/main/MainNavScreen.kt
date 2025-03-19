@@ -32,13 +32,17 @@ import gli.project.tripmate.presentation.ui.navigation.navitem.navItems
 import gli.project.tripmate.presentation.ui.screen.main.favorite.FavoriteScreen
 import gli.project.tripmate.presentation.ui.screen.main.lobby.LobbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.profile.ProfileScreen
+import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
 fun MainNavScreen(
     navController: NavHostController = rememberNavController(),
     onDetailClick: (placeId: String) -> Unit,
-    viewModel: PlacesViewModel
+    placeViewModel: PlacesViewModel,
+    locationViewModel: LocationViewModel,
+    permissionResult: Boolean,
+    onLocationRequestPermission: () -> Unit
 ) {
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
@@ -108,7 +112,10 @@ fun MainNavScreen(
                     onDetailClick = { placeId ->
                         onDetailClick(placeId)
                     },
-                    viewModel = viewModel
+                    placesViewModel = placeViewModel,
+                    locationViewModel = locationViewModel,
+                    permissionResult = permissionResult,
+                    onLocationRequestPermission = onLocationRequestPermission
                 )
             }
             composable<MainNavigation.Favorite> {

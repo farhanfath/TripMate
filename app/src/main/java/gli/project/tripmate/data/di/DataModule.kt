@@ -10,6 +10,8 @@ import dagger.hilt.components.SingletonComponent
 import gli.project.tripmate.data.remote.datasource.PlacesRemoteDataSource
 import gli.project.tripmate.data.repository.LocationRepositoryImpl
 import gli.project.tripmate.data.repository.PlacesRepositoryImpl
+import gli.project.tripmate.data.helper.LocationDataStore
+import gli.project.tripmate.data.helper.LocationHelper
 import gli.project.tripmate.domain.repository.LocationRepository
 import gli.project.tripmate.domain.repository.PlacesRepository
 import javax.inject.Singleton
@@ -30,8 +32,23 @@ object DataModule {
     @Singleton
     fun provideLocationRepository(
         @ApplicationContext context: Context,
-        fusedLocationClient: FusedLocationProviderClient
+        fusedLocationClient: FusedLocationProviderClient,
+        locationHelper: LocationHelper
     ): LocationRepository {
-        return LocationRepositoryImpl(context, fusedLocationClient)
+        return LocationRepositoryImpl(context, fusedLocationClient, locationHelper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationDataStore(): LocationDataStore {
+        return LocationDataStore()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationHelper(
+        @ApplicationContext context: Context
+    ): LocationHelper {
+        return LocationHelper(context = context)
     }
 }

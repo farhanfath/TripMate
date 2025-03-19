@@ -9,12 +9,16 @@ import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
+import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
 fun MainNavHost(
     navController: NavHostController,
-    viewModel: PlacesViewModel
+    placeViewModel: PlacesViewModel,
+    locationViewModel: LocationViewModel,
+    permissionResult: Boolean,
+    onLocationRequestPermission: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -32,7 +36,10 @@ fun MainNavHost(
                             )
                         )
                     },
-                    viewModel = viewModel
+                    placeViewModel = placeViewModel,
+                    locationViewModel = locationViewModel,
+                    permissionResult = permissionResult,
+                    onLocationRequestPermission = onLocationRequestPermission
                 )
             }
         }
