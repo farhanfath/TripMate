@@ -1,6 +1,5 @@
 package gli.project.tripmate.presentation.ui.screen.detail
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -44,12 +43,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
 import gli.project.tripmate.presentation.ui.screen.detail.component.BackDropImage
-import gli.project.tripmate.presentation.ui.screen.detail.component.DetailInformation
 import gli.project.tripmate.presentation.ui.screen.detail.component.DetailActionButton
+import gli.project.tripmate.presentation.ui.screen.detail.component.DetailInformation
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.about.AboutTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.GalleryTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.ReviewTab
 import gli.project.tripmate.presentation.util.HandlerResponseCompose
+import gli.project.tripmate.presentation.util.LogUtil
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -210,7 +210,7 @@ fun DetailScreen(
                 /**
                  * TODO: change to error handling
                  */
-                Log.d("DetailScreen", "Error: $it")
+                LogUtil.d("DetailScreen", "Error: $it")
             }
         )
     }

@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import gli.project.tripmate.data.helper.LocationHelper
 import gli.project.tripmate.domain.model.LocationModel
 import gli.project.tripmate.domain.repository.LocationRepository
 import gli.project.tripmate.domain.util.ErrorMessage
@@ -26,7 +26,8 @@ import kotlin.coroutines.resumeWithException
 
 class LocationRepositoryImpl @Inject constructor(
     private val context: Context,
-    private val fusedLocationClient: FusedLocationProviderClient
+    private val fusedLocationClient: FusedLocationProviderClient,
+    private val locationHelper: LocationHelper
 ) : LocationRepository {
     override suspend fun getCurrentLocation(): Flow<ResultResponse<LocationModel>> = flow {
         emit(ResultResponse.Loading)
@@ -55,7 +56,6 @@ class LocationRepositoryImpl @Inject constructor(
                 continuation.invokeOnCancellation {
                     cancellationToken.cancel()
                 }
-
                 fusedLocationClient.getCurrentLocation(
                     Priority.PRIORITY_HIGH_ACCURACY,
                     cancellationToken.token
@@ -82,14 +82,6 @@ class LocationRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     override fun isLocationServiceEnabled(): Boolean {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    override fun requestEnableLocationService() {
-        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
+        return locationHelper.isConnected()
     }
 }

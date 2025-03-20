@@ -1,5 +1,10 @@
 package gli.project.tripmate.presentation.ui.screen.main.lobby
 
+import android.app.Activity
+import android.content.IntentFilter
+import android.location.LocationManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,25 +18,86 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import gli.project.tripmate.domain.util.ResultResponse
+import gli.project.tripmate.presentation.receiver.LocationProviderChangedReceiver
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Feature
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.HistoryView
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Nearby
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.SearchBar
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationPermissionCard
+import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 import kotlinx.coroutines.flow.map
 
 @Composable
 fun LobbyScreen(
     onDetailClick: (placeId: String) -> Unit,
-    viewModel: PlacesViewModel
+    placesViewModel: PlacesViewModel,
+    locationViewModel: LocationViewModel,
+    permissionResult: Boolean,
+    onLocationRequestPermission: () -> Unit
 ) {
-    val nearbyPlaces = viewModel.placesState.map { it.nearbyPlaces }.collectAsState(ResultResponse.Loading).value
+    val context = LocalContext.current
+
+    // nearby location api handler
+    val nearbyPlaces = placesViewModel.placesState.map { it.nearbyPlaces }.collectAsState(ResultResponse.Loading).value
+
+    // location state handler
+    val locationState by locationViewModel.locationState.collectAsStateWithLifecycle()
+
+    // location gps request handler
+    val locationRequestLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) { activityResult ->
+        locationViewModel.handleLocationServiceResult(activityResult.resultCode == Activity.RESULT_OK)
+    }
+
+    val locationReceiver = remember {
+        LocationProviderChangedReceiver().apply {
+            init(object : LocationProviderChangedReceiver.LocationListener {
+                override fun onEnabled() {
+                    locationViewModel.onLocationProviderEnabled()
+                }
+
+                override fun onDisabled() {
+                    locationViewModel.onLocationProviderDisabled()
+                }
+            })
+        }
+    }
+
+    // get permission status every time permission result changes
+    LaunchedEffect(permissionResult) {
+        if (permissionResult) {
+            locationViewModel.refreshPermissionStatus()
+        }
+        locationViewModel.updatePermissionStatusAndGetLocation()
+    }
+
+    // Register receiver for gps every launch
+    LaunchedEffect(Unit) {
+        val filter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+        context.registerReceiver(locationReceiver, filter)
+    }
+
+    // Unregister receiver for gps every dispose
+    DisposableEffect(Unit) {
+        onDispose {
+            context.unregisterReceiver(locationReceiver)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -42,9 +108,6 @@ fun LobbyScreen(
                     .fillMaxWidth()
             )
         },
-        bottomBar = {
-
-        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -75,12 +138,45 @@ fun LobbyScreen(
                     onDetailClick = {}
                 )
             }
-            item {
-                Nearby(
-                    onDetailClick = onDetailClick,
-                    placeData = nearbyPlaces
-                )
+            if (locationState.permissionGranted && locationState.isLocationEnabled) {
+                item {
+                    Nearby(
+                        onDetailClick = onDetailClick,
+                        placeData = nearbyPlaces
+                    )
+                }
+            } else {
+                item {
+                    LocationPermissionCard(
+                        isPermissionGranted = locationState.permissionGranted,
+                        isLocationEnabled = locationState.isLocationEnabled,
+                        onRequestPermission = onLocationRequestPermission,
+                        onEnableLocation = {
+                            locationViewModel.enableLocationService(context) { intentSenderRequest ->
+                                locationRequestLauncher.launch(intentSenderRequest)
+                            }
+                        }
+                    )
+                }
             }
         }
+
+        LocationBottomSheet(
+            isPermissionIssue = locationState.isPermissionIssue,
+            onDismiss = {
+                locationViewModel.dismissLocationDialog()
+            },
+            onConfirm = {
+                if (locationState.isPermissionIssue) {
+                    onLocationRequestPermission()
+                } else {
+                    locationViewModel.enableLocationService(context) { intentSenderRequest ->
+                        locationRequestLauncher.launch(intentSenderRequest)
+                    }
+                }
+                locationViewModel.dismissLocationDialog()
+            },
+            isVisible = locationState.showLocationBottomSheet
+        )
     }
 }

@@ -15,10 +15,10 @@ import androidx.compose.ui.unit.dp
 fun BaseModalBottomSheet(
     isVisible: Boolean,
     onDismiss: () -> Unit,
+    fullScreen: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val bottomSheetState = rememberModalBottomSheetState()
-
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = fullScreen)
     if (isVisible) {
         ModalBottomSheet(
             onDismissRequest = onDismiss,

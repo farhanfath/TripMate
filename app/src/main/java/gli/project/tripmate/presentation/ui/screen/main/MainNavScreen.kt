@@ -49,6 +49,7 @@ import gli.project.tripmate.presentation.ui.screen.main.collection.CollectionScr
 import gli.project.tripmate.presentation.ui.screen.main.favorite.FavoriteScreen
 import gli.project.tripmate.presentation.ui.screen.main.lobby.LobbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.profile.ProfileScreen
+import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
@@ -56,7 +57,10 @@ fun MainNavScreen(
     navController: NavHostController = rememberNavController(),
     onDetailClick: (placeId: String) -> Unit,
     onChatAIClick: () -> Unit,
-    viewModel: PlacesViewModel
+    placeViewModel: PlacesViewModel,
+    locationViewModel: LocationViewModel,
+    permissionResult: Boolean,
+    onLocationRequestPermission: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -165,7 +169,10 @@ fun MainNavScreen(
                     onDetailClick = { placeId ->
                         onDetailClick(placeId)
                     },
-                    viewModel = viewModel
+                    placesViewModel = placeViewModel,
+                    locationViewModel = locationViewModel,
+                    permissionResult = permissionResult,
+                    onLocationRequestPermission = onLocationRequestPermission
                 )
             }
             composable<MainNavigation.Favorite> {
