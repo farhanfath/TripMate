@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import gli.project.tripmate.presentation.ui.theme.TripMateTheme
 
@@ -13,11 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainApp {
-                Text(
-                    text = "Hello, World!"
-                )
-            }
+            MainApp {}
         }
     }
 }
