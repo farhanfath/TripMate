@@ -1,4 +1,4 @@
-package gli.project.tripmate.data.remote.model
+package gli.project.tripmate.data.remote.geoapify.model
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName
 @Parcelize
 data class PlacesResponse(
 
-	@field:SerializedName("features")
+    @field:SerializedName("features")
 	val features: List<FeaturesItem>,
 
-	@field:SerializedName("type")
+    @field:SerializedName("type")
 	val type: String
 ) : Parcelable
 
@@ -43,91 +43,91 @@ data class WikiAndMedia(
 @Parcelize
 data class Properties(
 
-	@field:SerializedName("country")
+    @field:SerializedName("country")
 	val country: String,
 
-	@field:SerializedName("name_international")
+    @field:SerializedName("name_international")
 	val nameInternational: NameInternational,
 
-	@field:SerializedName("wiki_and_media")
+    @field:SerializedName("wiki_and_media")
 	val wikiAndMedia: WikiAndMedia?,
 
-	@field:SerializedName("historic")
+    @field:SerializedName("historic")
 	val historic: Historic,
 
-	@field:SerializedName("city")
+    @field:SerializedName("city")
 	val city: String,
 
-	@field:SerializedName("formatted")
+    @field:SerializedName("formatted")
 	val formatted: String,
 
-	@field:SerializedName("postcode")
+    @field:SerializedName("postcode")
 	val postcode: String,
 
-	@field:SerializedName("lon")
+    @field:SerializedName("lon")
 	val lon: Double,
 
-	@field:SerializedName("country_code")
+    @field:SerializedName("country_code")
 	val countryCode: String,
 
-	@field:SerializedName("address_line2")
+    @field:SerializedName("address_line2")
 	val addressLine2: String,
 
-	@field:SerializedName("address_line1")
+    @field:SerializedName("address_line1")
 	val addressLine1: String,
 
-	@field:SerializedName("street")
+    @field:SerializedName("street")
 	val street: String,
 
-	@field:SerializedName("datasource")
+    @field:SerializedName("datasource")
 	val datasource: Datasource,
 
-	@field:SerializedName("district")
+    @field:SerializedName("district")
 	val district: String,
 
-	@field:SerializedName("name")
+    @field:SerializedName("name")
 	val name: String,
 
-	@field:SerializedName("suburb")
+    @field:SerializedName("suburb")
 	val suburb: String,
 
-	@field:SerializedName("details")
+    @field:SerializedName("details")
 	val details: List<String>,
 
-	@field:SerializedName("state")
+    @field:SerializedName("state")
 	val state: String,
 
-	@field:SerializedName("categories")
+    @field:SerializedName("categories")
 	val categories: List<String>,
 
-	@field:SerializedName("village")
+    @field:SerializedName("village")
 	val village: String,
 
-	@field:SerializedName("city_district")
+    @field:SerializedName("city_district")
 	val cityDistrict: String,
 
-	@field:SerializedName("lat")
+    @field:SerializedName("lat")
 	val lat: Double,
 
-	@field:SerializedName("place_id")
+    @field:SerializedName("place_id")
 	val placeId: String,
 
-	@field:SerializedName("city_block")
+    @field:SerializedName("city_block")
 	val cityBlock: String,
 
-	@field:SerializedName("description")
+    @field:SerializedName("description")
 	val description: String,
 
-	@field:SerializedName("building")
+    @field:SerializedName("building")
 	val building: Building,
 
-	@field:SerializedName("restrictions")
+    @field:SerializedName("restrictions")
 	val restrictions: Restrictions,
 
-	@field:SerializedName("opening_hours")
+    @field:SerializedName("opening_hours")
 	val openingHours: String,
 
-	@field:SerializedName("name_other")
+    @field:SerializedName("name_other")
 	val nameOther: NameOther
 ) : Parcelable
 
@@ -273,13 +273,13 @@ data class Geometry(
 @Parcelize
 data class FeaturesItem(
 
-	@field:SerializedName("geometry")
+    @field:SerializedName("geometry")
 	val geometry: Geometry,
 
-	@field:SerializedName("type")
+    @field:SerializedName("type")
 	val type: String,
 
-	@field:SerializedName("properties")
+    @field:SerializedName("properties")
 	val properties: Properties
 ) : Parcelable
 
@@ -296,19 +296,19 @@ data class Building(
 @Parcelize
 data class Datasource(
 
-	@field:SerializedName("license")
+    @field:SerializedName("license")
 	val license: String,
 
-	@field:SerializedName("attribution")
+    @field:SerializedName("attribution")
 	val attribution: String,
 
-	@field:SerializedName("raw")
+    @field:SerializedName("raw")
 	val raw: Raw,
 
-	@field:SerializedName("sourcename")
+    @field:SerializedName("sourcename")
 	val sourcename: String,
 
-	@field:SerializedName("url")
+    @field:SerializedName("url")
 	val url: String
 ) : Parcelable
 

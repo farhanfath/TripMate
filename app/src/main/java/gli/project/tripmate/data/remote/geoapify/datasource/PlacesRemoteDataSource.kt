@@ -1,7 +1,7 @@
-package gli.project.tripmate.data.remote.datasource
+package gli.project.tripmate.data.remote.geoapify.datasource
 
-import gli.project.tripmate.data.remote.model.DetailPlaceResponse
-import gli.project.tripmate.data.remote.model.PlacesResponse
+import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
+import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
 
 interface PlacesRemoteDataSource {
     suspend fun getNearbyPlaces(

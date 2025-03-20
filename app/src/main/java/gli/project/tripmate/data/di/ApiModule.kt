@@ -5,7 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import gli.project.tripmate.BuildConfig
-import gli.project.tripmate.data.remote.ApiService
+import gli.project.tripmate.data.remote.geoapify.GeoApiService
+import gli.project.tripmate.data.remote.pexels.PexelsApiService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,8 +19,24 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
-    private const val BASE_URL = BuildConfig.BASE_URL
-    private const val API_KEY = BuildConfig.API_KEY
+    private const val GEO_API_BASE_URL = BuildConfig.GEO_API_BASE_URL
+    private const val GEOPIFY_API_KEY = BuildConfig.GEOPIFY_API_KEY
+    private const val PEXELS_API_BASE_URL = BuildConfig.PEXELS_API_BASE_URL
+    private const val PEXELS_API_KEY = BuildConfig.PEXELS_API_KEY
+
+    @Provides
+    @Singleton
+    @Named("GeoApiKey")
+    fun provideGeoApiKey(): String {
+        return GEOPIFY_API_KEY
+    }
+
+    @Provides
+    @Singleton
+    @Named("PexelsApiKey")
+    fun providePexelsApiKey(): String {
+        return PEXELS_API_KEY
+    }
 
     @Provides
     @Singleton
@@ -31,7 +48,8 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideApiKeyInterceptor(@Named("ApiKey") apiKey: String): Interceptor {
+    @Named("GeoApiKeyInterceptor")
+    fun provideGeoApiKeyInterceptor(@Named("GeoApiKey") apiKey: String): Interceptor {
         return Interceptor { chain ->
             val originalRequest = chain.request()
             val newUrl = originalRequest.url.newBuilder()
@@ -48,20 +66,27 @@ object ApiModule {
 
     @Provides
     @Singleton
-    @Named("ApiKey")
-    fun provideApiKey(): String {
-        return API_KEY
+    @Named("PexelsApiKeyInterceptor")
+    fun providePexelsApiKeyInterceptor(@Named("PexelsApiKey") apiKey: String): Interceptor {
+        return Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $apiKey")
+                .build()
+
+            chain.proceed(request)
+        }
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(
+    @Named("GeoOkhttpClient")
+    fun provideGeoOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        apiKeyInterceptor: Interceptor
+        @Named("GeoApiKeyInterceptor")apiKeyInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(apiKeyInterceptor) // Tambahkan API key interceptor dulu
-            .addInterceptor(loggingInterceptor) // Kemudian logging interceptor
+            .addInterceptor(apiKeyInterceptor)
+            .addInterceptor(loggingInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -70,12 +95,53 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideApiService(okHttpClient: OkHttpClient): ApiService {
+    @Named("PexelsOkhttpClient")
+    fun providePexelsOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        @Named("PexelsApiKeyInterceptor")apiKeyInterceptor: Interceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(apiKeyInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("GeoRetrofit")
+    fun provideGeoRetrofit(@Named("GeoOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(GEO_API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
-            .create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("PexelsRetrofit")
+    fun providePexelsRetrofit(@Named("PexelsOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(PEXELS_API_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("GeoApiService")
+    fun provideGeoApiService(@Named("GeoRetrofit") retrofit: Retrofit): GeoApiService {
+        return retrofit.create(GeoApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("PexelsApiService")
+    fun providePexelsApiService(@Named("PexelsRetrofit") retrofit: Retrofit): PexelsApiService {
+        return retrofit.create(PexelsApiService::class.java)
     }
 }

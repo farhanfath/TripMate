@@ -1,4 +1,4 @@
-package gli.project.tripmate.data.remote.model
+package gli.project.tripmate.data.remote.geoapify.model
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName
 @Parcelize
 data class DetailPlaceResponse(
 
-	@field:SerializedName("features")
+    @field:SerializedName("features")
 	val features: List<DetailFeatureItem?>? = null,
 
-	@field:SerializedName("type")
+    @field:SerializedName("type")
 	val type: String? = null
 ) : Parcelable
 
@@ -42,101 +42,101 @@ data class Timezone(
 @Parcelize
 data class DetailDataSource(
 
-	@field:SerializedName("license")
+    @field:SerializedName("license")
 	val license: String? = null,
 
-	@field:SerializedName("attribution")
+    @field:SerializedName("attribution")
 	val attribution: String? = null,
 
-	@field:SerializedName("raw")
+    @field:SerializedName("raw")
 	val raw: DetailRaw? = null,
 
-	@field:SerializedName("sourcename")
+    @field:SerializedName("sourcename")
 	val sourcename: String? = null,
 
-	@field:SerializedName("url")
+    @field:SerializedName("url")
 	val url: String? = null
 ) : Parcelable
 
 @Parcelize
 data class DetailProperties(
 
-	@field:SerializedName("country")
+    @field:SerializedName("country")
 	val country: String? = null,
 
-	@field:SerializedName("name_international")
+    @field:SerializedName("name_international")
 	val nameInternational: DetailNameInternational? = null,
 
-	@field:SerializedName("city")
+    @field:SerializedName("city")
 	val city: String? = null,
 
-	@field:SerializedName("formatted")
+    @field:SerializedName("formatted")
 	val formatted: String? = null,
 
-	@field:SerializedName("timezone")
+    @field:SerializedName("timezone")
 	val timezone: Timezone? = null,
 
-	@field:SerializedName("description")
+    @field:SerializedName("description")
 	val description: String? = null,
 
-	@field:SerializedName("lon")
+    @field:SerializedName("lon")
 	val lon: Double? = null,
 
-	@field:SerializedName("building")
+    @field:SerializedName("building")
 	val building: DetailBuilding? = null,
 
-	@field:SerializedName("address_line2")
+    @field:SerializedName("address_line2")
 	val addressLine2: String? = null,
 
-	@field:SerializedName("address_line1")
+    @field:SerializedName("address_line1")
 	val addressLine1: String? = null,
 
-	@field:SerializedName("street")
+    @field:SerializedName("street")
 	val street: String? = null,
 
-	@field:SerializedName("categories")
+    @field:SerializedName("categories")
 	val categories: List<String?>? = null,
 
-	@field:SerializedName("state")
+    @field:SerializedName("state")
 	val state: String? = null,
 
-	@field:SerializedName("website")
+    @field:SerializedName("website")
 	val website: String? = null,
 
-	@field:SerializedName("lat")
+    @field:SerializedName("lat")
 	val lat: Double? = null,
 
-	@field:SerializedName("place_id")
+    @field:SerializedName("place_id")
 	val placeId: String? = null,
 
-	@field:SerializedName("wiki_and_media")
+    @field:SerializedName("wiki_and_media")
 	val wikiAndMedia: DetailWikiAndMedia? = null,
 
-	@field:SerializedName("historic")
+    @field:SerializedName("historic")
 	val historic: DetailHistoric? = null,
 
-	@field:SerializedName("postcode")
+    @field:SerializedName("postcode")
 	val postcode: String? = null,
 
-	@field:SerializedName("restrictions")
+    @field:SerializedName("restrictions")
 	val restrictions: DetailRestrictions? = null,
 
-	@field:SerializedName("feature_type")
+    @field:SerializedName("feature_type")
 	val featureType: String? = null,
 
-	@field:SerializedName("country_code")
+    @field:SerializedName("country_code")
 	val countryCode: String? = null,
 
-	@field:SerializedName("datasource")
+    @field:SerializedName("datasource")
 	val datasource: DetailDataSource? = null,
 
-	@field:SerializedName("opening_hours")
+    @field:SerializedName("opening_hours")
 	val openingHours: String? = null,
 
-	@field:SerializedName("name")
+    @field:SerializedName("name")
 	val name: String? = null,
 
-	@field:SerializedName("name_other")
+    @field:SerializedName("name_other")
 	val nameOther: DetailNameOther? = null
 ) : Parcelable
 
@@ -218,13 +218,13 @@ data class DetailGeometry(
 @Parcelize
 data class DetailFeatureItem(
 
-	@field:SerializedName("geometry")
+    @field:SerializedName("geometry")
 	val geometry: DetailGeometry? = null,
 
-	@field:SerializedName("type")
+    @field:SerializedName("type")
 	val type: String? = null,
 
-	@field:SerializedName("properties")
+    @field:SerializedName("properties")
 	val properties: DetailProperties? = null
 ) : Parcelable
 

@@ -190,7 +190,7 @@ fun NearbyItem(
                                     modifier = Modifier.size(15.dp)
                                 )
                                 Text(
-                                    text = "6 km",
+                                    text = "10 km",
                                     style = MaterialTheme.typography.labelSmall.copy(
                                         color = Color.White
                                     )

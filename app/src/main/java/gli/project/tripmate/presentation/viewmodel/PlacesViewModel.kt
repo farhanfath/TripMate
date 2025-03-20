@@ -37,6 +37,17 @@ class PlacesViewModel @Inject constructor(
         }
     }
 
+    fun getPlaceRangeLocation(latPlace: Double, lonPlace: Double) {
+        viewModelScope.launch {
+            locationDataStore.currentLocation.collect { location ->
+                location?.let { (latUser, lonUser) ->
+                    val placeRange = useCase.getUserLocationAndPlaceRange(latPlace, lonPlace, latUser, lonUser)
+                    _placesState.update { it.copy(placeRange = placeRange) }
+                }
+            }
+        }
+    }
+
     fun getNearbyPlaces(categories: String, filter: String, limit: Int) {
         viewModelScope.launch {
             useCase.getNearbyPlaces(categories, filter, limit)

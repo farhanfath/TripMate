@@ -62,6 +62,7 @@ fun DetailScreen(
 ) {
     val viewModel : PlacesViewModel = hiltViewModel()
     val placeDetailState = viewModel.placesState.map { it.detailPlace }.collectAsState(ResultResponse.Loading).value
+    val userRange = viewModel.placesState.map { it.placeRange }.collectAsState(0.0).value
 
     LaunchedEffect(Unit) {
         viewModel.getDetailPlaces(placeId)
@@ -110,6 +111,9 @@ fun DetailScreen(
                 )
             },
             onSuccess = { detailData ->
+                // get range between user and place
+                viewModel.getPlaceRangeLocation(latPlace = detailData.lat, lonPlace = detailData.lon)
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -196,7 +200,12 @@ fun DetailScreen(
                                     }
                                 ) { targetTabIndex ->
                                     when(targetTabIndex) {
-                                        0 -> AboutTab(detailData)
+                                        0 -> {
+                                            AboutTab(
+                                                detailData = detailData,
+                                                userRange = userRange
+                                            )
+                                        }
                                         1 -> GalleryTab()
                                         2 -> ReviewTab()
                                     }

@@ -7,11 +7,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import gli.project.tripmate.data.remote.datasource.PlacesRemoteDataSource
-import gli.project.tripmate.data.repository.LocationRepositoryImpl
-import gli.project.tripmate.data.repository.PlacesRepositoryImpl
 import gli.project.tripmate.data.helper.LocationDataStore
 import gli.project.tripmate.data.helper.LocationHelper
+import gli.project.tripmate.data.remote.geoapify.datasource.PlacesRemoteDataSource
+import gli.project.tripmate.data.remote.pexels.datasource.PexelRemoteDataSource
+import gli.project.tripmate.data.repository.LocationRepositoryImpl
+import gli.project.tripmate.data.repository.PlacesRepositoryImpl
 import gli.project.tripmate.domain.repository.LocationRepository
 import gli.project.tripmate.domain.repository.PlacesRepository
 import javax.inject.Singleton
@@ -24,8 +25,9 @@ object DataModule {
     @Singleton
     fun providePlacesRepository(
         remoteDataSource: PlacesRemoteDataSource,
+        pexelRemoteDataSource: PexelRemoteDataSource
     ): PlacesRepository {
-        return PlacesRepositoryImpl(remoteDataSource)
+        return PlacesRepositoryImpl(remoteDataSource, pexelRemoteDataSource)
     }
 
     @Provides

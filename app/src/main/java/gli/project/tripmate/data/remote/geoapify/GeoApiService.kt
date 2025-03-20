@@ -1,12 +1,12 @@
-package gli.project.tripmate.data.remote
+package gli.project.tripmate.data.remote.geoapify
 
-import gli.project.tripmate.data.remote.model.DetailPlaceResponse
-import gli.project.tripmate.data.remote.model.PlacesResponse
+import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
+import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
 import gli.project.tripmate.data.util.ApiEndpoint
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ApiService {
+interface GeoApiService {
     @GET(ApiEndpoint.NEARBY_PLACES)
     suspend fun getNearbyPlaces(
         @Query("categories") categories: String,

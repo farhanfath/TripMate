@@ -28,18 +28,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.receiver.LocationProviderChangedReceiver
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Feature
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.HistoryView
-import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Nearby
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.SearchBar
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationPermissionCard
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun LobbyScreen(
@@ -51,8 +49,8 @@ fun LobbyScreen(
 ) {
     val context = LocalContext.current
 
-    // nearby location api handler
-    val nearbyPlaces = placesViewModel.placesState.map { it.nearbyPlaces }.collectAsState(ResultResponse.Loading).value
+    // place state handler
+    val placesState by placesViewModel.placesState.collectAsState()
 
     // location state handler
     val locationState by locationViewModel.locationState.collectAsStateWithLifecycle()
@@ -142,7 +140,7 @@ fun LobbyScreen(
                 item {
                     Nearby(
                         onDetailClick = onDetailClick,
-                        placeData = nearbyPlaces
+                        placeData = placesState.nearbyPlaces
                     )
                 }
             } else {

@@ -1,6 +1,6 @@
 package gli.project.tripmate.data.mapper
 
-import gli.project.tripmate.data.remote.model.DetailPlaceResponse
+import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
 import gli.project.tripmate.domain.model.DetailPlace
 
 fun DetailPlaceResponse.toDomain() : DetailPlace {

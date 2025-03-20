@@ -44,7 +44,8 @@ fun LocationMapCard(
     latitude: Double,
     longitude: Double,
     locationName: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userRange: Double
 ) {
     val context = LocalContext.current
     val location = remember { LatLng(latitude, longitude) }
@@ -140,7 +141,7 @@ fun LocationMapCard(
                         modifier = Modifier.padding(end = 10.dp)
                     ) {
                         Text(
-                            text = "$latitude, $longitude",
+                            text = "${userRange.let { "%.2f km".format(it) }}",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.basicMarquee()

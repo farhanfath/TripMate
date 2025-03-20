@@ -42,11 +42,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val geoApiBaseUrl = localProperties.getProperty("GEO_API_BASE_URL")
-        val apiKey = localProperties.getProperty("API_KEY")
+        val geoApiKey = localProperties.getProperty("GEOPIFY_API_KEY")
         val mapApiKey = localProperties.getProperty("MAPS_API_KEY")
-        buildConfigField("String", "BASE_URL", "\"$geoApiBaseUrl\"")
-        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        val imageBaseUrl = localProperties.getProperty("PEXELS_API_BASE_URL")
+        val imageKey = localProperties.getProperty("PEXELS_API_KEY")
+        buildConfigField("String", "GEO_API_BASE_URL", "\"$geoApiBaseUrl\"")
+        buildConfigField("String", "GEOPIFY_API_KEY", "\"$geoApiKey\"")
         buildConfigField("String", "MAPS_API_KEY", "\"$mapApiKey\"")
+        buildConfigField("String", "IMAGE_BASE_URL", "\"$imageBaseUrl\"")
+        buildConfigField("String", "IMAGE_API_KEY", "\"$imageKey\"")
     }
 
     buildTypes {

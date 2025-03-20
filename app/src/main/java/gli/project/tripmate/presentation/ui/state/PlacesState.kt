@@ -6,5 +6,6 @@ import gli.project.tripmate.domain.util.ResultResponse
 
 data class PlacesState(
     val nearbyPlaces: ResultResponse<List<Place>> = ResultResponse.Loading,
-    val detailPlace: ResultResponse<DetailPlace> = ResultResponse.Loading
+    val detailPlace: ResultResponse<DetailPlace> = ResultResponse.Loading,
+    val placeRange : Double = 0.0
 )

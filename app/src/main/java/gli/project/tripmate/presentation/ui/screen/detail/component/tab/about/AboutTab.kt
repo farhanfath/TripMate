@@ -15,10 +15,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.domain.model.DetailPlace
 import gli.project.tripmate.presentation.ui.screen.detail.component.LocationMapCard
+import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
 fun AboutTab(
-    detailData: DetailPlace
+    detailData: DetailPlace,
+    userRange: Double
 ) {
     Column(
         modifier = Modifier
@@ -46,22 +48,14 @@ fun AboutTab(
         /**
          * Google Map Location by lat and lon
          */
-//        Image(
-//            painter = painterResource(R.drawable.ic_launcher_background),
-//            contentDescription = "",
-//            modifier = Modifier
-//                .clip(RoundedCornerShape(10.dp))
-//                .fillMaxWidth()
-//                .height(300.dp),
-//            contentScale = ContentScale.Crop
-//        )
         LocationMapCard(
             latitude = detailData.lat,
             longitude = detailData.lon,
             locationName = detailData.name,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
+                .height(300.dp),
+            userRange = userRange
         )
 
         // Add more content to test scrolling
