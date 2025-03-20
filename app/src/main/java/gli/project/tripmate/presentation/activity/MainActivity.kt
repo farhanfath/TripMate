@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import gli.project.tripmate.presentation.ui.screen.lobby.LobbyScreen
 import gli.project.tripmate.presentation.ui.theme.TripMateTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +13,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainApp {}
+            MainApp {
+                LobbyScreen()
+            }
         }
     }
 }
@@ -20,7 +23,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp(content: @Composable () -> Unit) {
     TripMateTheme(
-        dynamicColor = false
+        dynamicColor = false,
+        darkTheme = false
     ) {
         content()
     }

@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
-import gli.project.tripmate.presentation.ui.theme.icon_medium_size_48
+import gli.project.tripmate.presentation.ui.theme.icon_size_48
 
 @Composable
 fun CustomImageLoader(
@@ -103,7 +103,7 @@ fun CustomImageLoader(
                 Icon(
                     imageVector = Icons.Filled.BrokenImage,
                     contentDescription = "Image Load Error",
-                    modifier = Modifier.size(icon_medium_size_48),
+                    modifier = Modifier.size(icon_size_48),
                     tint = Color.Gray
                 )
             }
