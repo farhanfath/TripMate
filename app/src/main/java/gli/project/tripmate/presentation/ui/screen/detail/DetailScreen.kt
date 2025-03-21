@@ -47,7 +47,7 @@ import gli.project.tripmate.presentation.ui.screen.detail.component.DetailInform
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.about.AboutTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.GalleryTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.ReviewTab
-import gli.project.tripmate.presentation.util.HandlerResponseCompose
+import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 import gli.project.tripmate.presentation.util.LogUtil
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 import kotlinx.coroutines.flow.map
@@ -129,6 +129,10 @@ fun DetailScreen(
                         modifier = Modifier.padding(innerPadding),
                         onBackClick = onBackClick
                     )
+
+                    /**
+                     * detail Content
+                     */
 
                     /**
                      * detail Content
@@ -220,6 +224,9 @@ fun DetailScreen(
                 }
             },
             onError = {
+                /**
+                 * TODO: change to error handling
+                 */
                 /**
                  * TODO: change to error handling
                  */

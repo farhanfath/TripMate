@@ -8,6 +8,7 @@ import gli.project.tripmate.BuildConfig
 import gli.project.tripmate.data.remote.gemini.GeminiApiService
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
+import gli.project.tripmate.presentation.util.LogUtil
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -90,16 +91,18 @@ object ApiModule {
     @Provides
     @Singleton
     @Named("GeminiApiKeyInterceptor")
-    fun provideGeminiApiKeyInterceptor(@Named("GeminiApiKey") apiKey: String): Interceptor {
+    fun provideGeminiApiKeyInterceptor(@Named("GeminiApiKey") key: String): Interceptor {
         return Interceptor { chain ->
             val originalRequest = chain.request()
             val newUrl = originalRequest.url.newBuilder()
-                .addQueryParameter("apiKey", apiKey)
+                .addQueryParameter("key", key)
                 .build()
 
             val newRequest = originalRequest.newBuilder()
                 .url(newUrl)
                 .build()
+
+            LogUtil.d("Interceptor", "Request URL: ${newRequest.url}")
 
             chain.proceed(newRequest)
         }

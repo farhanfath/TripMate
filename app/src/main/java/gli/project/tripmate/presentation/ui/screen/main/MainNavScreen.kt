@@ -43,6 +43,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import gli.project.tripmate.R
 import gli.project.tripmate.presentation.ui.component.BottomNavShape
+import gli.project.tripmate.presentation.ui.component.CustomTopBar
 import gli.project.tripmate.presentation.ui.navigation.bottomnav.navItems
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.main.collection.CollectionScreen
@@ -64,12 +65,7 @@ fun MainNavScreen(
 ) {
     Scaffold(
         topBar = {
-            Box(
-                modifier = Modifier
-                    .height(35.dp)
-                    .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary)
-            )
+            CustomTopBar()
         },
         floatingActionButton = {
             FloatingActionButton(

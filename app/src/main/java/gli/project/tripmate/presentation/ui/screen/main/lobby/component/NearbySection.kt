@@ -44,7 +44,7 @@ import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
-import gli.project.tripmate.presentation.util.HandlerResponseCompose
+import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 import gli.project.tripmate.presentation.util.LogUtil
 
 @Composable
@@ -106,6 +106,9 @@ fun Nearby(
                 }
             },
             onError = {
+                /**
+                 * TODO: change to error handling
+                 */
                 /**
                  * TODO: change to error handling
                  */

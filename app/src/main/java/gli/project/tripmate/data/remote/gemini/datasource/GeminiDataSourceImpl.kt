@@ -9,6 +9,10 @@ class GeminiDataSourceImpl @Inject constructor(
     private val geminiApiService: GeminiApiService
 ) : GeminiDataSource {
     override suspend fun getChatResponse(message: ChatRequest): ChatResponse {
-        return geminiApiService.getChatResponse(message)
+        return try {
+            geminiApiService.getChatResponse(message)
+        } catch (e: Exception) {
+            ChatResponse(emptyList())
+        }
     }
 }

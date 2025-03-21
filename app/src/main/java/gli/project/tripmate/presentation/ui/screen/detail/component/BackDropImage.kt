@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.Dp
 import gli.project.tripmate.domain.model.PexelImage
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
-import gli.project.tripmate.presentation.util.HandlerResponseCompose
+import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 
 @Composable
 fun BoxScope.BackDropImage(

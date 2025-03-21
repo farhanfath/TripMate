@@ -10,6 +10,7 @@ import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
+import gli.project.tripmate.presentation.viewmodel.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
@@ -17,6 +18,7 @@ import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 fun MainNavHost(
     navController: NavHostController,
     placeViewModel: PlacesViewModel,
+    chatViewModel: ChatViewModel,
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit
@@ -63,7 +65,9 @@ fun MainNavHost(
         }
 
         composable<MainNavigation.ChatAI> {
-            ChatScreen()
+            ChatScreen(
+                chatViewModel = chatViewModel
+            )
         }
     }
 }

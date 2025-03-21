@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.util
+package gli.project.tripmate.presentation.util.extensions
 
 import androidx.compose.runtime.Composable
 import gli.project.tripmate.domain.util.ResultResponse
@@ -9,6 +9,19 @@ fun <T> HandlerResponseCompose(
     onLoading: @Composable () -> Unit,
     onSuccess: @Composable (data: T) -> Unit,
     onError: @Composable (error: ResultResponse.Error) -> Unit
+) {
+    when (response) {
+        is ResultResponse.Loading -> onLoading()
+        is ResultResponse.Success -> onSuccess(response.data)
+        is ResultResponse.Error -> onError(response)
+    }
+}
+
+fun <T> customResponseHandler(
+    response: ResultResponse<T>,
+    onLoading: () -> Unit = {},
+    onSuccess: (data: T) -> Unit = {},
+    onError: (error: ResultResponse.Error) -> Unit = {}
 ) {
     when (response) {
         is ResultResponse.Loading -> onLoading()

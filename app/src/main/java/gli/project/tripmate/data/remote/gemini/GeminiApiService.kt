@@ -7,7 +7,7 @@ import retrofit2.http.POST
 
 interface GeminiApiService {
 
-    @POST("v1beta/models/gemini-2.0-flash:generateContent")
+    @POST("models/gemini-2.0-flash:generateContent")
     suspend fun getChatResponse(
         @Body request: ChatRequest
     ) : ChatResponse
