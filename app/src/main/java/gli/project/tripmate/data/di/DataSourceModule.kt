@@ -4,6 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import gli.project.tripmate.data.remote.gemini.GeminiApiService
+import gli.project.tripmate.data.remote.gemini.datasource.GeminiDataSource
+import gli.project.tripmate.data.remote.gemini.datasource.GeminiDataSourceImpl
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.geoapify.datasource.PlacesRemoteDataSource
 import gli.project.tripmate.data.remote.geoapify.datasource.PlacesRemoteDataSourceImpl
@@ -27,5 +30,11 @@ object DataSourceModule {
     @Singleton
     fun providePexelRemoteDataSource(@Named("PexelsApiService") apiService: PexelsApiService): PexelRemoteDataSource {
         return PexelRemoteDataSourceImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGeminiRemoteDataSource(@Named("GeminiApiService") apiService: GeminiApiService): GeminiDataSource {
+        return GeminiDataSourceImpl(apiService)
     }
 }

@@ -46,11 +46,15 @@ android {
         val mapApiKey = localProperties.getProperty("MAPS_API_KEY")
         val imageBaseUrl = localProperties.getProperty("PEXELS_API_BASE_URL")
         val imageKey = localProperties.getProperty("PEXELS_API_KEY")
+        val geminiBaseUrl = localProperties.getProperty("GEMINI_API_BASE_URL")
+        val geminiKey = localProperties.getProperty("GEMINI_API_KEY")
         buildConfigField("String", "GEO_API_BASE_URL", "\"$geoApiBaseUrl\"")
         buildConfigField("String", "GEOPIFY_API_KEY", "\"$geoApiKey\"")
         buildConfigField("String", "MAPS_API_KEY", "\"$mapApiKey\"")
         buildConfigField("String", "IMAGE_BASE_URL", "\"$imageBaseUrl\"")
         buildConfigField("String", "IMAGE_API_KEY", "\"$imageKey\"")
+        buildConfigField("String", "GEMINI_BASE_URL", "\"$geminiBaseUrl\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
     }
 
     buildTypes {

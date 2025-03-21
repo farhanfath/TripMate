@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import gli.project.tripmate.BuildConfig
+import gli.project.tripmate.data.remote.gemini.GeminiApiService
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
 import okhttp3.Interceptor
@@ -23,6 +24,8 @@ object ApiModule {
     private const val GEOPIFY_API_KEY = BuildConfig.GEOPIFY_API_KEY
     private const val PEXELS_API_BASE_URL = BuildConfig.PEXELS_API_BASE_URL
     private const val PEXELS_API_KEY = BuildConfig.PEXELS_API_KEY
+    private const val GEMINI_API_BASE_URL = BuildConfig.GEMINI_BASE_URL
+    private const val GEMINI_API_KEY = BuildConfig.GEMINI_API_KEY
 
     @Provides
     @Singleton
@@ -36,6 +39,13 @@ object ApiModule {
     @Named("PexelsApiKey")
     fun providePexelsApiKey(): String {
         return PEXELS_API_KEY
+    }
+
+    @Provides
+    @Singleton
+    @Named("GeminiApiKey")
+    fun provideGeminiApiKey(): String {
+        return GEMINI_API_KEY
     }
 
     @Provides
@@ -79,6 +89,24 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @Named("GeminiApiKeyInterceptor")
+    fun provideGeminiApiKeyInterceptor(@Named("GeminiApiKey") apiKey: String): Interceptor {
+        return Interceptor { chain ->
+            val originalRequest = chain.request()
+            val newUrl = originalRequest.url.newBuilder()
+                .addQueryParameter("apiKey", apiKey)
+                .build()
+
+            val newRequest = originalRequest.newBuilder()
+                .url(newUrl)
+                .build()
+
+            chain.proceed(newRequest)
+        }
+    }
+
+    @Provides
+    @Singleton
     @Named("GeoOkhttpClient")
     fun provideGeoOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
@@ -99,6 +127,22 @@ object ApiModule {
     fun providePexelsOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         @Named("PexelsApiKeyInterceptor")apiKeyInterceptor: Interceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(apiKeyInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("GeminiOkhttpClient")
+    fun provideGeminiOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        @Named("GeminiApiKeyInterceptor")apiKeyInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(apiKeyInterceptor)
@@ -133,6 +177,17 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @Named("GeminiRetrofit")
+    fun provideGeminiRetrofit(@Named("GeminiOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(GEMINI_API_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     @Named("GeoApiService")
     fun provideGeoApiService(@Named("GeoRetrofit") retrofit: Retrofit): GeoApiService {
         return retrofit.create(GeoApiService::class.java)
@@ -143,5 +198,12 @@ object ApiModule {
     @Named("PexelsApiService")
     fun providePexelsApiService(@Named("PexelsRetrofit") retrofit: Retrofit): PexelsApiService {
         return retrofit.create(PexelsApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("GeminiApiService")
+    fun provideGeminiApiService(@Named("GeminiRetrofit") retrofit: Retrofit): GeminiApiService {
+        return retrofit.create(GeminiApiService::class.java)
     }
 }
