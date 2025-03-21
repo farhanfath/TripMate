@@ -19,11 +19,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -36,21 +39,19 @@ fun SearchBar() {
             .wrapContentHeight(),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // Search Card
-        Card(
-            shape = RoundedCornerShape(32.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 4.dp,
-                pressedElevation = 8.dp
-            ),
+        // Search Bar
+        Surface(
+            color = Color.White,
             modifier = Modifier
+                .graphicsLayer {
+                    shape = RoundedCornerShape(32.dp)
+                    clip = true
+                    shadowElevation = 10f
+                }
                 .weight(6f)
                 .clickable {
 
-                },
+                }
         ) {
             Row(
                 modifier = Modifier

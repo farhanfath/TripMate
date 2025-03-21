@@ -28,12 +28,14 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -117,18 +119,20 @@ fun NearbyItem(
     onDetailClick: () -> Unit,
     place: Place
 ) {
-    Card(
+    Surface(
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
             .padding(vertical = 10.dp, horizontal = 4.dp)
             .height(200.dp)
             .width(180.dp)
+            .graphicsLayer {
+                shape = RoundedCornerShape(10.dp)
+                clip = true
+                shadowElevation = 10f
+            }
             .clickable {
                 onDetailClick()
-            },
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        )
+            }
     ) {
         Column {
             Box(
@@ -277,4 +281,5 @@ fun NearbyItem(
             }
         }
     }
+
 }
