@@ -15,4 +15,6 @@ interface PlacesRepository {
     fun getUserLocationAndPlaceRange(latPlace: Double, lonPlace: Double, latUser: Double, lonUser: Double) : Double
 
     fun getPlacesDetailImageList(query: String) : Flow<PagingData<PexelImage>>
+
+    suspend fun getPlaceDetailBackgroundImage(query: String) : ResultResponse<PexelImage>
 }

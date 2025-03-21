@@ -30,10 +30,11 @@ fun MainNavHost(
         ) {
             composable<MainNavigation.Lobby> {
                 MainNavScreen(
-                    onDetailClick = { placeId ->
+                    onDetailClick = { placeId, placeName ->
                         navController.navigate(
                             MainNavigation.DetailTour(
-                                placeId = placeId
+                                placeId = placeId,
+                                placeName = placeName
                             )
                         )
                     },
@@ -54,6 +55,7 @@ fun MainNavHost(
             val detailPlace = entry.toRoute<MainNavigation.DetailTour>()
             DetailScreen(
                 placeId = detailPlace.placeId,
+                placeName = detailPlace.placeName,
                 onBackClick = {
                     navController.navigateUp()
                 }

@@ -27,6 +27,7 @@ sealed class MainNavigation {
      */
     @Serializable
     data class DetailTour(
-        val placeId: String
+        val placeId: String,
+        val placeName: String
     ) : MainNavigation()
 }

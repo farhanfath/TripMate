@@ -55,7 +55,7 @@ import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 @Composable
 fun MainNavScreen(
     navController: NavHostController = rememberNavController(),
-    onDetailClick: (placeId: String) -> Unit,
+    onDetailClick: (placeId: String, placeName: String) -> Unit,
     onChatAIClick: () -> Unit,
     placeViewModel: PlacesViewModel,
     locationViewModel: LocationViewModel,
@@ -166,8 +166,8 @@ fun MainNavScreen(
         ) {
             composable<MainNavigation.Lobby> {
                 LobbyScreen(
-                    onDetailClick = { placeId ->
-                        onDetailClick(placeId)
+                    onDetailClick = { placeId, placeName ->
+                        onDetailClick(placeId, placeName)
                     },
                     placesViewModel = placeViewModel,
                     locationViewModel = locationViewModel,

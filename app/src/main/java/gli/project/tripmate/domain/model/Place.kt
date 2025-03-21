@@ -2,7 +2,7 @@ package gli.project.tripmate.domain.model
 
 data class Place(
     val placeId: String,
-    val name: String?,
+    val name: String = "",
     val country: String,
     val city: String,
     val image: String,

@@ -25,7 +25,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 class PlacesRepositoryImpl @Inject constructor(
-    private val remoteDataSource: PlacesRemoteDataSource,
+    private val geoRemoteDataSource: PlacesRemoteDataSource,
     private val pexelRemoteDataSource: PexelRemoteDataSource
 ) : PlacesRepository {
     override fun getNearbyPlaces(
@@ -35,7 +35,7 @@ class PlacesRepositoryImpl @Inject constructor(
     ): Flow<ResultResponse<List<Place>>> = flow {
         emit(ResultResponse.Loading)
         try {
-            val response = remoteDataSource.getNearbyPlaces(categories, filter, limit)
+            val response = geoRemoteDataSource.getNearbyPlaces(categories, filter, limit)
             val places = response.toDomain()
             emit(ResultResponse.Success(places))
         } catch (e: IOException) {
@@ -47,7 +47,7 @@ class PlacesRepositoryImpl @Inject constructor(
 
     override suspend fun getDetailPlace(id: String): ResultResponse<DetailPlace> {
         return try {
-            val response = remoteDataSource.getDetailPlace(id)
+            val response = geoRemoteDataSource.getDetailPlace(id)
             val detailPlaces = response.toDomain()
             ResultResponse.Success(detailPlaces)
         } catch (e: IOException) {
@@ -85,5 +85,17 @@ class PlacesRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = { pexelRemoteDataSource.getPexelsImagePagingSource(query) }
         ).flow
+    }
+
+    override suspend fun getPlaceDetailBackgroundImage(query: String): ResultResponse<PexelImage> {
+        return try {
+            val response = pexelRemoteDataSource.getPexelDetailImage(query)
+            val detailPlaces = response.toDomain()
+            ResultResponse.Success(detailPlaces)
+        } catch (e: IOException) {
+            ResultResponse.Error(ErrorMessage.NETWORK_ERROR)
+        } catch (e: HttpException) {
+            ResultResponse.Error(ErrorMessage.SERVER_ERROR)
+        }
     }
 }

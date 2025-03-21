@@ -11,4 +11,10 @@ interface PexelsApiService {
         @Query("query") query: String,
         @Query("page") page: Int
     ) : PexelResponse
+
+    @GET("search")
+    suspend fun getSingleDetailImage(
+        @Query("query") query: String,
+        @Query("per_page") page: Int = 1
+    ) : PexelResponse
 }

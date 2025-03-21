@@ -48,4 +48,8 @@ class PlacesUseCaseImpl @Inject constructor(
             emit(ResultResponse.Error(e.message ?: "Unknown error"))
         }
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getPexelDetailImage(query: String): ResultResponse<PexelImage> {
+        return repository.getPlaceDetailBackgroundImage(query)
+    }
 }

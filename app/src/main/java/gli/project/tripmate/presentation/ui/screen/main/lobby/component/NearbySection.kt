@@ -49,7 +49,7 @@ import gli.project.tripmate.presentation.util.LogUtil
 
 @Composable
 fun Nearby(
-    onDetailClick: (placeId: String) -> Unit,
+    onDetailClick: (placeId: String, placeName: String) -> Unit,
     placeData: ResultResponse<List<Place>>
 ) {
     Column {
@@ -95,11 +95,12 @@ fun Nearby(
                     contentPadding = PaddingValues(horizontal = 10.dp)
                 ) {
                     items(placeList) { place ->
+                        // get image from different api
                         NearbyItem(
                             onDetailClick = {
-                                onDetailClick(place.placeId)
+                                onDetailClick(place.placeId, place.name)
                             },
-                            place = place
+                            place = place,
                         )
                     }
                 }
@@ -117,7 +118,7 @@ fun Nearby(
 @Composable
 fun NearbyItem(
     onDetailClick: () -> Unit,
-    place: Place
+    place: Place,
 ) {
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
@@ -140,7 +141,7 @@ fun NearbyItem(
                     .height(130.dp)
             ) {
                 CustomImageLoader(
-                    url = "${place.image}.jpg",
+                    url = place.image,
                     modifier = Modifier
                         .height(130.dp)
                         .clip(RoundedCornerShape(12.dp))
@@ -218,7 +219,7 @@ fun NearbyItem(
                 ) {
                     Text(
                         modifier = Modifier.basicMarquee(),
-                        text = "${place.name}"
+                        text = place.name
                     )
                 }
                 Text(

@@ -13,22 +13,47 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
+import gli.project.tripmate.domain.model.PexelImage
+import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
+import gli.project.tripmate.presentation.util.HandlerResponseCompose
 
 @Composable
 fun BoxScope.BackDropImage(
     currentImageHeight: Dp,
-    imageUrl: String
+    imagePexelState: ResultResponse<PexelImage>
 ) {
-    CustomImageLoader(
-        url = imageUrl,
-        scale = ContentScale.Crop,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(currentImageHeight)
-            .align(Alignment.TopCenter)
-    )
+//    if (imageUrl == null) {
+//
+//    } else {
+//        CustomImageLoader(
+//            url = imageUrl,
+//            scale = ContentScale.Crop,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(currentImageHeight)
+//                .align(Alignment.TopCenter)
+//        )
+//    }
+    HandlerResponseCompose(
+        response = imagePexelState,
+        onLoading = {
 
+        },
+        onSuccess = { image ->
+            CustomImageLoader(
+                url = image.originalSize,
+                scale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(currentImageHeight)
+                    .align(Alignment.TopCenter)
+            )
+        },
+        onError = {
+
+        }
+    )
     // gradient color
     Box(
         modifier = Modifier

@@ -15,4 +15,6 @@ interface PlacesUseCase {
     fun getUserLocationAndPlaceRange(latPlace: Double, lonPlace: Double, latUser: Double, lonUser: Double) : Double
 
     fun getDetailPlaceImageList(query: String): Flow<ResultResponse<PagingData<PexelImage>>>
+
+    suspend fun getPexelDetailImage(query: String) : ResultResponse<PexelImage>
 }

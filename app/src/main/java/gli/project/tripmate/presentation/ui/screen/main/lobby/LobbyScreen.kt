@@ -41,7 +41,7 @@ import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
 fun LobbyScreen(
-    onDetailClick: (placeId: String) -> Unit,
+    onDetailClick: (placeId: String, placeName: String) -> Unit,
     placesViewModel: PlacesViewModel,
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,

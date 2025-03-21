@@ -40,7 +40,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
 import gli.project.tripmate.presentation.ui.screen.detail.component.BackDropImage
 import gli.project.tripmate.presentation.ui.screen.detail.component.DetailActionButton
@@ -58,14 +57,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun DetailScreen(
     placeId : String,
+    placeName: String,
     onBackClick: () -> Unit,
 ) {
     val viewModel : PlacesViewModel = hiltViewModel()
-    val placeDetailState = viewModel.placesState.map { it.detailPlace }.collectAsState(ResultResponse.Loading).value
+    val placeDetailState by viewModel.placesState.collectAsState()
     val userRange = viewModel.placesState.map { it.placeRange }.collectAsState(0.0).value
 
     LaunchedEffect(Unit) {
         viewModel.getDetailPlaces(placeId)
+        viewModel.getPexelDetailImage(placeName)
     }
 
     /**
@@ -104,7 +105,7 @@ fun DetailScreen(
 
     Scaffold { innerPadding ->
         HandlerResponseCompose(
-            response = placeDetailState,
+            response = placeDetailState.detailPlace,
             onLoading = {
                 CustomShimmer(
                     modifier = Modifier.fillMaxSize()
@@ -121,7 +122,7 @@ fun DetailScreen(
                 ) {
                     BackDropImage(
                         currentImageHeight = currentImageHeight,
-                        imageUrl = "${detailData.imageUrl}"
+                        imagePexelState = placeDetailState.detailImage
                     )
 
                     DetailActionButton(
@@ -233,6 +234,7 @@ fun DetailScreen(
 fun DetailScreenPreview() {
     DetailScreen(
         placeId = "",
+        placeName = "",
         onBackClick = {}
     )
 }

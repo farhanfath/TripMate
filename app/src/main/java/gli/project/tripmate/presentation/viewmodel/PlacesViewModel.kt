@@ -87,4 +87,16 @@ class PlacesViewModel @Inject constructor(
             }
             .cachedIn(viewModelScope)
     }
+
+    fun getPexelDetailImage(query: String) {
+        viewModelScope.launch {
+            _placesState.update { it.copy(detailImage = ResultResponse.Loading) }
+            try {
+                val result = useCase.getPexelDetailImage(query)
+                _placesState.update { it.copy(detailImage = result) }
+            } catch (e: Exception) {
+                _placesState.update { it.copy(detailImage = ResultResponse.Error(e.message.toString())) }
+            }
+        }
+    }
 }

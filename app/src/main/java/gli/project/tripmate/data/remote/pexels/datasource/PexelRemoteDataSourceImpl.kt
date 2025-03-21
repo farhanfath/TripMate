@@ -2,6 +2,7 @@ package gli.project.tripmate.data.remote.pexels.datasource
 
 import androidx.paging.PagingSource
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
+import gli.project.tripmate.data.remote.pexels.model.PexelResponse
 import gli.project.tripmate.data.remote.pexels.paging.PexelPagingSource
 import gli.project.tripmate.domain.model.PexelImage
 import javax.inject.Inject
@@ -11,5 +12,9 @@ class PexelRemoteDataSourceImpl @Inject constructor(
 ) : PexelRemoteDataSource {
     override fun getPexelsImagePagingSource(query: String): PagingSource<Int, PexelImage> {
         return PexelPagingSource(pexelApiService, query)
+    }
+
+    override suspend fun getPexelDetailImage(query: String): PexelResponse {
+        return pexelApiService.getSingleDetailImage(query)
     }
 }
