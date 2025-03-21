@@ -7,61 +7,88 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import gli.project.tripmate.domain.model.PexelImage
 import gli.project.tripmate.presentation.ui.component.BaseModalBottomSheet
+import gli.project.tripmate.presentation.util.extensions.handlePagingState
 
 @Composable
 fun MoreGalleryBottomSheet(
     isVisible: Boolean,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    placeImageList: LazyPagingItems<PexelImage>
 ) {
     BaseModalBottomSheet(
         isVisible = isVisible,
         onDismiss = onDismiss
     ) {
-        val items = generateStoreItems(50) // Buat 20 item toko
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
         ) {
-            // Proses item-item dalam grup tiga (1 besar + 2 kecil)
-            items.chunked(3).forEachIndexed { _, group ->
-                item {
-                    // 1 item besar (full width)
-                    if (group.isNotEmpty()) {
-                        ImageCard(
-                            item = group[0],
-                            isBig = true,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+            handlePagingState(
+                items = placeImageList,
+                onLoading = {
+                    // Loading state handling
+                },
+                onSuccess = {
+                    // Process items in groups of three (1 big + 2 small)
+                    val groupCount = (placeImageList.itemCount + 2) / 3 // Ceiling division
 
-                    // 2 item kecil dalam satu baris (jika ada)
-                    if (group.size > 1) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            for (i in 1 until minOf(3, group.size)) {
-                                ImageCard(
-                                    item = group[i],
-                                    isBig = false,
-                                    modifier = Modifier.weight(1f)
-                                )
+                    for (groupIndex in 0 until groupCount) {
+                        item(key = "group_$groupIndex") {
+                            val startIndex = groupIndex * 3
+                            val endIndex = minOf(startIndex + 3, placeImageList.itemCount)
+
+                            // 1 item big (full width)
+                            if (startIndex < placeImageList.itemCount) {
+                                val imageData = placeImageList[startIndex]
+                                if (imageData != null) {
+                                    ImageCard(
+                                        imageData = imageData,
+                                        isBig = true,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
                             }
 
-                            // Spacer jika hanya ada 1 item kecil
-                            if (group.size == 2) {
-                                Spacer(modifier = Modifier.weight(1f))
+                            // 2 items small in one row (if available)
+                            if (startIndex + 1 < placeImageList.itemCount) {
+                                Row(modifier = Modifier.fillMaxWidth()) {
+                                    for (i in startIndex + 1 until endIndex) {
+                                        val imageData = placeImageList[i]
+                                        if (imageData != null) {
+                                            ImageCard(
+                                                imageData = imageData,
+                                                isBig = false,
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
+                                    }
+
+                                    // Spacer if only 1 small item
+                                    if (endIndex - (startIndex + 1) == 1) {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
+                                }
                             }
+
+                            // Spacer between groups
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
-
-                    // Spacer antara grup
-                    Spacer(modifier = Modifier.height(8.dp))
+                },
+                onError = {
+                    item {
+                        Text(text = "error")
+                    }
                 }
-            }
+            )
         }
     }
 }

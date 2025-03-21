@@ -12,32 +12,36 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.component.GalleryRowGrid
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.component.MoreGalleryBottomSheet
+import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
-fun GalleryTab() {
+fun GalleryTab(
+    viewModel: PlacesViewModel,
+    detailPlaceName: String
+) {
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val placeImageList = viewModel.getDetailListImage(detailPlaceName).collectAsLazyPagingItems()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
     ) {
-        repeat(2) {
-            Text(
-                text = "Sample Gallery",
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(start = 10.dp, top = 20.dp, bottom = 10.dp)
-            )
-            GalleryRowGrid(
-                onShowMore = { showBottomSheet = true }
-            )
-        }
+        Text(
+            text = "Sample Gallery",
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(start = 10.dp, top = 20.dp, bottom = 10.dp)
+        )
+        GalleryRowGrid(
+            imageList = placeImageList,
+            onShowMore = { showBottomSheet = true }
+        )
     }
 
     /**
@@ -45,12 +49,7 @@ fun GalleryTab() {
      */
     MoreGalleryBottomSheet(
         isVisible = showBottomSheet,
-        onDismiss = { showBottomSheet = false }
+        onDismiss = { showBottomSheet = false },
+        placeImageList = placeImageList,
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GalleryTabPreview() {
-    GalleryTab()
 }

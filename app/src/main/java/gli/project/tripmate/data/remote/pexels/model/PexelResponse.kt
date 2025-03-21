@@ -45,13 +45,13 @@ data class PhotosItem(
 	val photographerUrl: String? = null,
 
 	@field:SerializedName("id")
-	val id: Int? = null,
+	val id: Long,
 
 	@field:SerializedName("url")
 	val url: String? = null,
 
 	@field:SerializedName("photographer_id")
-	val photographerId: Int? = null,
+	val photographerId: Long? = null,
 
 	@field:SerializedName("liked")
 	val liked: Boolean? = null,

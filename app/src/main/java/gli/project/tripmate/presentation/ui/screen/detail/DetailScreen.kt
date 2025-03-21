@@ -206,7 +206,10 @@ fun DetailScreen(
                                                 userRange = userRange
                                             )
                                         }
-                                        1 -> GalleryTab()
+                                        1 -> GalleryTab(
+                                            viewModel = viewModel,
+                                            detailPlaceName = detailData.name
+                                        )
                                         2 -> ReviewTab()
                                     }
                                 }

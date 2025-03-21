@@ -70,7 +70,7 @@ object ApiModule {
     fun providePexelsApiKeyInterceptor(@Named("PexelsApiKey") apiKey: String): Interceptor {
         return Interceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $apiKey")
+                .addHeader("Authorization", apiKey)
                 .build()
 
             chain.proceed(request)

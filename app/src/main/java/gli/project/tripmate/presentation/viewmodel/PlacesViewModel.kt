@@ -2,14 +2,19 @@ package gli.project.tripmate.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gli.project.tripmate.data.helper.LocationDataStore
+import gli.project.tripmate.domain.model.PexelImage
 import gli.project.tripmate.domain.usecase.PlacesUseCase
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.state.PlacesState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -73,5 +78,13 @@ class PlacesViewModel @Inject constructor(
                 _placesState.update { it.copy(detailPlace = ResultResponse.Error(e.message.toString())) }
             }
         }
+    }
+
+    fun getDetailListImage(query: String): Flow<PagingData<PexelImage>> {
+        return useCase.getDetailPlaceImageList(query = query)
+            .map { result ->
+                if (result is ResultResponse.Success) result.data else PagingData.empty()
+            }
+            .cachedIn(viewModelScope)
     }
 }

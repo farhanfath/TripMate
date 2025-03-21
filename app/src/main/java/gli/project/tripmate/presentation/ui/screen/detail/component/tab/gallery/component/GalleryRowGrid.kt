@@ -1,7 +1,6 @@
 package gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.component
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,94 +25,93 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-/**
- * TODO: delete soon
- */
-data class StoreItem(
-    val id: Int,
-    val name: String,
-    val imageUrl: String
-)
-
-/**
- * TODO: delete soon
- */
-fun generateStoreItems(count: Int = 30): List<StoreItem> {
-
-    return List(count) { index ->
-        val width = 300 + (index % 3) * 100
-        val height = 200 + (index % 4) * 50
-
-        StoreItem(
-            id = index,
-            name = "example",
-            imageUrl = "https://picsum.photos/$width/$height?random=$index"
-        )
-    }
-}
+import androidx.paging.compose.LazyPagingItems
+import gli.project.tripmate.domain.model.PexelImage
+import gli.project.tripmate.presentation.ui.component.CustomImageLoader
+import gli.project.tripmate.presentation.util.extensions.handlePagingState
 
 @Composable
 fun GalleryRowGrid(
-    onShowMore: () -> Unit = {}
+    onShowMore: () -> Unit = {},
+    imageList: LazyPagingItems<PexelImage>
 ) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        val allItems = generateStoreItems()
-        val displayItems = allItems.take(21)
+        handlePagingState(
+            items = imageList,
+            onLoading = {
 
-        // Process items in groups of three (1 big + 2 small)
-        displayItems.chunked(3).forEachIndexed { _, group ->
-            item {
-                // 1 item big (full width)
-                if (group.isNotEmpty()) {
-                    ImageCard(
-                        item = group[0],
-                        isBig = true
-                    )
-                }
+            },
+            onSuccess = {
+                // Only display first 21 images
+                val visibleItemCount = minOf(11, imageList.itemCount)
 
-                // 2 items small in one row (if available)
-                if (group.size > 1) {
-                    Column {
-                        for (i in 1 until minOf(3, group.size)) {
-                            ImageCard(
-                                item = group[i],
-                                isBig = false,
-                            )
+                // Process items in groups of three (1 big + 2 small)
+                val groupCount = (visibleItemCount + 2) / 3
+
+                for (groupIndex in 0 until groupCount) {
+                    item(key = "group_$groupIndex") {
+                        val startIndex = groupIndex * 3
+                        val endIndex = minOf(startIndex + 3, visibleItemCount)
+
+                        if (startIndex < visibleItemCount) {
+                            val imageData = imageList[startIndex]
+                            if (imageData != null) {
+                                ImageCard(
+                                    imageData = imageData,
+                                    isBig = true
+                                )
+                            }
                         }
 
-                        // Spacer if only 1 small item
-                        if (group.size == 2) {
-                            Spacer(modifier = Modifier.weight(1f))
+                        // 2 items small in one row (if available)
+                        if (startIndex + 1 < visibleItemCount) {
+                            Column {
+                                for (i in startIndex + 1 until endIndex) {
+                                    val imageData = imageList[i]
+                                    if (imageData != null) {
+                                        ImageCard(
+                                            imageData = imageData,
+                                            isBig = false
+                                        )
+                                    }
+                                }
+
+                                // Spacer if only 1 small item
+                                if (endIndex - (startIndex + 1) == 1) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
                         }
+
+                        // Spacer between groups
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
 
-                // Spacer between groups
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
+                // Show more button as the last item if there are more than 21 images
+                if (imageList.itemCount > 21) {
+                    item(key = "show_more") {
+                        ShowMoreCard(onShowMore = onShowMore)
+                    }
+                }
+            },
+            onError = {
 
-        // Show more button as the last item in the row
-        if (allItems.size > 21) {
-            item {
-                ShowMoreCard(onShowMore = onShowMore)
             }
-        }
+        )
     }
 }
 
 @Composable
-fun ImageCard(item: StoreItem, isBig: Boolean, modifier: Modifier = Modifier) {
+fun ImageCard(imageData: PexelImage, isBig: Boolean, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .padding(4.dp)
@@ -122,25 +120,14 @@ fun ImageCard(item: StoreItem, isBig: Boolean, modifier: Modifier = Modifier) {
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // Placeholder warna sebagai background
-            val backgroundColor = Color(
-                red = (item.id * 50) % 256 / 255f,
-                green = (item.id * 20) % 256 / 255f,
-                blue = (item.id * 70) % 256 / 255f,
-                alpha = 1f
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor)
-            )
-        }
+        CustomImageLoader(
+            url = imageData.originalSize,
+            modifier = Modifier.fillMaxSize(),
+            scale = ContentScale.Crop
+        )
     }
 }
+
 
 @Composable
 fun ShowMoreCard(onShowMore: () -> Unit) {
@@ -184,10 +171,4 @@ fun ShowMoreCard(onShowMore: () -> Unit) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GalleryRowGridPreview() {
-    GalleryRowGrid()
 }

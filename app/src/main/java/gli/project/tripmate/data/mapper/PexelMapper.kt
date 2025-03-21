@@ -23,6 +23,7 @@ fun PhotosItem.toDomain(): PexelImage {
     val image = this.src
 
     return PexelImage(
+        id = this.id,
         originalSize = image?.original ?: "",
         largeSize = image?.large ?: "",
         mediumSize = image?.medium ?: "",
