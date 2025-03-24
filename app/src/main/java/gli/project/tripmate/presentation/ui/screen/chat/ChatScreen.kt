@@ -1,21 +1,25 @@
 package gli.project.tripmate.presentation.ui.screen.chat
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,24 +28,59 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.presentation.ui.component.CustomTopBar
 import gli.project.tripmate.presentation.ui.screen.chat.component.ChatBubble
 import gli.project.tripmate.presentation.ui.screen.chat.component.PulsatingDots
 import gli.project.tripmate.presentation.util.extensions.customResponseHandler
 import gli.project.tripmate.presentation.viewmodel.ChatViewModel
-import gli.project.tripmate.presentation.viewmodel.Message
 
 @Composable
 fun ChatScreen(
-    chatViewModel: ChatViewModel
+    chatViewModel: ChatViewModel,
+    onBackClick: () -> Unit
 ) {
     val chatState by chatViewModel.chatState.collectAsState()
     var inputText by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            CustomTopBar()
+            CustomTopBar(
+                additionalContent = {
+                    Box(
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.primary)
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    onBackClick()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+                            Text(
+                                text = "Tanya TripMate",
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                        }
+                    }
+                }
+            )
         }
     ) { innerPadding ->
         Column(
@@ -65,36 +104,45 @@ fun ChatScreen(
                             PulsatingDots()
                         }
                     },
-                    onError = {
-
-                    }
+                    onError = {}
                 )
             }
 
-            // Input chat di bagian bawah
             Row(
                 modifier = Modifier
+                    .background(color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f))
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextField(
+                OutlinedTextField(
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent
+                    ),
                     value = inputText,
                     onValueChange = { inputText = it },
                     modifier = Modifier.weight(1f),
-                    placeholder = { Text("Ketik pesan...") }
+                    placeholder = { Text("Tanya TripMate...") }
                 )
-                Button(
+                IconButton(
                     onClick = {
                         if (inputText.isNotBlank()) {
                             chatViewModel.sendMessage(inputText)
                             inputText = ""
                         }
-                    },
-                    modifier = Modifier.padding(start = 8.dp)
+                    }
                 ) {
-                    Text("Send")
+                    Icon(
+                        modifier = Modifier.padding(start = 8.dp),
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = "Send Message",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
+
             }
         }
     }

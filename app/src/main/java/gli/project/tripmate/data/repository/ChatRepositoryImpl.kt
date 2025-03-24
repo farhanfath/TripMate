@@ -1,9 +1,9 @@
 package gli.project.tripmate.data.repository
 
 import gli.project.tripmate.data.remote.gemini.datasource.GeminiDataSource
-import gli.project.tripmate.data.remote.gemini.model.ChatContent
-import gli.project.tripmate.data.remote.gemini.model.ChatPart
-import gli.project.tripmate.data.remote.gemini.model.ChatRequest
+import gli.project.tripmate.domain.model.chatbot.ChatContent
+import gli.project.tripmate.domain.model.chatbot.ChatPart
+import gli.project.tripmate.domain.model.chatbot.ChatRequest
 import gli.project.tripmate.domain.repository.ChatRepository
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.util.LogUtil

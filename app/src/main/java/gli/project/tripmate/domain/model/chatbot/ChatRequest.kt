@@ -1,4 +1,4 @@
-package gli.project.tripmate.data.remote.gemini.model
+package gli.project.tripmate.domain.model.chatbot
 
 data class ChatRequest(
     val contents: List<ChatContent>

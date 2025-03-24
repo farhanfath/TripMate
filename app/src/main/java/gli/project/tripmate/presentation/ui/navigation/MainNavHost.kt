@@ -66,7 +66,10 @@ fun MainNavHost(
 
         composable<MainNavigation.ChatAI> {
             ChatScreen(
-                chatViewModel = chatViewModel
+                chatViewModel = chatViewModel,
+                onBackClick = {
+                    navController.navigateUp()
+                }
             )
         }
     }
