@@ -86,7 +86,7 @@ data class Properties(
 	val district: String,
 
     @field:SerializedName("name")
-	val name: String,
+	val name: String?,
 
     @field:SerializedName("suburb")
 	val suburb: String,

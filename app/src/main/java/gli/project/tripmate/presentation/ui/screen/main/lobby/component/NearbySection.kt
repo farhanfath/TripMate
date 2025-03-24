@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.NotListedLocation
@@ -40,17 +39,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import gli.project.tripmate.domain.model.Place
-import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
-import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
-import gli.project.tripmate.presentation.util.LogUtil
+import gli.project.tripmate.presentation.ui.component.SeeMoreCard
+import gli.project.tripmate.presentation.util.extensions.handlePagingState
 
 @Composable
 fun Nearby(
     onDetailClick: (placeId: String, placeName: String) -> Unit,
-    placeData: ResultResponse<List<Place>>
+    placeData: LazyPagingItems<Place>
 ) {
     Column {
         Row(
@@ -74,12 +73,13 @@ fun Nearby(
                 )
             )
         }
-        HandlerResponseCompose(
-            response = placeData,
-            onLoading = {
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 10.dp)
-                ) {
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+            contentPadding = PaddingValues(horizontal = 10.dp)
+        ) {
+            handlePagingState(
+                items = placeData,
+                onLoading = {
                     items(5) {
                         CustomShimmer(
                             modifier = Modifier
@@ -88,33 +88,47 @@ fun Nearby(
                                 .width(180.dp)
                         )
                     }
-                }
-            },
-            onSuccess ={ placeList->
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 10.dp)
-                ) {
-                    items(placeList) { place ->
-                        // get image from different api
-                        NearbyItem(
-                            onDetailClick = {
-                                onDetailClick(place.placeId, place.name)
-                            },
-                            place = place,
-                        )
+                },
+                onSuccess = {
+                    val maxPlacesToShow = minOf(20, placeData.itemCount)
+                    items(
+                        count = maxPlacesToShow,
+                        key = { index ->
+                            val place = placeData[index]
+                            if (place != null) {
+                                "place_${place.placeId}_$index"
+                            } else {
+                                "null_$index"
+                            }
+                        }
+                    ) { index ->
+                        placeData[index]?.let { place ->
+                            NearbyItem(
+                                onDetailClick = {
+                                    onDetailClick(place.placeId, place.name ?: "")
+                                },
+                                place = place,
+                            )
+                        }
                     }
+                    if (placeData.itemCount > 20) {
+                        item(key = "see_more") {
+                            SeeMoreCard(
+                                modifier = Modifier
+                                    .width(180.dp)
+                                    .height(200.dp),
+                                onSeeMoreClick = {
+
+                                }
+                            )
+                        }
+                    }
+                },
+                onError = {
+                    // TODO: Handle error
                 }
-            },
-            onError = {
-                /**
-                 * TODO: change to error handling
-                 */
-                /**
-                 * TODO: change to error handling
-                 */
-                LogUtil.d("Nearby", "Error: $it")
-            }
-        )
+            )
+        }
     }
 }
 

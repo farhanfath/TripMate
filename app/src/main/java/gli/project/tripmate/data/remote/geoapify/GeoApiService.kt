@@ -12,6 +12,7 @@ interface GeoApiService {
         @Query("categories") categories: String,
         @Query("filter") filter: String,
         @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ) : PlacesResponse
 
     @GET(ApiEndpoint.DETAIL_PLACE)

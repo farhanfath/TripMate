@@ -8,7 +8,7 @@ import gli.project.tripmate.domain.util.ResultResponse
 import kotlinx.coroutines.flow.Flow
 
 interface PlacesRepository {
-    fun getNearbyPlaces(categories: String, filter: String, limit: Int) : Flow<ResultResponse<List<Place>>>
+    fun getNearbyPlaces(categories: String, latitude: Double, longitude: Double, radius: Int) : Flow<PagingData<Place>>
 
     suspend fun getDetailPlace(id: String) : ResultResponse<DetailPlace>
 

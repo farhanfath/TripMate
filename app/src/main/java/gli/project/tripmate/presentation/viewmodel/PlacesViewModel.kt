@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gli.project.tripmate.data.helper.LocationDataStore
 import gli.project.tripmate.domain.model.PexelImage
+import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.usecase.PlacesUseCase
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.ui.state.PlacesState
@@ -37,61 +38,75 @@ class PlacesViewModel @Inject constructor(
         viewModelScope.launch {
             locationDataStore.currentLocation.collect { location ->
                 location?.let { (lat, lon) ->
-                    fetchNearbyPlaces(
+                    _placesState.update { it.copy(
+                        userLatitude = lat,
+                        userLongitude = lon,
+                        isLocationLoaded = true
+                    ) }
+
+                    val nearbyPlaces = getNearbyPlaces(
                         categories = "tourism",
-                        filter = "circle:$lon,$lat,5000",
-                        limit = 10,
-                        isCategory = false
+                        latitude = lat,
+                        longitude = lon,
+                        radius = 5000
                     )
+                    _placesState.update { it.copy(nearbyPlaces = nearbyPlaces) }
                 }
             }
         }
     }
 
-    private fun fetchNearbyPlaces(categories: String, filter: String, limit: Int, isCategory: Boolean) {
+    private fun loadNearbyPlacesByCategory(category: String) {
         viewModelScope.launch {
-            useCase.getNearbyPlaces(categories, filter, limit)
-                .onStart {
-                    if (isCategory) {
-                        _placesState.update { it.copy(nearbyPlacesByCategory = ResultResponse.Loading) }
-                    } else {
-                        _placesState.update { it.copy(nearbyPlaces = ResultResponse.Loading) }
-                    }
-                }
-                .catch { e ->
-                    if (isCategory) {
-                        _placesState.update { it.copy(nearbyPlacesByCategory = ResultResponse.Error(e.message.toString())) }
-                    } else {
-                        _placesState.update { it.copy(nearbyPlaces = ResultResponse.Error(e.message.toString())) }
-                    }
-                }
-                .collect { result ->
-                    if (isCategory) {
-                        _placesState.update { it.copy(nearbyPlacesByCategory = result) }
-                    } else {
-                        _placesState.update { it.copy(nearbyPlaces = result) }
-                    }
-                }
-        }
-    }
+            // Pastikan lokasi sudah tersedia
+            val currentState = _placesState.value
+            if (currentState.userLatitude != 0.0 && currentState.userLongitude != 0.0) {
+                // Gunakan lokasi yang sudah tersimpan di state
+                val nearbyPlacesByCategoryFlow = getNearbyPlaces(
+                    categories = category,
+                    latitude = currentState.userLatitude,
+                    longitude = currentState.userLongitude,
+                    radius = 5000
+                )
 
-    fun getNearbyPlaces(categories: String, filter: String, limit: Int) {
-        fetchNearbyPlaces(categories, filter, limit, isCategory = false)
-    }
+                _placesState.update { it.copy(nearbyPlacesByCategory = nearbyPlacesByCategoryFlow) }
+            } else {
+                // Jika lokasi belum tersedia, tunggu lokasi
+                locationDataStore.currentLocation.collect { location ->
+                    location?.let { (lat, lon) ->
+                        // Update lokasi pengguna di state jika belum
+                        _placesState.update { it.copy(
+                            userLatitude = lat,
+                            userLongitude = lon,
+                            isLocationLoaded = true
+                        ) }
 
-    fun getNearbyPlacesByCategory(categoryType: String) {
-        viewModelScope.launch {
-            locationDataStore.currentLocation.collectLatest { location ->
-                location?.let { (lat, lon) ->
-                    fetchNearbyPlaces(
-                        categories = categoryType,
-                        filter = "circle:$lon,$lat,10000",
-                        limit = 20,
-                        isCategory = true
-                    )
+                        // Dapatkan nearby places berdasarkan kategori
+                        val nearbyPlacesByCategoryFlow = getNearbyPlaces(
+                            categories = category,
+                            latitude = lat,
+                            longitude = lon,
+                            radius = 5000
+                        )
+
+                        _placesState.update { it.copy(nearbyPlacesByCategory = nearbyPlacesByCategoryFlow) }
+                        return@collect
+                    }
                 }
             }
         }
+    }
+
+    fun getNearbyPlacesByCategory(category: String) {
+        loadNearbyPlacesByCategory(category)
+    }
+
+    private fun getNearbyPlaces(categories: String, latitude: Double, longitude: Double, radius: Int): Flow<PagingData<Place>> {
+        return useCase.getNearbyPlaces(categories, latitude, longitude, radius)
+            .map { result ->
+                if (result is ResultResponse.Success) result.data else PagingData.empty()
+            }
+            .cachedIn(viewModelScope)
     }
 
     fun getPlaceRangeLocation(latPlace: Double, lonPlace: Double) {
@@ -104,7 +119,6 @@ class PlacesViewModel @Inject constructor(
             }
         }
     }
-
 
     fun getDetailPlaces(placeId: String) {
         viewModelScope.launch {

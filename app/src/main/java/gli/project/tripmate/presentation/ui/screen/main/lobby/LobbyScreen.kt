@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.presentation.receiver.LocationProviderChangedReceiver
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Feature
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
@@ -38,6 +39,7 @@ import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationPermissionCard
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun LobbyScreen(
@@ -52,6 +54,7 @@ fun LobbyScreen(
 
     // place state handler
     val placesState by placesViewModel.placesState.collectAsState()
+    val nearbyPlacesState = placesState.nearbyPlaces.collectAsLazyPagingItems()
 
     // location state handler
     val locationState by locationViewModel.locationState.collectAsStateWithLifecycle()
@@ -145,7 +148,7 @@ fun LobbyScreen(
                 item {
                     Nearby(
                         onDetailClick = onDetailClick,
-                        placeData = placesState.nearbyPlaces
+                        placeData = nearbyPlacesState
                     )
                 }
             } else {

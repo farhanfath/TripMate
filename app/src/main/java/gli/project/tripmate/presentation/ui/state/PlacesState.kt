@@ -1,14 +1,20 @@
 package gli.project.tripmate.presentation.ui.state
 
+import androidx.paging.PagingData
 import gli.project.tripmate.domain.model.DetailPlace
 import gli.project.tripmate.domain.model.PexelImage
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.util.ResultResponse
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 data class PlacesState(
-    val nearbyPlaces: ResultResponse<List<Place>> = ResultResponse.Loading,
-    val nearbyPlacesByCategory: ResultResponse<List<Place>> = ResultResponse.Loading,
+    val nearbyPlaces: Flow<PagingData<Place>> = flowOf(PagingData.empty()),
+    val nearbyPlacesByCategory: Flow<PagingData<Place>> = flowOf(PagingData.empty()),
+    val isLocationLoaded: Boolean = false,
     val detailPlace: ResultResponse<DetailPlace> = ResultResponse.Loading,
     val placeRange : Double = 0.0,
+    val userLatitude : Double = 0.0,
+    val userLongitude : Double = 0.0,
     val detailImage: ResultResponse<PexelImage> = ResultResponse.Loading
 )

@@ -1,15 +1,13 @@
 package gli.project.tripmate.data.remote.geoapify.datasource
 
+import androidx.paging.PagingSource
 import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
 import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
 import gli.project.tripmate.data.remote.pexels.model.PexelResponse
+import gli.project.tripmate.domain.model.Place
 
 interface PlacesRemoteDataSource {
-    suspend fun getNearbyPlaces(
-        categories: String,
-        filter: String,
-        limit: Int
-    ) : PlacesResponse
+    fun getNearbyPlacesPagingSource(categories: String, latitude: Double, longitude: Double, radius: Int) : PagingSource<Int, Place>
 
     suspend fun getDetailPlace(id: String) : DetailPlaceResponse
 }

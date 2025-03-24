@@ -1,19 +1,23 @@
 package gli.project.tripmate.data.remote.geoapify.datasource
 
+import androidx.paging.PagingSource
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
 import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
+import gli.project.tripmate.data.remote.geoapify.paging.GeoApifyPagingSource
+import gli.project.tripmate.domain.model.Place
 import javax.inject.Inject
 
 class PlacesRemoteDataSourceImpl @Inject constructor(
     private val geoApiService: GeoApiService
 ) : PlacesRemoteDataSource {
-    override suspend fun getNearbyPlaces(
+    override fun getNearbyPlacesPagingSource(
         categories: String,
-        filter: String,
-        limit: Int
-    ): PlacesResponse {
-        return geoApiService.getNearbyPlaces(categories, filter, limit)
+        latitude: Double,
+        longitude: Double,
+        radius: Int
+    ): PagingSource<Int, Place> {
+        return GeoApifyPagingSource(geoApiService, categories, longitude, latitude, radius)
     }
 
     override suspend fun getDetailPlace(id: String): DetailPlaceResponse {

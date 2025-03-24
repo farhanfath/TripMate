@@ -20,11 +20,18 @@ class PlacesUseCaseImpl @Inject constructor(
 ) : PlacesUseCase {
     override fun getNearbyPlaces(
         categories: String,
-        filter: String,
-        limit: Int
-    ): Flow<ResultResponse<List<Place>>> {
-        return repository.getNearbyPlaces(categories, filter, limit)
-    }
+        latitude: Double,
+        longitude: Double,
+        radius: Int
+    ): Flow<ResultResponse<PagingData<Place>>>  = flow {
+        emit(ResultResponse.Loading)
+        try {
+            val places = repository.getNearbyPlaces(categories, latitude, longitude, radius)
+            emitAll(places.map { ResultResponse.Success(it) })
+        } catch (e: Exception) {
+            emit(ResultResponse.Error(e.message ?: "Unknown error"))
+        }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun getDetailPlace(id: String): ResultResponse<DetailPlace> {
         return repository.getDetailPlace(id)
