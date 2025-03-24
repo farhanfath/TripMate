@@ -15,15 +15,22 @@ object DataConstants {
         "Review"
     )
 
+    // endpoint category
+    private const val HOTEL = "accommodation.hotel"
+    private const val RESTAURANT = "catering.restaurant"
+    private const val MALL = "commercial.shopping_mall"
+    private const val AIRPORT = "airport"
+
     val featureCategory = listOf(
-        FeatureCategory(name = "Hotels", icon = Icons.Default.Bed),
-        FeatureCategory(name = "Restaurant", icon = Icons.Default.Restaurant),
-        FeatureCategory(name = "Mall", icon = Icons.Default.LocalMall),
-        FeatureCategory(name = "Airport", icon = Icons.Default.LocalAirport),
+        FeatureCategory(name = "Hotels", categoryEndpoint = HOTEL, icon = Icons.Default.Bed),
+        FeatureCategory(name = "Restaurant", categoryEndpoint = RESTAURANT, icon = Icons.Default.Restaurant),
+        FeatureCategory(name = "Mall", categoryEndpoint = MALL, icon = Icons.Default.LocalMall),
+        FeatureCategory(name = "Airport", categoryEndpoint = AIRPORT, icon = Icons.Default.LocalAirport),
     )
 }
 
 data class FeatureCategory(
     val name: String,
+    val categoryEndpoint: String,
     val icon: ImageVector
 )

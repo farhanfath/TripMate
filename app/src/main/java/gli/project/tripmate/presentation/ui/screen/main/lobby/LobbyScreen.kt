@@ -45,7 +45,8 @@ fun LobbyScreen(
     placesViewModel: PlacesViewModel,
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
-    onLocationRequestPermission: () -> Unit
+    onLocationRequestPermission: () -> Unit,
+    onFeatureDetailClick: (name: String, endpoint: String) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -129,7 +130,11 @@ fun LobbyScreen(
             }
             item {
                 Spacer(modifier = Modifier.size(20.dp))
-                Feature()
+                Feature(
+                    onFeatureDetailClick = { name, endpoint ->
+                        onFeatureDetailClick(name, endpoint)
+                    }
+                )
             }
             item {
                 HistoryView(

@@ -9,6 +9,7 @@ import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.detail.DetailScreen
+import gli.project.tripmate.presentation.ui.screen.feature.FeatureScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
 import gli.project.tripmate.presentation.viewmodel.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
@@ -48,6 +49,14 @@ fun MainNavHost(
                         navController.navigate(
                             MainNavigation.ChatAI
                         )
+                    },
+                    onFeatureDetailClick = { categoryName, categoryEndpoint ->
+                        navController.navigate(
+                            MainNavigation.DetailFeature(
+                                categoryName = categoryName,
+                                categoryEndpoint = categoryEndpoint
+                            )
+                        )
                     }
                 )
             }
@@ -69,6 +78,26 @@ fun MainNavHost(
                 chatViewModel = chatViewModel,
                 onBackClick = {
                     navController.navigateUp()
+                }
+            )
+        }
+
+        composable<MainNavigation.DetailFeature> { entry ->
+            val categoryFeature = entry.toRoute<MainNavigation.DetailFeature>()
+            FeatureScreen(
+                placeViewModel = placeViewModel,
+                nameCategory = categoryFeature.categoryName,
+                categoryType = categoryFeature.categoryEndpoint,
+                onBackClick = {
+                    navController.navigateUp()
+                },
+                onDetailClick = { placeId, placeName ->
+                    navController.navigate(
+                        MainNavigation.DetailTour(
+                            placeId = placeId,
+                            placeName = placeName
+                        )
+                    )
                 }
             )
         }

@@ -30,6 +30,9 @@ datastorePreferences = "1.1.3"
 
 # map
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
+mapCompose = "2.11.4"
+mapService = "19.1.0"
+googleMapPlaces = "3.5.0"
 # location service
 playServicesLocation = "21.3.0"
 
@@ -96,6 +99,12 @@ coil3-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "
 
 # location service
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+
+# maps
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapCompose" }
+maps-services = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "mapService" }
+google-maps-places = { group = "com.google.android.libraries.places", name = "places", version.ref = "googleMapPlaces" }
+# places
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

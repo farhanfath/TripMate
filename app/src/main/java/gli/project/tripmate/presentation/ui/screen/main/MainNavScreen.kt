@@ -61,7 +61,8 @@ fun MainNavScreen(
     placeViewModel: PlacesViewModel,
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
-    onLocationRequestPermission: () -> Unit
+    onLocationRequestPermission: () -> Unit,
+    onFeatureDetailClick: (name: String, endpoint: String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -168,7 +169,10 @@ fun MainNavScreen(
                     placesViewModel = placeViewModel,
                     locationViewModel = locationViewModel,
                     permissionResult = permissionResult,
-                    onLocationRequestPermission = onLocationRequestPermission
+                    onLocationRequestPermission = onLocationRequestPermission,
+                    onFeatureDetailClick = { name, endpoint ->
+                        onFeatureDetailClick(name, endpoint)
+                    }
                 )
             }
             composable<MainNavigation.Favorite> {

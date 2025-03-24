@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
@@ -29,13 +30,64 @@ class PlacesViewModel @Inject constructor(
     val placesState = _placesState.asStateFlow()
 
     init {
+        loadDefaultNearbyPlaces()
+    }
+
+    private fun loadDefaultNearbyPlaces() {
         viewModelScope.launch {
             locationDataStore.currentLocation.collect { location ->
                 location?.let { (lat, lon) ->
-                    getNearbyPlaces(
+                    fetchNearbyPlaces(
                         categories = "tourism",
                         filter = "circle:$lon,$lat,5000",
-                        limit = 10
+                        limit = 10,
+                        isCategory = false
+                    )
+                }
+            }
+        }
+    }
+
+    private fun fetchNearbyPlaces(categories: String, filter: String, limit: Int, isCategory: Boolean) {
+        viewModelScope.launch {
+            useCase.getNearbyPlaces(categories, filter, limit)
+                .onStart {
+                    if (isCategory) {
+                        _placesState.update { it.copy(nearbyPlacesByCategory = ResultResponse.Loading) }
+                    } else {
+                        _placesState.update { it.copy(nearbyPlaces = ResultResponse.Loading) }
+                    }
+                }
+                .catch { e ->
+                    if (isCategory) {
+                        _placesState.update { it.copy(nearbyPlacesByCategory = ResultResponse.Error(e.message.toString())) }
+                    } else {
+                        _placesState.update { it.copy(nearbyPlaces = ResultResponse.Error(e.message.toString())) }
+                    }
+                }
+                .collect { result ->
+                    if (isCategory) {
+                        _placesState.update { it.copy(nearbyPlacesByCategory = result) }
+                    } else {
+                        _placesState.update { it.copy(nearbyPlaces = result) }
+                    }
+                }
+        }
+    }
+
+    fun getNearbyPlaces(categories: String, filter: String, limit: Int) {
+        fetchNearbyPlaces(categories, filter, limit, isCategory = false)
+    }
+
+    fun getNearbyPlacesByCategory(categoryType: String) {
+        viewModelScope.launch {
+            locationDataStore.currentLocation.collectLatest { location ->
+                location?.let { (lat, lon) ->
+                    fetchNearbyPlaces(
+                        categories = categoryType,
+                        filter = "circle:$lon,$lat,10000",
+                        limit = 20,
+                        isCategory = true
                     )
                 }
             }
@@ -53,20 +105,6 @@ class PlacesViewModel @Inject constructor(
         }
     }
 
-    fun getNearbyPlaces(categories: String, filter: String, limit: Int) {
-        viewModelScope.launch {
-            useCase.getNearbyPlaces(categories, filter, limit)
-                .onStart {
-                    _placesState.update { it.copy(nearbyPlaces = ResultResponse.Loading) }
-                }
-                .catch { e ->
-                    _placesState.update { it.copy(nearbyPlaces = ResultResponse.Error(e.message.toString())) }
-                }
-                .collect { result ->
-                    _placesState.update { it.copy(nearbyPlaces = result) }
-                }
-        }
-    }
 
     fun getDetailPlaces(placeId: String) {
         viewModelScope.launch {

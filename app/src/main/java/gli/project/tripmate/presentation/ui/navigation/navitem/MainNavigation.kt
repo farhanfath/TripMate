@@ -30,4 +30,10 @@ sealed class MainNavigation {
         val placeId: String,
         val placeName: String
     ) : MainNavigation()
+
+    @Serializable
+    data class DetailFeature(
+        val categoryName: String,
+        val categoryEndpoint: String
+    ) : MainNavigation()
 }

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.presentation.ui.component.CustomTopBar
+import gli.project.tripmate.presentation.ui.component.CustomTopBarWithNavigation
 import gli.project.tripmate.presentation.ui.screen.chat.component.ChatBubble
 import gli.project.tripmate.presentation.ui.screen.chat.component.PulsatingDots
 import gli.project.tripmate.presentation.util.extensions.customResponseHandler
@@ -47,39 +48,9 @@ fun ChatScreen(
 
     Scaffold(
         topBar = {
-            CustomTopBar(
-                additionalContent = {
-                    Box(
-                        modifier = Modifier
-                            .background(color = MaterialTheme.colorScheme.primary)
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    onBackClick()
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = "",
-                                    tint = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
-                            Text(
-                                text = "Tanya TripMate",
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.titleLarge.copy(
-                                    fontWeight = FontWeight.Bold
-                                )
-                            )
-                        }
-                    }
-                }
+            CustomTopBarWithNavigation(
+                title = "Tanya TripMate",
+                onBackClick = onBackClick
             )
         }
     ) { innerPadding ->
