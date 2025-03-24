@@ -8,6 +8,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import java.util.Locale
 
 // Fungsi untuk parsing markdown (sama seperti sebelumnya)
 fun parseMarkdown(text: String): AnnotatedString {
@@ -120,5 +121,33 @@ fun AnnotatedString.Builder.applyCurrentStyling(
         pushStyle(style)
         append(text)
         pop()
+    }
+}
+
+fun locationRangeFormat(range: Double) : String {
+    return String.format(Locale("id", "ID"), "%.1f", range) + " km dari Lokasi anda"
+}
+
+fun formatOperatingHours(input: String?): String {
+    val daysMap = mapOf(
+        "Mo" to "Senin",
+        "Tu" to "Selasa",
+        "We" to "Rabu",
+        "Th" to "Kamis",
+        "Fr" to "Jumat",
+        "Sa" to "Sabtu",
+        "Su" to "Minggu"
+    )
+
+    val regex = Regex("([A-Za-z]{2})-([A-Za-z]{2}) (\\d{2}:\\d{2})-(\\d{2}:\\d{2})")
+    val matchResult = input?.let { regex.find(it) }
+
+    return if (matchResult != null) {
+        val (startDay, endDay, openTime, closeTime) = matchResult.destructured
+        val formattedStartDay = daysMap[startDay] ?: startDay
+        val formattedEndDay = daysMap[endDay] ?: endDay
+        "$formattedStartDay - $formattedEndDay, Pukul $openTime - $closeTime"
+    } else {
+        "Informasi jam buka belum tersedia"
     }
 }

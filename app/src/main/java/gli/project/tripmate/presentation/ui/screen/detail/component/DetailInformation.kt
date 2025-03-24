@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
@@ -26,10 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.domain.model.DetailPlace
+import gli.project.tripmate.presentation.util.extensions.formatOperatingHours
 
 @Composable
 fun DetailInformation(
-    data: DetailPlace
+    data: DetailPlace,
+    placeName: String
 ) {
     Row(
         modifier = Modifier
@@ -40,7 +43,7 @@ fun DetailInformation(
     ) {
         Column {
             Text(
-                text = data.name,
+                text = placeName,
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -62,6 +65,29 @@ fun DetailInformation(
                 ) {
                     Text(
                         text = data.address,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        modifier = Modifier.basicMarquee()
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.size(10.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccessTime,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(16.dp)
+                )
+                Box(
+                    modifier = Modifier.width(150.dp)
+                ) {
+                    Text(
+                        text = formatOperatingHours(data.openingHours),
                         style = MaterialTheme.typography.bodySmall.copy(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         ),

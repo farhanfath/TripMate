@@ -47,6 +47,7 @@ import gli.project.tripmate.presentation.ui.screen.detail.component.DetailInform
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.about.AboutTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.GalleryTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.ReviewTab
+import gli.project.tripmate.presentation.util.DataConstants
 import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 import gli.project.tripmate.presentation.util.LogUtil
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
@@ -98,7 +99,7 @@ fun DetailScreen(
         }
     }
 
-    val tabs = listOf("About", "Gallery", "Reviews")
+    val tabs = DataConstants.tabName
     val scope = rememberCoroutineScope()
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -147,7 +148,8 @@ fun DetailScreen(
                     ) {
                         item {
                             DetailInformation(
-                                data = detailData
+                                data = detailData,
+                                placeName = placeName
                             )
                         }
 

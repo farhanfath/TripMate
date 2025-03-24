@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Bed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,6 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import gli.project.tripmate.presentation.util.DataConstants
+import gli.project.tripmate.presentation.util.FeatureCategory
 
 @Composable
 fun Feature() {
@@ -31,14 +32,17 @@ fun Feature() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        repeat(4) {
-            FeatureItem()
+        val categories = DataConstants.featureCategory
+        categories.forEach { category ->
+            FeatureItem(category = category)
         }
     }
 }
 
 @Composable
-fun RowScope.FeatureItem() {
+fun RowScope.FeatureItem(
+    category: FeatureCategory
+) {
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
@@ -61,42 +65,16 @@ fun RowScope.FeatureItem() {
                 .fillMaxSize()
         ) {
             Icon(
-                imageVector = Icons.Outlined.Bed,
+                imageVector = category.icon,
                 contentDescription = "",
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier.padding(bottom = 10.dp)
             )
             Text(
-                text = "Hotels"
+                text = category.name,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontSize = 10.sp
+                ),
             )
         }
     }
-//    Card(
-//        elevation = CardDefaults.cardElevation(4.dp),
-//        colors = CardDefaults.cardColors(
-//            containerColor = MaterialTheme.colorScheme.onPrimary
-//        ),
-//        modifier = Modifier
-//            .padding(horizontal = 10.dp, vertical = 4.dp)
-//            .size(70.dp)
-//            .weight(1f)
-//            .clickable {
-//
-//            }
-//    ) {
-//        Column(
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            modifier = Modifier
-//                .fillMaxSize()
-//        ) {
-//            Icon(
-//                imageVector = Icons.Outlined.Bed,
-//                contentDescription = "",
-//                modifier = Modifier.padding(bottom = 6.dp)
-//            )
-//            Text(
-//                text = "Hotels"
-//            )
-//        }
-//    }
 }

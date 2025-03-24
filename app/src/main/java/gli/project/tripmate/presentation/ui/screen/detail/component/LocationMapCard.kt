@@ -38,6 +38,7 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import gli.project.tripmate.presentation.util.extensions.locationRangeFormat
 
 @Composable
 fun LocationMapCard(
@@ -141,7 +142,7 @@ fun LocationMapCard(
                         modifier = Modifier.padding(end = 10.dp)
                     ) {
                         Text(
-                            text = "${userRange.let { "%.2f km".format(it) }}",
+                            text = locationRangeFormat(userRange),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.basicMarquee()
