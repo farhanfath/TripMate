@@ -1,7 +1,5 @@
 package gli.project.tripmate.presentation.util.extensions
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -10,7 +8,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import java.util.Locale
 
-// Fungsi untuk parsing markdown (sama seperti sebelumnya)
 fun parseMarkdown(text: String): AnnotatedString {
     return buildAnnotatedString {
         val currentText = StringBuilder()
@@ -101,29 +98,6 @@ fun parseMarkdown(text: String): AnnotatedString {
     }
 }
 
-@Composable
-fun AnnotatedString.Builder.applyCurrentStyling(
-    text: String,
-    isBold: Boolean,
-    isItalic: Boolean,
-    isCode: Boolean
-): AnnotatedString {
-    if (text.isEmpty()) return AnnotatedString("")
-
-    return buildAnnotatedString {
-        val style = SpanStyle(
-            fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal,
-            fontStyle = if (isItalic) FontStyle.Italic else FontStyle.Normal,
-            fontFamily = if (isCode) FontFamily.Monospace else FontFamily.Default,
-            background = if (isCode) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else androidx.compose.ui.graphics.Color.Unspecified
-        )
-
-        pushStyle(style)
-        append(text)
-        pop()
-    }
-}
-
 fun locationRangeFormat(range: Double) : String {
     return String.format(Locale("id", "ID"), "%.1f", range) + " km dari Lokasi anda"
 }
@@ -149,5 +123,11 @@ fun formatOperatingHours(input: String?): String {
         "$formattedStartDay - $formattedEndDay, Pukul $openTime - $closeTime"
     } else {
         "Informasi jam buka belum tersedia"
+    }
+}
+
+fun emptyTextHandler(original: String, placeHolder: String) : String {
+    return original.ifEmpty {
+        placeHolder
     }
 }

@@ -12,4 +12,5 @@
     <string name="no_connection_message">Your connection is lost, try checking your Wi-Fi or cell phone signal</string>
     <string name="failed_server_connect">Failed to connect server</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="name_not_available">Place name not available</string>
 </resources>

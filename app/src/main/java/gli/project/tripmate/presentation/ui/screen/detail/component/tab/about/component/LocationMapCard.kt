@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.screen.detail.component
+package gli.project.tripmate.presentation.ui.screen.detail.component.tab.about.component
 
 import android.content.Intent
 import android.net.Uri

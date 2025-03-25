@@ -37,10 +37,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import gli.project.tripmate.R
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
@@ -48,6 +50,7 @@ import gli.project.tripmate.presentation.ui.component.SeeMoreCard
 import gli.project.tripmate.presentation.ui.component.error.RowSectionError
 import gli.project.tripmate.presentation.ui.component.error.PagingFooterError
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
+import gli.project.tripmate.presentation.util.extensions.emptyTextHandler
 import gli.project.tripmate.presentation.util.extensions.handlePagingAppendState
 import gli.project.tripmate.presentation.util.extensions.handlePagingState
 
@@ -279,7 +282,7 @@ fun NearbyItem(
                 ) {
                     Text(
                         modifier = Modifier.basicMarquee(),
-                        text = place.name
+                        text = emptyTextHandler(place.name, stringResource(id = R.string.name_not_available))
                     )
                 }
                 Text(

@@ -24,9 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import gli.project.tripmate.R
 import gli.project.tripmate.domain.model.DetailPlace
+import gli.project.tripmate.presentation.util.extensions.emptyTextHandler
 import gli.project.tripmate.presentation.util.extensions.formatOperatingHours
 
 @Composable
@@ -43,7 +46,7 @@ fun DetailInformation(
     ) {
         Column {
             Text(
-                text = placeName,
+                text = emptyTextHandler(placeName, stringResource(id = R.string.name_not_available)),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
