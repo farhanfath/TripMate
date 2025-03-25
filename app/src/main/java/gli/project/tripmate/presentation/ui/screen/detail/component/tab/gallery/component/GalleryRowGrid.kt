@@ -26,12 +26,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import gli.project.tripmate.domain.model.PexelImage
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
+import gli.project.tripmate.presentation.ui.component.CustomShimmer
+import gli.project.tripmate.presentation.ui.component.error.RowSectionError
+import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.util.extensions.handlePagingState
 
 @Composable
@@ -47,7 +51,14 @@ fun GalleryRowGrid(
         handlePagingState(
             items = imageList,
             onLoading = {
-
+                items(10) {
+                    CustomShimmer(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .width(230.dp)
+                            .height(310.dp)
+                    )
+                }
             },
             onSuccess = {
                 val visibleItemCount = minOf(12, imageList.itemCount)
@@ -102,8 +113,16 @@ fun GalleryRowGrid(
                     }
                 }
             },
-            onError = {
-
+            onError = { errorStatus ->
+                item {
+                    RowSectionError(
+                        message = ErrorMessageHelper.getThrowableErrorMessage(errorStatus, LocalContext.current),
+                        onRetry = { imageList.retry() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(310.dp)
+                    )
+                }
             }
         )
     }

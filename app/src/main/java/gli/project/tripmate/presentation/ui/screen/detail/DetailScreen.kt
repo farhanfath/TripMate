@@ -36,11 +36,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
+import gli.project.tripmate.presentation.ui.component.error.CustomNoConnectionPlaceholder
 import gli.project.tripmate.presentation.ui.screen.detail.component.BackDropImage
 import gli.project.tripmate.presentation.ui.screen.detail.component.DetailActionButton
 import gli.project.tripmate.presentation.ui.screen.detail.component.DetailInformation
@@ -49,7 +51,7 @@ import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.ReviewTab
 import gli.project.tripmate.presentation.util.DataConstants
 import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
-import gli.project.tripmate.presentation.util.LogUtil
+import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -220,14 +222,12 @@ fun DetailScreen(
                     }
                 }
             },
-            onError = {
-                /**
-                 * TODO: change to error handling
-                 */
-                /**
-                 * TODO: change to error handling
-                 */
-                LogUtil.d("DetailScreen", "Error: $it")
+            onError = { errorStatus ->
+                CustomNoConnectionPlaceholder(
+                    onRetry = { viewModel.getDetailPlaces(placeId) },
+                    title = "Error Acquired",
+                    desc = ErrorMessageHelper.getUiErrorMessage(errorStatus, LocalContext.current)
+                )
             }
         )
     }

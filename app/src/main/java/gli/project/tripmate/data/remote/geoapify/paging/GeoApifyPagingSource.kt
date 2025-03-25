@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import gli.project.tripmate.data.mapper.toDomain
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
+import gli.project.tripmate.data.util.PagingError
 import gli.project.tripmate.domain.model.Place
 import retrofit2.HttpException
 import java.io.IOException
@@ -34,9 +35,9 @@ class GeoApifyPagingSource @Inject constructor(
                 nextKey = if (places.isEmpty()) null else position + limit
             )
         } catch (e: IOException) {
-            LoadResult.Error(Throwable(e))
+            LoadResult.Error(PagingError.NetworkError)
         } catch (e: HttpException) {
-            LoadResult.Error(Throwable(e))
+            LoadResult.Error(PagingError.ServerError)
         }
     }
 

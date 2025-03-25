@@ -10,16 +10,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrokenImage
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -27,9 +22,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
+import gli.project.tripmate.R
 
 @Composable
 fun CustomImageLoader(
@@ -40,6 +36,17 @@ fun CustomImageLoader(
 ) {
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
+
+    // List drawable resources untuk placeholder
+    val placeholderDrawables = listOf(
+        R.drawable.placeholder_hotel,
+        R.drawable.placeholder_restaurant,
+        R.drawable.placeholder_mall,
+        R.drawable.placeholder_cafe
+    )
+
+    // Pilih random drawable untuk placeholder error
+    val randomPlaceholderRes = remember { placeholderDrawables.random() }
 
     // Shimmer animation
     val shimmerColors = listOf(
@@ -95,18 +102,14 @@ fun CustomImageLoader(
             )
         }
 
+        // Show random placeholder image for error state
         if (isError) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.BrokenImage,
-                    contentDescription = "Image Load Error",
-                    modifier = Modifier.size(48.dp),
-                    tint = Color.Gray
-                )
-            }
+            Image(
+                painter = painterResource(id = randomPlaceholderRes),
+                contentDescription = "Error Placeholder Image",
+                contentScale = scale,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }

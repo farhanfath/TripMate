@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import gli.project.tripmate.data.mapper.toDomain
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
+import gli.project.tripmate.data.util.PagingError
 import gli.project.tripmate.domain.model.PexelImage
 import retrofit2.HttpException
 import java.io.IOException
@@ -23,9 +24,9 @@ class PexelPagingSource @Inject constructor(
                 nextKey = if (response.photos.isEmpty()) null else page + 1
             )
         } catch (e: IOException) {
-            LoadResult.Error(Throwable(e))
+            LoadResult.Error(PagingError.NetworkError)
         } catch (e: HttpException) {
-            LoadResult.Error(Throwable(e))
+            LoadResult.Error(PagingError.ServerError)
         }
     }
 

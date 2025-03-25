@@ -1,5 +1,7 @@
 package gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery
 
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,11 +34,12 @@ fun GalleryTab(
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "Discover $detailPlaceName in Pictures",
+            text = "Discover More",
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
-            modifier = Modifier.padding(start = 10.dp, top = 20.dp, bottom = 10.dp)
+            modifier = Modifier
+                .padding(start = 10.dp, top = 20.dp, bottom = 10.dp)
         )
         GalleryRowGrid(
             imageList = placeImageList,

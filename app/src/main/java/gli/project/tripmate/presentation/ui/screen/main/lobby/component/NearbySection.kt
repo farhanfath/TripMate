@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,10 @@ import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
 import gli.project.tripmate.presentation.ui.component.SeeMoreCard
+import gli.project.tripmate.presentation.ui.component.error.RowSectionError
+import gli.project.tripmate.presentation.ui.component.error.PagingFooterError
+import gli.project.tripmate.presentation.util.ErrorMessageHelper
+import gli.project.tripmate.presentation.util.extensions.handlePagingAppendState
 import gli.project.tripmate.presentation.util.extensions.handlePagingState
 
 @Composable
@@ -127,9 +132,43 @@ fun Nearby(
                             )
                         }
                     }
+
+                    if (placeData.itemCount < 20) {
+                        handlePagingAppendState(
+                            items = placeData,
+                            onLoading = {
+                                item {
+                                    CustomShimmer(
+                                        modifier = Modifier
+                                            .padding(vertical = 10.dp, horizontal = 4.dp)
+                                            .height(200.dp)
+                                            .width(180.dp)
+                                    )
+                                }
+                            },
+                            onError = { error ->
+                                item {
+                                    PagingFooterError (
+                                        modifier = Modifier
+                                            .height(200.dp)
+                                            .width(180.dp),
+                                        error = error.message
+                                            ?: "Error loading more movies",
+                                        onRetry = { placeData.retry() }
+                                    )
+                                }
+                            }
+                        )
+                    }
                 },
-                onError = {
-                    // TODO: Handle error
+                onError = { error ->
+                    item {
+                        RowSectionError(
+                            message = ErrorMessageHelper.getThrowableErrorMessage(error, LocalContext.current),
+                            onRetry = { placeData.retry() },
+                            modifier = Modifier.fillParentMaxWidth()
+                        )
+                    }
                 }
             )
         }
