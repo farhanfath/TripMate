@@ -27,8 +27,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
+import gli.project.tripmate.R
 import gli.project.tripmate.presentation.ui.theme.icon_medium_size_48
 
 @Composable
@@ -48,14 +50,14 @@ fun CustomImageLoader(
         Color.LightGray.copy(alpha = 0.6f)
     )
 
-    val transition = rememberInfiniteTransition(label = "shimmer")
+    val transition = rememberInfiniteTransition(label = stringResource(R.string.shimmer_animation))
     val translateAnim = transition.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
-        ), label = "shimmer"
+        ), label = stringResource(R.string.shimmer_animation)
     )
 
     // Brush for shimmer effect
@@ -102,7 +104,7 @@ fun CustomImageLoader(
             ) {
                 Icon(
                     imageVector = Icons.Filled.BrokenImage,
-                    contentDescription = "Image Load Error",
+                    contentDescription = stringResource(id = R.string.image_load_error),
                     modifier = Modifier.size(icon_medium_size_48),
                     tint = Color.Gray
                 )
