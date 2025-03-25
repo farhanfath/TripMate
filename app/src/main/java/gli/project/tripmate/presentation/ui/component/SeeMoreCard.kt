@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SeeMoreCard(
     onSeeMoreClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     OutlinedCard(
         modifier = modifier

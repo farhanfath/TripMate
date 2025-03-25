@@ -50,8 +50,7 @@ fun GalleryRowGrid(
 
             },
             onSuccess = {
-                // Only display first 21 images
-                val visibleItemCount = minOf(11, imageList.itemCount)
+                val visibleItemCount = minOf(12, imageList.itemCount)
 
                 // Process items in groups of three (1 big + 2 small)
                 val groupCount = (visibleItemCount + 2) / 3

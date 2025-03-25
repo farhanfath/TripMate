@@ -49,7 +49,8 @@ import gli.project.tripmate.presentation.util.extensions.handlePagingState
 @Composable
 fun Nearby(
     onDetailClick: (placeId: String, placeName: String) -> Unit,
-    placeData: LazyPagingItems<Place>
+    placeData: LazyPagingItems<Place>,
+    onSeeMoreClick: () -> Unit
 ) {
     Column {
         Row(
@@ -70,7 +71,10 @@ fun Nearby(
                 style = MaterialTheme.typography.titleSmall.copy(
                     color = MaterialTheme.colorScheme.secondary,
                     textDecoration = TextDecoration.Underline
-                )
+                ),
+                modifier = Modifier.clickable {
+                    onSeeMoreClick()
+                }
             )
         }
         LazyRow(
@@ -105,7 +109,7 @@ fun Nearby(
                         placeData[index]?.let { place ->
                             NearbyItem(
                                 onDetailClick = {
-                                    onDetailClick(place.placeId, place.name ?: "")
+                                    onDetailClick(place.placeId, place.name)
                                 },
                                 place = place,
                             )
@@ -118,8 +122,8 @@ fun Nearby(
                                     .width(180.dp)
                                     .height(200.dp),
                                 onSeeMoreClick = {
-
-                                }
+                                    onSeeMoreClick()
+                                },
                             )
                         }
                     }

@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.screen.feature.component
+package gli.project.tripmate.presentation.ui.screen.category.component
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
@@ -41,7 +41,7 @@ import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 
 @Composable
-fun NearbyPlaceByCategoryItem(
+fun NearbyPlaceLongItem(
     onDetailClick: () -> Unit,
     place: Place,
 ) {
@@ -212,7 +212,7 @@ fun NearbyPlaceByCategoryItem(
 @Preview
 @Composable
 fun NearbyPlaceByCategoryItemPreview() {
-    NearbyPlaceByCategoryItem(
+    NearbyPlaceLongItem(
         onDetailClick = {},
         place = Place(
             placeId = "",

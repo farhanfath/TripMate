@@ -9,8 +9,9 @@ import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.detail.DetailScreen
-import gli.project.tripmate.presentation.ui.screen.feature.FeatureScreen
+import gli.project.tripmate.presentation.ui.screen.category.CategoryScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
+import gli.project.tripmate.presentation.ui.screen.more.MoreNearbyScreen
 import gli.project.tripmate.presentation.viewmodel.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
@@ -50,12 +51,17 @@ fun MainNavHost(
                             MainNavigation.ChatAI
                         )
                     },
-                    onFeatureDetailClick = { categoryName, categoryEndpoint ->
+                    onCategoryDetailClick = { categoryName, categoryEndpoint ->
                         navController.navigate(
-                            MainNavigation.DetailFeature(
+                            MainNavigation.DetailCategory(
                                 categoryName = categoryName,
                                 categoryEndpoint = categoryEndpoint
                             )
+                        )
+                    },
+                    onSeeMoreClick = {
+                        navController.navigate(
+                            MainNavigation.MoreNearby
                         )
                     }
                 )
@@ -82,12 +88,29 @@ fun MainNavHost(
             )
         }
 
-        composable<MainNavigation.DetailFeature> { entry ->
-            val categoryFeature = entry.toRoute<MainNavigation.DetailFeature>()
-            FeatureScreen(
+        composable<MainNavigation.DetailCategory> { entry ->
+            val categoryFeature = entry.toRoute<MainNavigation.DetailCategory>()
+            CategoryScreen(
                 placeViewModel = placeViewModel,
                 nameCategory = categoryFeature.categoryName,
                 categoryType = categoryFeature.categoryEndpoint,
+                onBackClick = {
+                    navController.navigateUp()
+                },
+                onDetailClick = { placeId, placeName ->
+                    navController.navigate(
+                        MainNavigation.DetailTour(
+                            placeId = placeId,
+                            placeName = placeName
+                        )
+                    )
+                }
+            )
+        }
+
+        composable<MainNavigation.MoreNearby> {
+            MoreNearbyScreen(
+                placesViewModel = placeViewModel,
                 onBackClick = {
                     navController.navigateUp()
                 },

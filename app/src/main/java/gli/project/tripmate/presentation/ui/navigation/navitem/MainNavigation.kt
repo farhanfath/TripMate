@@ -32,8 +32,14 @@ sealed class MainNavigation {
     ) : MainNavigation()
 
     @Serializable
-    data class DetailFeature(
+    data class DetailCategory(
         val categoryName: String,
         val categoryEndpoint: String
     ) : MainNavigation()
+
+    /**
+     * more screen
+     */
+    @Serializable
+    data object MoreNearby : MainNavigation()
 }

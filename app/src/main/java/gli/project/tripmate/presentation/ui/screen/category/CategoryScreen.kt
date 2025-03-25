@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.screen.feature
+package gli.project.tripmate.presentation.ui.screen.category
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,12 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
 import gli.project.tripmate.presentation.ui.component.CustomTopBarWithNavigation
-import gli.project.tripmate.presentation.ui.screen.feature.component.NearbyPlaceByCategoryItem
+import gli.project.tripmate.presentation.ui.screen.category.component.NearbyPlaceLongItem
 import gli.project.tripmate.presentation.util.extensions.handlePagingState
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 
 @Composable
-fun FeatureScreen(
+fun CategoryScreen(
     placeViewModel: PlacesViewModel,
     nameCategory: String,
     categoryType: String,
@@ -78,7 +78,7 @@ fun FeatureScreen(
                         ) { index ->
                             // get image from different api
                             nearbyPlacesCategoryState[index]?.let { place ->
-                                NearbyPlaceByCategoryItem(
+                                NearbyPlaceLongItem(
                                     onDetailClick = {
                                         onDetailClick(place.placeId, place.name)
                                     },

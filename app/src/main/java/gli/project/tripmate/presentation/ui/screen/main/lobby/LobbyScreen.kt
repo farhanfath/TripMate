@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.presentation.receiver.LocationProviderChangedReceiver
-import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Feature
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.CategorySection
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.HistoryView
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Nearby
@@ -39,7 +39,6 @@ import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationPermissionCard
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun LobbyScreen(
@@ -48,7 +47,8 @@ fun LobbyScreen(
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit,
-    onFeatureDetailClick: (name: String, endpoint: String) -> Unit
+    onCategoryDetailClick: (name: String, endpoint: String) -> Unit,
+    onSeeMoreClick: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -133,9 +133,9 @@ fun LobbyScreen(
             }
             item {
                 Spacer(modifier = Modifier.size(20.dp))
-                Feature(
-                    onFeatureDetailClick = { name, endpoint ->
-                        onFeatureDetailClick(name, endpoint)
+                CategorySection(
+                    onCategoryDetailClick = { name, endpoint ->
+                        onCategoryDetailClick(name, endpoint)
                     }
                 )
             }
@@ -148,7 +148,8 @@ fun LobbyScreen(
                 item {
                     Nearby(
                         onDetailClick = onDetailClick,
-                        placeData = nearbyPlacesState
+                        placeData = nearbyPlacesState,
+                        onSeeMoreClick = onSeeMoreClick
                     )
                 }
             } else {

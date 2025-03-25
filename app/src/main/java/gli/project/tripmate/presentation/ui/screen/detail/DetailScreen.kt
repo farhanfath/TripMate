@@ -134,10 +134,6 @@ fun DetailScreen(
                     /**
                      * detail Content
                      */
-
-                    /**
-                     * detail Content
-                     */
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -196,7 +192,6 @@ fun DetailScreen(
                                 AnimatedContent(
                                     targetState = selectedTabIndex,
                                     transitionSpec = {
-                                        // Definisikan animasi slide berdasarkan indeks sebelumnya dan sekarang
                                         if (targetState > initialState) {
                                             slideInHorizontally { width -> width } togetherWith
                                                     slideOutHorizontally { width -> -width }

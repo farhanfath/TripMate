@@ -24,8 +24,8 @@ import gli.project.tripmate.presentation.util.DataConstants
 import gli.project.tripmate.presentation.util.FeatureCategory
 
 @Composable
-fun Feature(
-    onFeatureDetailClick: (name: String, endpoint: String) -> Unit
+fun CategorySection(
+    onCategoryDetailClick: (name: String, endpoint: String) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -36,10 +36,10 @@ fun Feature(
     ) {
         val categories = DataConstants.featureCategory
         categories.forEach { category ->
-            FeatureItem(
+            CategoryItem(
                 category = category,
-                onFeatureDetailClick = {
-                    onFeatureDetailClick(category.name, category.categoryEndpoint)
+                onCategoryDetailClick = {
+                    onCategoryDetailClick(category.name, category.categoryEndpoint)
                 }
             )
         }
@@ -47,9 +47,9 @@ fun Feature(
 }
 
 @Composable
-fun RowScope.FeatureItem(
+fun RowScope.CategoryItem(
     category: FeatureCategory,
-    onFeatureDetailClick: () -> Unit
+    onCategoryDetailClick: () -> Unit
 ) {
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
@@ -63,7 +63,7 @@ fun RowScope.FeatureItem(
             }
             .weight(1f)
             .clickable {
-                onFeatureDetailClick()
+                onCategoryDetailClick()
             }
     ) {
         Column(

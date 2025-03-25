@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -62,7 +61,8 @@ fun MainNavScreen(
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit,
-    onFeatureDetailClick: (name: String, endpoint: String) -> Unit
+    onCategoryDetailClick: (name: String, endpoint: String) -> Unit,
+    onSeeMoreClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -170,9 +170,10 @@ fun MainNavScreen(
                     locationViewModel = locationViewModel,
                     permissionResult = permissionResult,
                     onLocationRequestPermission = onLocationRequestPermission,
-                    onFeatureDetailClick = { name, endpoint ->
-                        onFeatureDetailClick(name, endpoint)
-                    }
+                    onCategoryDetailClick = { name, endpoint ->
+                        onCategoryDetailClick(name, endpoint)
+                    },
+                    onSeeMoreClick = onSeeMoreClick
                 )
             }
             composable<MainNavigation.Favorite> {

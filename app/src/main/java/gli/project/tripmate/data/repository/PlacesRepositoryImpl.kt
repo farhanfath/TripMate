@@ -3,10 +3,8 @@ package gli.project.tripmate.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import gli.project.tripmate.data.mapper.toDomain
 import gli.project.tripmate.data.remote.geoapify.datasource.PlacesRemoteDataSource
-import gli.project.tripmate.data.remote.geoapify.paging.GeoApifyPagingSource
 import gli.project.tripmate.data.remote.pexels.datasource.PexelRemoteDataSource
 import gli.project.tripmate.domain.model.DetailPlace
 import gli.project.tripmate.domain.model.PexelImage
@@ -14,10 +12,7 @@ import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.repository.PlacesRepository
 import gli.project.tripmate.domain.util.ErrorMessage
 import gli.project.tripmate.domain.util.ResultResponse
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -40,7 +35,7 @@ class PlacesRepositoryImpl @Inject constructor(
             config = PagingConfig(
                 pageSize = 20,
                 enablePlaceholders = false,
-                maxSize = 100
+                initialLoadSize = 20
             ),
             pagingSourceFactory = {
                 geoRemoteDataSource.getNearbyPlacesPagingSource(categories, latitude, longitude, radius)

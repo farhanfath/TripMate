@@ -32,7 +32,7 @@ fun GalleryTab(
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "Sample Gallery",
+            text = "Discover $detailPlaceName in Pictures",
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
