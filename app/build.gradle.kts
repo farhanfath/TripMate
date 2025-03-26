@@ -22,6 +22,8 @@ plugins {
 
     // google map
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    // firebase
+    alias(libs.plugins.google.gms.google.services)
 }
 
 val localProperties = Properties().apply {
@@ -132,6 +134,11 @@ dependencies {
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences)
+
+    // firebase - firestore
+    implementation(libs.firebase.firestore)
+    // firebase - auth
+    implementation(libs.firebase.auth)
 
     /**
      * App Dependency
