@@ -57,6 +57,7 @@ import gli.project.tripmate.presentation.util.extensions.handlePagingState
 @Composable
 fun Nearby(
     onDetailClick: (placeId: String, placeName: String) -> Unit,
+    onAddRecentView: (place: Place) -> Unit,
     placeData: LazyPagingItems<Place>,
     onSeeMoreClick: () -> Unit
 ) {
@@ -117,7 +118,10 @@ fun Nearby(
                         placeData[index]?.let { place ->
                             NearbyItem(
                                 onDetailClick = {
+                                    // navigate to detail
                                     onDetailClick(place.placeId, place.name)
+                                    // add the data to recent view
+                                    onAddRecentView(place)
                                 },
                                 place = place,
                             )

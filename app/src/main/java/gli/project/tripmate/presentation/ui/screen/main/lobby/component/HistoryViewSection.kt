@@ -1,6 +1,5 @@
 package gli.project.tripmate.presentation.ui.screen.main.lobby.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,12 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,16 +28,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import gli.project.tripmate.R
+import gli.project.tripmate.domain.model.local.RecentView
+import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 
 @Composable
 fun HistoryView(
-    onDetailClick: () -> Unit
+    recentViewData : List<RecentView>,
+    onDetailClick: (placeId: String, placeName: String) -> Unit
 ) {
     Column {
         Row(
@@ -63,13 +62,22 @@ fun HistoryView(
                 )
             )
         }
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 10.dp)
-        ) {
-            items(6) {
-                HistoryViewItem(
-                    onDetailClick = onDetailClick
-                )
+        if (recentViewData.isEmpty()) {
+            Text(
+                text = "empty data"
+            )
+        } else {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 10.dp)
+            ) {
+                items(recentViewData) { recentViewItem ->
+                    HistoryViewItem(
+                        recentViewItem = recentViewItem,
+                        onDetailClick = { placeId, placeName ->
+                            onDetailClick(placeId, placeName)
+                        }
+                    )
+                }
             }
         }
     }
@@ -77,7 +85,8 @@ fun HistoryView(
 
 @Composable
 fun HistoryViewItem(
-    onDetailClick: () -> Unit
+    recentViewItem: RecentView,
+    onDetailClick: (placeId: String, placeName: String) -> Unit
 ) {
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
@@ -90,7 +99,7 @@ fun HistoryViewItem(
                 shadowElevation = 10f
             }
             .clickable {
-                onDetailClick()
+                onDetailClick(recentViewItem.placeId, recentViewItem.placeName)
             }
     ) {
         Row(
@@ -99,12 +108,12 @@ fun HistoryViewItem(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = "",
+            CustomImageLoader(
+                url = recentViewItem.placeImage,
                 modifier = Modifier
                     .size(80.dp)
-                    .clip(RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(10.dp)),
+                scale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier
@@ -113,15 +122,9 @@ fun HistoryViewItem(
             ) {
                 Column {
                     Text(
-                        text = "Hotel Canary Inn & Restaurant",
+                        text = recentViewItem.placeName,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                    Text(
-                        text = "Free Breakfast Available",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
                 }
@@ -144,7 +147,7 @@ fun HistoryViewItem(
                         ) {
                             Text(
                                 modifier = Modifier.basicMarquee(),
-                                text = "Jakarta, Indonesia",
+                                text = recentViewItem.location,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                                 style = MaterialTheme.typography.labelSmall
                             )
@@ -175,12 +178,4 @@ fun HistoryViewItem(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HistoryViewPreview() {
-    HistoryView(
-        onDetailClick = {}
-    )
 }

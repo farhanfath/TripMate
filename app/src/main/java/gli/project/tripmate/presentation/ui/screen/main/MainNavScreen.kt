@@ -51,6 +51,7 @@ import gli.project.tripmate.presentation.ui.screen.main.lobby.LobbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.profile.ProfileScreen
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
 
 @Composable
 fun MainNavScreen(
@@ -59,6 +60,7 @@ fun MainNavScreen(
     onChatAIClick: () -> Unit,
     placeViewModel: PlacesViewModel,
     locationViewModel: LocationViewModel,
+    recentViewViewModel: RecentViewViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit,
     onCategoryDetailClick: (name: String, endpoint: String) -> Unit,
@@ -168,6 +170,7 @@ fun MainNavScreen(
                     },
                     placesViewModel = placeViewModel,
                     locationViewModel = locationViewModel,
+                    recentViewViewModel = recentViewViewModel,
                     permissionResult = permissionResult,
                     onLocationRequestPermission = onLocationRequestPermission,
                     onCategoryDetailClick = { name, endpoint ->

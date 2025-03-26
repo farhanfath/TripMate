@@ -22,10 +22,12 @@ import gli.project.tripmate.presentation.ui.screen.category.component.NearbyPlac
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.util.extensions.handlePagingState
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
 
 @Composable
 fun CategoryScreen(
     placeViewModel: PlacesViewModel,
+    recentViewViewModel: RecentViewViewModel,
     nameCategory: String,
     categoryType: String,
     onBackClick: () -> Unit,
@@ -81,6 +83,8 @@ fun CategoryScreen(
                             NearbyPlaceLongItem(
                                 onDetailClick = {
                                     onDetailClick(place.placeId, place.name)
+                                    // add the place to recent view
+                                    recentViewViewModel.addRecentView(place)
                                 },
                                 place = place,
                             )

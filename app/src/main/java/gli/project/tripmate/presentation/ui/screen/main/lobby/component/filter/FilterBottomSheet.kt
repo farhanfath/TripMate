@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import gli.project.tripmate.domain.util.constants.HOTEL
 import gli.project.tripmate.presentation.ui.component.BaseModalBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.filter.component.CategoryFilterSection
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
@@ -31,8 +32,8 @@ fun FilterBottomSheet(
     isVisible: Boolean,
     placesViewModel: PlacesViewModel
 ) {
-    var fixSelectedFilterName by remember { mutableStateOf("") }
-    var fixSelectedFilterEndpoint by remember { mutableStateOf("") }
+    var fixSelectedFilterName by remember { mutableStateOf("Hotels") }
+    var fixSelectedFilterEndpoint by remember { mutableStateOf(HOTEL) }
 
     BaseModalBottomSheet(
         modifier = Modifier.padding(top = 150.dp),

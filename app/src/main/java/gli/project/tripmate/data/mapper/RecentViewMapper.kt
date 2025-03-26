@@ -20,7 +20,7 @@ fun Place.toEntity() : RecentViewEntity {
         placeId = placeId,
         placeName = name,
         placeImage = image,
-        location = "$city + $country"
+        location = "$city, $country"
     )
 }
 

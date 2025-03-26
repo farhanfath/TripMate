@@ -15,12 +15,14 @@ import gli.project.tripmate.presentation.ui.screen.more.MoreNearbyScreen
 import gli.project.tripmate.presentation.viewmodel.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
 
 @Composable
 fun MainNavHost(
     navController: NavHostController,
     placeViewModel: PlacesViewModel,
     chatViewModel: ChatViewModel,
+    recentViewViewModel: RecentViewViewModel,
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit
@@ -44,6 +46,7 @@ fun MainNavHost(
                     },
                     placeViewModel = placeViewModel,
                     locationViewModel = locationViewModel,
+                    recentViewViewModel = recentViewViewModel,
                     permissionResult = permissionResult,
                     onLocationRequestPermission = onLocationRequestPermission,
                     onChatAIClick = {
@@ -92,6 +95,7 @@ fun MainNavHost(
             val categoryFeature = entry.toRoute<MainNavigation.DetailCategory>()
             CategoryScreen(
                 placeViewModel = placeViewModel,
+                recentViewViewModel = recentViewViewModel,
                 nameCategory = categoryFeature.categoryName,
                 categoryType = categoryFeature.categoryEndpoint,
                 onBackClick = {

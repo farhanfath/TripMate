@@ -43,12 +43,14 @@ import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationPermissionCard
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
 
 @Composable
 fun LobbyScreen(
     onDetailClick: (placeId: String, placeName: String) -> Unit,
     placesViewModel: PlacesViewModel,
     locationViewModel: LocationViewModel,
+    recentViewViewModel: RecentViewViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit,
     onCategoryDetailClick: (name: String, endpoint: String) -> Unit,
@@ -59,6 +61,9 @@ fun LobbyScreen(
     // place state handler
     val placesState by placesViewModel.placesState.collectAsState()
     val nearbyPlacesState = placesState.nearbyPlaces.collectAsLazyPagingItems()
+
+    // recentView state handler
+    val recentView by recentViewViewModel.recentView.collectAsState(emptyList())
 
     // location state handler
     val locationState by locationViewModel.locationState.collectAsStateWithLifecycle()
@@ -84,11 +89,8 @@ fun LobbyScreen(
         }
     }
 
-
-    /**
-     * TODO: sample for filter bottomsheet
-     */
-    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    // filter bottom sheet state handler
+    var showFilterBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     // get permission status every time permission result changes
     LaunchedEffect(permissionResult) {
@@ -139,7 +141,7 @@ fun LobbyScreen(
                         Greeting()
                         SearchBar(
                             onFilterClick = {
-                                showBottomSheet = true
+                                showFilterBottomSheet = true
                             }
                         )
                     }
@@ -155,13 +157,17 @@ fun LobbyScreen(
             }
             item {
                 HistoryView(
-                    onDetailClick = {}
+                    recentViewData = recentView,
+                    onDetailClick = onDetailClick
                 )
             }
             if (locationState.permissionGranted && locationState.isLocationEnabled) {
                 item {
                     Nearby(
                         onDetailClick = onDetailClick,
+                        onAddRecentView = { place ->
+                            recentViewViewModel.addRecentView(place)
+                        },
                         placeData = nearbyPlacesState,
                         onSeeMoreClick = onSeeMoreClick
                     )
@@ -204,8 +210,8 @@ fun LobbyScreen(
             onConfirm = { filterName, filterEndpoint ->
                 onCategoryDetailClick(filterName, filterEndpoint)
             },
-            onDismiss = { showBottomSheet = false },
-            isVisible = showBottomSheet,
+            onDismiss = { showFilterBottomSheet = false },
+            isVisible = showFilterBottomSheet,
             placesViewModel = placesViewModel
         )
     }
