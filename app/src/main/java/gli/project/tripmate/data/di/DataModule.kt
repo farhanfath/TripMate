@@ -9,15 +9,18 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import gli.project.tripmate.data.helper.LocationDataStore
 import gli.project.tripmate.data.helper.LocationHelper
+import gli.project.tripmate.data.local.datasource.RecentViewDataSource
 import gli.project.tripmate.data.remote.gemini.datasource.GeminiDataSource
 import gli.project.tripmate.data.remote.geoapify.datasource.PlacesRemoteDataSource
 import gli.project.tripmate.data.remote.pexels.datasource.PexelRemoteDataSource
 import gli.project.tripmate.data.repository.ChatRepositoryImpl
 import gli.project.tripmate.data.repository.LocationRepositoryImpl
 import gli.project.tripmate.data.repository.PlacesRepositoryImpl
+import gli.project.tripmate.data.repository.RecentViewRepositoryImpl
 import gli.project.tripmate.domain.repository.ChatRepository
 import gli.project.tripmate.domain.repository.LocationRepository
 import gli.project.tripmate.domain.repository.PlacesRepository
+import gli.project.tripmate.domain.repository.RecentViewRepository
 import javax.inject.Singleton
 
 @Module
@@ -49,6 +52,14 @@ object DataModule {
         chatDataSource: GeminiDataSource
     ): ChatRepository {
         return ChatRepositoryImpl(chatDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecentViewRepository(
+        recentViewDataSource: RecentViewDataSource
+    ): RecentViewRepository {
+        return RecentViewRepositoryImpl(recentViewDataSource)
     }
 
     @Provides

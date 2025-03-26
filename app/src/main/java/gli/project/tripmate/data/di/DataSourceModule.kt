@@ -4,6 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import gli.project.tripmate.data.local.RecentViewDao
+import gli.project.tripmate.data.local.datasource.RecentViewDataSource
+import gli.project.tripmate.data.local.datasource.RecentViewDataSourceImpl
 import gli.project.tripmate.data.remote.gemini.GeminiApiService
 import gli.project.tripmate.data.remote.gemini.datasource.GeminiDataSource
 import gli.project.tripmate.data.remote.gemini.datasource.GeminiDataSourceImpl
@@ -36,5 +39,11 @@ object DataSourceModule {
     @Singleton
     fun provideGeminiRemoteDataSource(@Named("GeminiApiService") apiService: GeminiApiService): GeminiDataSource {
         return GeminiDataSourceImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecentViewLocalDataSource(recentViewDao: RecentViewDao): RecentViewDataSource {
+        return RecentViewDataSourceImpl(recentViewDao)
     }
 }

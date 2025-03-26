@@ -8,13 +8,14 @@ import gli.project.tripmate.domain.util.ResultResponse
 import kotlinx.coroutines.flow.Flow
 
 interface PlacesRepository {
+    // location from geo api
     fun getNearbyPlaces(categories: String, latitude: Double, longitude: Double, radius: Int) : Flow<PagingData<Place>>
-
     suspend fun getDetailPlace(id: String) : ResultResponse<DetailPlace>
 
+    // maps api + geo api
     fun getUserLocationAndPlaceRange(latPlace: Double, lonPlace: Double, latUser: Double, lonUser: Double) : Double
 
+    // image with from pexels api
     fun getPlacesDetailImageList(query: String) : Flow<PagingData<PexelImage>>
-
     suspend fun getPlaceDetailBackgroundImage(query: String) : ResultResponse<PexelImage>
 }
