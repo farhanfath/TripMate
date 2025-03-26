@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import gli.project.tripmate.presentation.util.DataConstants
-import gli.project.tripmate.presentation.util.FeatureCategory
+import gli.project.tripmate.domain.model.PlaceCategory
+import gli.project.tripmate.domain.util.constants.DataConstants
 
 @Composable
 fun CategorySection(
@@ -34,7 +34,7 @@ fun CategorySection(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        val categories = DataConstants.featureCategory
+        val categories = DataConstants.placeCategories
         categories.forEach { category ->
             CategoryItem(
                 category = category,
@@ -48,7 +48,7 @@ fun CategorySection(
 
 @Composable
 fun RowScope.CategoryItem(
-    category: FeatureCategory,
+    category: PlaceCategory,
     onCategoryDetailClick: () -> Unit
 ) {
     Surface(

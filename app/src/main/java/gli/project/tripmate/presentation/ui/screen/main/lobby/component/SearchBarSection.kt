@@ -31,7 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SearchBar() {
+fun SearchBar(
+    onFilterClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(top = 50.dp, start = 20.dp, end = 20.dp)
@@ -84,7 +86,9 @@ fun SearchBar() {
 
         // Filter button
         ElevatedButton(
-            onClick = {},
+            onClick = {
+                onFilterClick()
+            },
             shape = CircleShape,
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = Color.White,

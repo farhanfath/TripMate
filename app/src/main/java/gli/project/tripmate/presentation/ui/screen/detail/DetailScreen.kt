@@ -49,7 +49,7 @@ import gli.project.tripmate.presentation.ui.screen.detail.component.DetailInform
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.about.AboutTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.GalleryTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.ReviewTab
-import gli.project.tripmate.presentation.util.DataConstants
+import gli.project.tripmate.domain.util.constants.DataConstants
 import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel

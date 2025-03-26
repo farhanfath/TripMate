@@ -4,7 +4,9 @@ import androidx.paging.PagingData
 import gli.project.tripmate.domain.model.DetailPlace
 import gli.project.tripmate.domain.model.PexelImage
 import gli.project.tripmate.domain.model.Place
+import gli.project.tripmate.domain.model.PlaceCategory
 import gli.project.tripmate.domain.util.ResultResponse
+import gli.project.tripmate.domain.util.constants.DataConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -16,5 +18,6 @@ data class PlacesState(
     val placeRange : Double = 0.0,
     val userLatitude : Double = 0.0,
     val userLongitude : Double = 0.0,
-    val detailImage: ResultResponse<PexelImage> = ResultResponse.Loading
+    val detailImage: ResultResponse<PexelImage> = ResultResponse.Loading,
+    val placesCategory: List<PlaceCategory> = DataConstants.placeFilterCategories
 )

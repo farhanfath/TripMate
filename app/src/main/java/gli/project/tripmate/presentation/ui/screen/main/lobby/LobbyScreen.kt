@@ -22,7 +22,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +38,7 @@ import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Greeting
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.HistoryView
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.Nearby
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.SearchBar
+import gli.project.tripmate.presentation.ui.screen.main.lobby.component.filter.FilterBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.lobby.component.location.LocationPermissionCard
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
@@ -79,6 +83,12 @@ fun LobbyScreen(
             })
         }
     }
+
+
+    /**
+     * TODO: sample for filter bottomsheet
+     */
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     // get permission status every time permission result changes
     LaunchedEffect(permissionResult) {
@@ -127,7 +137,11 @@ fun LobbyScreen(
                     )
                     Column {
                         Greeting()
-                        SearchBar()
+                        SearchBar(
+                            onFilterClick = {
+                                showBottomSheet = true
+                            }
+                        )
                     }
                 }
             }
@@ -184,6 +198,15 @@ fun LobbyScreen(
                 locationViewModel.dismissLocationDialog()
             },
             isVisible = locationState.showLocationBottomSheet
+        )
+
+        FilterBottomSheet(
+            onConfirm = { filterName, filterEndpoint ->
+                onCategoryDetailClick(filterName, filterEndpoint)
+            },
+            onDismiss = { showBottomSheet = false },
+            isVisible = showBottomSheet,
+            placesViewModel = placesViewModel
         )
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseModalBottomSheet(
+    modifier: Modifier = Modifier,
     isVisible: Boolean,
     onDismiss: () -> Unit,
     fullScreen: Boolean = false,
@@ -21,13 +22,13 @@ fun BaseModalBottomSheet(
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = fullScreen)
     if (isVisible) {
         ModalBottomSheet(
+            modifier = modifier,
             onDismissRequest = onDismiss,
             sheetState = bottomSheetState,
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
             ) {
                 content()
             }
