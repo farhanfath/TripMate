@@ -48,7 +48,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun DetailScreen() {
+fun DetailScreen(
+    onBackClick: () -> Unit
+) {
     /**
      * image and scroll behavior
      */
@@ -91,7 +93,10 @@ fun DetailScreen() {
         ) {
             BackDropImage(currentImageHeight)
 
-            DetailActionButton(modifier = Modifier.padding(innerPadding))
+            DetailActionButton(
+                modifier = Modifier.padding(innerPadding),
+                onBackClick = onBackClick
+            )
 
             /**
              * detail Content
@@ -177,5 +182,7 @@ fun DetailScreen() {
 @Preview
 @Composable
 fun DetailScreenPreview() {
-    DetailScreen()
+    DetailScreen(
+        onBackClick = {}
+    )
 }

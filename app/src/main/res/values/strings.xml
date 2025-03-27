@@ -5,4 +5,9 @@
 
     <!--  error message  -->
     <string name="image_load_error">Error load image</string>
+
+    <!--  navigation label  -->
+    <string name="lobby_label">Explore</string>
+    <string name="favorite_label">Favorite</string>
+    <string name="profile_label">Profile</string>
 </resources>

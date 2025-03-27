@@ -1,7 +1,8 @@
-package gli.project.tripmate.presentation.ui.screen.lobby.component
+package gli.project.tripmate.presentation.ui.screen.main.lobby.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,7 +54,9 @@ import gli.project.tripmate.presentation.ui.theme.size_200
 import gli.project.tripmate.presentation.ui.theme.size_30
 
 @Composable
-fun Nearby() {
+fun Nearby(
+    onDetailClick: () -> Unit
+) {
     Column {
         Row(
             modifier = Modifier
@@ -80,7 +83,9 @@ fun Nearby() {
             contentPadding = PaddingValues(horizontal = padding_10)
         ) {
             items(10) {
-                NearbyItem()
+                NearbyItem(
+                    onDetailClick = onDetailClick
+                )
             }
         }
     }
@@ -89,17 +94,23 @@ fun Nearby() {
 @Preview(showBackground = true)
 @Composable
 fun NearbyPreview(modifier: Modifier = Modifier) {
-    Nearby()
+    Nearby(
+        onDetailClick = {}
+    )
 }
 
-@Preview
 @Composable
-fun NearbyItem() {
+fun NearbyItem(
+    onDetailClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(vertical = padding_10, horizontal = padding_4)
             .height(size_200)
-            .width(size_180),
+            .width(size_180)
+            .clickable {
+                onDetailClick()
+            },
         elevation = CardDefaults.cardElevation(padding_4),
         colors = CardDefaults.cardColors(
             containerColor = Color.White

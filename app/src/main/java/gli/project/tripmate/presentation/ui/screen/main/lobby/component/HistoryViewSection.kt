@@ -1,7 +1,8 @@
-package gli.project.tripmate.presentation.ui.screen.lobby.component
+package gli.project.tripmate.presentation.ui.screen.main.lobby.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,9 @@ import gli.project.tripmate.presentation.ui.theme.size_75
 import gli.project.tripmate.presentation.ui.theme.size_80
 
 @Composable
-fun HistoryView() {
+fun HistoryView(
+    onDetailClick: () -> Unit
+) {
     Column {
         Row(
             modifier = Modifier
@@ -71,24 +74,25 @@ fun HistoryView() {
             contentPadding = PaddingValues(horizontal = padding_10)
         ) {
             items(6) {
-                HistoryViewItem()
+                HistoryViewItem(
+                    onDetailClick = onDetailClick
+                )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun HistoryViewPreview() {
-    HistoryView()
-}
-
-@Composable
-fun HistoryViewItem() {
+fun HistoryViewItem(
+    onDetailClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(vertical = padding_10, horizontal = padding_4)
-            .width(size_280),
+            .width(size_280)
+            .clickable {
+                onDetailClick()
+            },
         elevation = CardDefaults.cardElevation(padding_4),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -176,4 +180,12 @@ fun HistoryViewItem() {
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HistoryViewPreview() {
+    HistoryView(
+        onDetailClick = {}
+    )
 }

@@ -20,7 +20,10 @@ import gli.project.tripmate.R
 import gli.project.tripmate.presentation.ui.theme.padding_20
 
 @Composable
-fun DetailActionButton(modifier: Modifier = Modifier) {
+fun DetailActionButton(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(vertical = padding_20, horizontal = padding_20)
@@ -34,7 +37,9 @@ fun DetailActionButton(modifier: Modifier = Modifier) {
                 containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ),
-            onClick = {}
+            onClick = {
+                onBackClick()
+            }
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
