@@ -1,6 +1,5 @@
 package gli.project.tripmate.data.usecase
 
-import androidx.paging.PagingData
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.model.local.RecentView
 import gli.project.tripmate.domain.repository.RecentViewRepository

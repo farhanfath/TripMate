@@ -13,4 +13,10 @@
     <string name="failed_server_connect">Failed to connect server</string>
     <string name="unknown_error">Unknown Error</string>
     <string name="name_not_available">Place name not available</string>
+
+    <!--  time utils  -->
+    <string name="days_ago">Last seen: %d days ago</string>
+    <string name="hours_ago">Last seen: %d hours ago</string>
+    <string name="minutes_ago">Last seen: %d minutes ago</string>
+    <string name="just_now">Just seen</string>
 </resources>

@@ -158,6 +158,7 @@ fun LobbyScreen(
             item {
                 HistoryView(
                     recentViewData = recentView,
+                    recentViewViewModel = recentViewViewModel,
                     onDetailClick = onDetailClick
                 )
             }

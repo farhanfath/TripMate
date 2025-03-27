@@ -1,11 +1,15 @@
 package gli.project.tripmate.presentation.util.extensions
 
+import android.content.Context
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import gli.project.tripmate.R
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 fun parseMarkdown(text: String): AnnotatedString {
@@ -129,5 +133,21 @@ fun formatOperatingHours(input: String?): String {
 fun emptyTextHandler(original: String, placeHolder: String) : String {
     return original.ifEmpty {
         placeHolder
+    }
+}
+
+fun Long.formatToRelativeTime(context: Context): String {
+    val now = System.currentTimeMillis()
+    val diff = now - this
+
+    return when {
+        diff < 1000 * 60 -> context.getString(R.string.just_now)
+        diff < 1000 * 60 * 60 -> context.getString(R.string.minutes_ago, diff / (1000 * 60))
+        diff < 1000 * 60 * 60 * 24 -> context.getString(R.string.hours_ago, diff / (1000 * 60 * 60))
+        diff < 1000 * 60 * 60 * 24 * 7 -> context.getString(R.string.days_ago, diff / (1000 * 60 * 60 * 24))
+        else -> {
+            val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            formatter.format(Date(this))
+        }
     }
 }

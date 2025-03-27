@@ -29,44 +29,44 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.domain.model.local.RecentView
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
+import gli.project.tripmate.presentation.util.extensions.formatToRelativeTime
+import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
 
 @Composable
 fun HistoryView(
     recentViewData : List<RecentView>,
+    recentViewViewModel: RecentViewViewModel,
     onDetailClick: (placeId: String, placeName: String) -> Unit
 ) {
-    Column {
-        Row(
-            modifier = Modifier
-                .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Recently Viewed",
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold
+    if (recentViewData.isNotEmpty()) {
+        Column {
+            Row(
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Recently Viewed",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-            )
-            Text(
-                text = "See All",
-                style = MaterialTheme.typography.titleSmall.copy(
-                    color = MaterialTheme.colorScheme.secondary,
-                    textDecoration = TextDecoration.Underline
+                Text(
+                    text = "See All",
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        color = MaterialTheme.colorScheme.secondary,
+                        textDecoration = TextDecoration.Underline
+                    )
                 )
-            )
-        }
-        if (recentViewData.isEmpty()) {
-            Text(
-                text = "empty data"
-            )
-        } else {
+            }
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 10.dp)
             ) {
@@ -75,6 +75,7 @@ fun HistoryView(
                         recentViewItem = recentViewItem,
                         onDetailClick = { placeId, placeName ->
                             onDetailClick(placeId, placeName)
+                            recentViewViewModel.updateRecentViewTimeStamp(recentViewItem)
                         }
                     )
                 }
@@ -125,6 +126,13 @@ fun HistoryViewItem(
                         text = recentViewItem.placeName,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                    Text(
+                        text = recentViewItem.timeStamp.formatToRelativeTime(context = LocalContext.current),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Thin,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                     )
                 }
