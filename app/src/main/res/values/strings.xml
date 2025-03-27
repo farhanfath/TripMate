@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TripMate</string>
     <string name="shimmer_animation">shimmer</string>
+    <string name="back_button">Back Button</string>
 
     <!--  error message  -->
     <string name="image_load_error">Error load image</string>

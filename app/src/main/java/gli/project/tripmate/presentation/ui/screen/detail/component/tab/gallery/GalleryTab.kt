@@ -13,9 +13,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.component.GalleryRowGrid
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.component.MoreGalleryBottomSheet
+import gli.project.tripmate.presentation.ui.theme.padding_10
+import gli.project.tripmate.presentation.ui.theme.padding_20
 
 @Composable
 fun GalleryTab() {
@@ -24,7 +25,7 @@ fun GalleryTab() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = padding_20)
     ) {
         repeat(2) {
             Text(
@@ -32,7 +33,7 @@ fun GalleryTab() {
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier.padding(start = 10.dp, top = 20.dp, bottom = 10.dp)
+                modifier = Modifier.padding(start = padding_10, top = padding_20, bottom = padding_10)
             )
             GalleryRowGrid(
                 onShowMore = { showBottomSheet = true }

@@ -14,13 +14,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import gli.project.tripmate.R
+import gli.project.tripmate.presentation.ui.theme.padding_20
 
 @Composable
 fun DetailActionButton(modifier: Modifier = Modifier) {
     Row(
         modifier = Modifier
-            .padding(vertical = 20.dp, horizontal = 20.dp)
+            .padding(vertical = padding_20, horizontal = padding_20)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -35,7 +38,7 @@ fun DetailActionButton(modifier: Modifier = Modifier) {
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                contentDescription = "back Button"
+                contentDescription = stringResource(R.string.back_button)
             )
         }
         FilledIconButton(

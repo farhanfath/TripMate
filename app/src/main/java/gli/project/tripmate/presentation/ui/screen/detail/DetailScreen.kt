@@ -42,6 +42,8 @@ import gli.project.tripmate.presentation.ui.screen.detail.component.DetailAction
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.about.AboutTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.gallery.GalleryTab
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.ReviewTab
+import gli.project.tripmate.presentation.ui.theme.size_200
+import gli.project.tripmate.presentation.ui.theme.size_400
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -50,8 +52,8 @@ fun DetailScreen() {
     /**
      * image and scroll behavior
      */
-    val maxImageHeight = 400.dp
-    val minImageHeight = 200.dp
+    val maxImageHeight = size_400
+    val minImageHeight = size_200
     var currentImageHeight by remember { mutableStateOf(maxImageHeight) }
 
     val nestedScrollConnection = remember {

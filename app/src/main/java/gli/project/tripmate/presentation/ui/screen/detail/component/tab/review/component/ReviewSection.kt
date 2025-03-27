@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import gli.project.tripmate.presentation.ui.theme.padding_10
+import gli.project.tripmate.presentation.ui.theme.padding_4
+import gli.project.tripmate.presentation.ui.theme.size_8
 
 @Composable
 fun ReviewSection(onShowMoreReviews: () -> Unit) {
@@ -22,7 +24,7 @@ fun ReviewSection(onShowMoreReviews: () -> Unit) {
     }
 
     OutlinedButton(
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(padding_4),
         modifier = Modifier.fillMaxWidth(),
         onClick = onShowMoreReviews
     ) {
@@ -36,7 +38,7 @@ fun ReviewSection(onShowMoreReviews: () -> Unit) {
 fun ReviewItem() {
     Column(
         modifier = Modifier
-            .padding(vertical = 10.dp)
+            .padding(vertical = padding_10)
             .fillMaxWidth()
     ) {
         Text(
@@ -45,9 +47,9 @@ fun ReviewItem() {
                 fontWeight = FontWeight.Bold
             )
         )
-        Spacer(modifier = Modifier.size(4.dp))
+        Spacer(modifier = Modifier.size(padding_4))
         RatingBar(rating = 4.5f, maxRating = 5)
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(size_8))
         Text(
             text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare faucibus sollicitudin. Nulla id mattis erat, nec imperdiet odio. Morbi fermentum ac massa id finibus. Cras faucibus viverra metus ut pretium. Quisque nibh enim, vehicula id semper a, maximus at sem. In dui magna, sodales quis turpis sed, pellentesque porttitor sapien. Ut id scelerisque ipsum, et consectetur magna. Maecenas aliquet, elit id vulputate feugiat, leo dolor cursus turpis, vel venenatis leo nibh sed sapien. Nulla orci lectus, aliquam non nisi in, consectetur blandit nisi. Nullam augue sapien, vulputate ac elementum sit amet, imperdiet non nisl.",
             style = MaterialTheme.typography.labelSmall.copy(

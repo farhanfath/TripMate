@@ -18,13 +18,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.R
+import gli.project.tripmate.presentation.ui.theme.padding_10
+import gli.project.tripmate.presentation.ui.theme.padding_20
+import gli.project.tripmate.presentation.ui.theme.size_300
 
 @Composable
 fun AboutTab() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = padding_20, vertical = padding_10)
     ) {
         /**
          * Place Description
@@ -41,7 +44,7 @@ fun AboutTab() {
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
-            modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
+            modifier = Modifier.padding(top = padding_20, bottom = padding_10)
         )
 
         /**
@@ -51,9 +54,9 @@ fun AboutTab() {
             painter = painterResource(R.drawable.ic_launcher_background),
             contentDescription = "",
             modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(padding_10))
                 .fillMaxWidth()
-                .height(300.dp),
+                .height(size_300),
             contentScale = ContentScale.Crop
         )
 

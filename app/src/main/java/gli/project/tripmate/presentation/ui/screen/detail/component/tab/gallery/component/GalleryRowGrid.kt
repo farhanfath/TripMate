@@ -31,6 +31,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import gli.project.tripmate.presentation.ui.theme.padding_4
+import gli.project.tripmate.presentation.ui.theme.padding_8
+import gli.project.tripmate.presentation.ui.theme.size_1
+import gli.project.tripmate.presentation.ui.theme.size_120
+import gli.project.tripmate.presentation.ui.theme.size_150
+import gli.project.tripmate.presentation.ui.theme.size_230
+import gli.project.tripmate.presentation.ui.theme.size_310
+import gli.project.tripmate.presentation.ui.theme.size_32
+import gli.project.tripmate.presentation.ui.theme.size_8
 
 /**
  * TODO: delete soon
@@ -65,7 +74,7 @@ fun GalleryRowGrid(
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(padding_8)
     ) {
         val allItems = generateStoreItems()
         val displayItems = allItems.take(21)
@@ -99,7 +108,7 @@ fun GalleryRowGrid(
                 }
 
                 // Spacer between groups
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(padding_8))
             }
         }
 
@@ -116,11 +125,11 @@ fun GalleryRowGrid(
 fun ImageCard(item: StoreItem, isBig: Boolean, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .padding(4.dp)
-            .width(230.dp)
-            .height(if (isBig) 310.dp else 150.dp),
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .padding(padding_4)
+            .width(size_230)
+            .height(if (isBig) size_310 else size_150),
+        shape = RoundedCornerShape(padding_8),
+        elevation = CardDefaults.cardElevation(defaultElevation = padding_4)
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -146,15 +155,15 @@ fun ImageCard(item: StoreItem, isBig: Boolean, modifier: Modifier = Modifier) {
 fun ShowMoreCard(onShowMore: () -> Unit) {
     OutlinedCard(
         modifier = Modifier
-            .padding(4.dp)
-            .width(120.dp)
-            .height(310.dp)
+            .padding(padding_4)
+            .width(size_120)
+            .height(size_310)
             .clickable {
                 onShowMore()
             },
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(padding_4),
         border = BorderStroke(
-            width = 1.dp,
+            width = size_1,
             color = MaterialTheme.colorScheme.primary
         )
     ) {
@@ -170,9 +179,9 @@ fun ShowMoreCard(onShowMore: () -> Unit) {
                     imageVector = Icons.Outlined.ArrowCircleRight,
                     contentDescription = "show more",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(size_32)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(size_8))
                 Text(
                     text = "show more",
                     style = MaterialTheme.typography.bodyMedium.copy(

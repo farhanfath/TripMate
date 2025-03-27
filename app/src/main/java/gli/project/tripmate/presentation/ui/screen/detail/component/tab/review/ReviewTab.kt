@@ -19,6 +19,8 @@ import gli.project.tripmate.presentation.ui.component.DashedDivider
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.component.MoreReviewBottomSheet
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.component.RatingBarSummary
 import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.component.ReviewSection
+import gli.project.tripmate.presentation.ui.theme.padding_10
+import gli.project.tripmate.presentation.ui.theme.padding_20
 
 @Composable
 fun ReviewTab() {
@@ -27,22 +29,22 @@ fun ReviewTab() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = padding_20, vertical = padding_10)
     ) {
         Text(
             text = "Review for this location",
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
-            modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
+            modifier = Modifier.padding(top = padding_20, bottom = padding_10)
         )
         RatingBarSummary()
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(padding_10))
 
         DashedDivider(
             modifier = Modifier
-                .padding(vertical = 10.dp)
+                .padding(vertical = padding_10)
                 .fillMaxWidth()
         )
 

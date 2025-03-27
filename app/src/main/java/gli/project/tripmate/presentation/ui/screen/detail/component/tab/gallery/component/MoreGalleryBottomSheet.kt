@@ -9,8 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import gli.project.tripmate.presentation.ui.component.BaseModalBottomSheet
+import gli.project.tripmate.presentation.ui.theme.padding_8
+import gli.project.tripmate.presentation.ui.theme.size_8
 
 @Composable
 fun MoreGalleryBottomSheet(
@@ -26,7 +27,7 @@ fun MoreGalleryBottomSheet(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                .padding(padding_8)
         ) {
             // Proses item-item dalam grup tiga (1 besar + 2 kecil)
             items.chunked(3).forEachIndexed { _, group ->
@@ -59,7 +60,7 @@ fun MoreGalleryBottomSheet(
                     }
 
                     // Spacer antara grup
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(size_8))
                 }
             }
         }

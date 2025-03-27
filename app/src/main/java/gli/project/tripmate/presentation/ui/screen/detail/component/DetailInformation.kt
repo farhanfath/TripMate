@@ -21,13 +21,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import gli.project.tripmate.presentation.ui.theme.padding_20
+import gli.project.tripmate.presentation.ui.theme.padding_4
+import gli.project.tripmate.presentation.ui.theme.padding_40
+import gli.project.tripmate.presentation.ui.theme.padding_8
+import gli.project.tripmate.presentation.ui.theme.size_0_5
+import gli.project.tripmate.presentation.ui.theme.size_10
+import gli.project.tripmate.presentation.ui.theme.size_16
 
 @Composable
 fun DetailInformation() {
     Row(
         modifier = Modifier
-            .padding(top = 40.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .padding(top = padding_40, start = padding_20, end = padding_20, bottom = padding_20)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -39,16 +45,16 @@ fun DetailInformation() {
                     fontWeight = FontWeight.Bold
                 )
             )
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(size_10))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(padding_4)
             ) {
                 Icon(
                     imageVector = Icons.Default.LocationOn,
                     contentDescription = "",
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(size_16)
                 )
                 Text(
                     text = "Jakarta, Indonesia",
@@ -63,16 +69,16 @@ fun DetailInformation() {
             colors = CardDefaults.cardColors(
                 containerColor = Color.Transparent
             ),
-            border = BorderStroke(width = 0.5.dp, color = Color.LightGray)
+            border = BorderStroke(width = size_0_5, color = Color.LightGray)
         ) {
             Row(
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(padding_8),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = "",
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(size_16),
                     tint = Color.Yellow
                 )
                 Text(
@@ -80,7 +86,7 @@ fun DetailInformation() {
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    modifier = Modifier.padding(horizontal = 4.dp)
+                    modifier = Modifier.padding(horizontal = padding_4)
                 )
                 Text(
                     text = "(123 reviews)",
