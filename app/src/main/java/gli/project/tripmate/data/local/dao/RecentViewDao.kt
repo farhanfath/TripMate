@@ -1,4 +1,4 @@
-package gli.project.tripmate.data.local
+package gli.project.tripmate.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

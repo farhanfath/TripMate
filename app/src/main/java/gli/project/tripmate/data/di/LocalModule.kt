@@ -8,7 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import gli.project.tripmate.data.local.AppDatabase
-import gli.project.tripmate.data.local.RecentViewDao
+import gli.project.tripmate.data.local.dao.FavoriteDao
+import gli.project.tripmate.data.local.dao.RecentViewDao
 import javax.inject.Singleton
 
 @Module
@@ -29,5 +30,11 @@ object LocalModule {
     @Singleton
     fun provideRecentViewDao(database: AppDatabase): RecentViewDao {
         return database.recentViewDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteDao(database: AppDatabase): FavoriteDao {
+        return database.favoriteDao()
     }
 }

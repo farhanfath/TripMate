@@ -4,7 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import gli.project.tripmate.data.local.RecentViewDao
+import gli.project.tripmate.data.local.dao.FavoriteDao
+import gli.project.tripmate.data.local.dao.RecentViewDao
+import gli.project.tripmate.data.local.datasource.FavoriteDataSource
+import gli.project.tripmate.data.local.datasource.FavoriteDataSourceImpl
 import gli.project.tripmate.data.local.datasource.RecentViewDataSource
 import gli.project.tripmate.data.local.datasource.RecentViewDataSourceImpl
 import gli.project.tripmate.data.remote.gemini.GeminiApiService
@@ -45,5 +48,11 @@ object DataSourceModule {
     @Singleton
     fun provideRecentViewLocalDataSource(recentViewDao: RecentViewDao): RecentViewDataSource {
         return RecentViewDataSourceImpl(recentViewDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteLocalDataSource(favorite: FavoriteDao): FavoriteDataSource {
+        return FavoriteDataSourceImpl(favorite)
     }
 }

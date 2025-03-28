@@ -4,15 +4,18 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import gli.project.tripmate.data.usecase.FavoriteUseCaseImpl
 import gli.project.tripmate.data.usecase.ChatUseCaseImpl
 import gli.project.tripmate.data.usecase.LocationUseCaseImpl
 import gli.project.tripmate.data.usecase.PlacesUseCaseImpl
 import gli.project.tripmate.data.usecase.RecentViewUseCaseImpl
 import gli.project.tripmate.domain.repository.ChatRepository
+import gli.project.tripmate.domain.repository.FavoriteRepository
 import gli.project.tripmate.domain.repository.LocationRepository
 import gli.project.tripmate.domain.repository.PlacesRepository
 import gli.project.tripmate.domain.repository.RecentViewRepository
 import gli.project.tripmate.domain.usecase.ChatUseCase
+import gli.project.tripmate.domain.usecase.FavoriteUseCase
 import gli.project.tripmate.domain.usecase.LocationUseCase
 import gli.project.tripmate.domain.usecase.PlacesUseCase
 import gli.project.tripmate.domain.usecase.RecentViewUseCase
@@ -39,5 +42,10 @@ object UseCaseModule {
     @Provides
     fun provideRecentViewUseCase(repository: RecentViewRepository): RecentViewUseCase {
         return RecentViewUseCaseImpl(repository)
+    }
+
+    @Provides
+    fun provideFavoriteUseCase(repository: FavoriteRepository): FavoriteUseCase {
+        return FavoriteUseCaseImpl(repository)
     }
 }

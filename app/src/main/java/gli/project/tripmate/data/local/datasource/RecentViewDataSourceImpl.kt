@@ -1,6 +1,6 @@
 package gli.project.tripmate.data.local.datasource
 
-import gli.project.tripmate.data.local.RecentViewDao
+import gli.project.tripmate.data.local.dao.RecentViewDao
 import gli.project.tripmate.data.local.model.RecentViewEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
