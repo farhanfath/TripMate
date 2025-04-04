@@ -13,6 +13,7 @@ import gli.project.tripmate.presentation.ui.screen.category.CategoryScreen
 import gli.project.tripmate.presentation.ui.screen.main.MainNavScreen
 import gli.project.tripmate.presentation.ui.screen.more.MoreNearbyScreen
 import gli.project.tripmate.presentation.viewmodel.ChatViewModel
+import gli.project.tripmate.presentation.viewmodel.FavoriteViewModel
 import gli.project.tripmate.presentation.viewmodel.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
@@ -24,6 +25,7 @@ fun MainNavHost(
     chatViewModel: ChatViewModel,
     recentViewViewModel: RecentViewViewModel,
     locationViewModel: LocationViewModel,
+    favoriteViewModel: FavoriteViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit
 ) {

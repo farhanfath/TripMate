@@ -17,13 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.NotListedLocation
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -80,28 +77,8 @@ fun NearbyPlaceLongItem(
                     modifier = Modifier
                         .padding(12.dp)
                         .fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.TopEnd
-                    ) {
-                        FilledIconButton(
-                            onClick = {},
-                            modifier = Modifier.size(30.dp),
-                            colors = IconButtonDefaults.iconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                            )
-                        ) {
-                            Icon(
-                                modifier = Modifier.padding(6.dp),
-                                imageVector = Icons.Outlined.FavoriteBorder,
-                                contentDescription = "",
-                                tint = Color.White
-                            )
-                        }
-                    }
-
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.BottomStart

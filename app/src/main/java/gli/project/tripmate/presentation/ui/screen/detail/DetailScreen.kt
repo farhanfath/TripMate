@@ -16,8 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
@@ -52,6 +59,7 @@ import gli.project.tripmate.presentation.ui.screen.detail.component.tab.review.R
 import gli.project.tripmate.domain.util.constants.DataConstants
 import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
+import gli.project.tripmate.presentation.viewmodel.FavoriteViewModel
 import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -64,12 +72,14 @@ fun DetailScreen(
     onBackClick: () -> Unit,
 ) {
     val viewModel : PlacesViewModel = hiltViewModel()
+    val favoriteViewModel: FavoriteViewModel = hiltViewModel()
     val placeDetailState by viewModel.placesState.collectAsState()
     val userRange = viewModel.placesState.map { it.placeRange }.collectAsState(0.0).value
 
     LaunchedEffect(Unit) {
         viewModel.getDetailPlaces(placeId)
         viewModel.getPexelDetailImage(placeName)
+        favoriteViewModel.checkFavoriteStatus(placeId)
     }
 
     /**
@@ -104,9 +114,17 @@ fun DetailScreen(
     val tabs = DataConstants.tabName
     val scope = rememberCoroutineScope()
 
+    // favorite
+    val snackBarHostState = remember { SnackbarHostState() }
+    val isFavorite by favoriteViewModel.isFavorite.collectAsState()
+
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    Scaffold { innerPadding ->
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
+        }
+    ) { innerPadding ->
         HandlerResponseCompose(
             response = placeDetailState.detailPlace,
             onLoading = {
@@ -130,7 +148,35 @@ fun DetailScreen(
 
                     DetailActionButton(
                         modifier = Modifier.padding(innerPadding),
-                        onBackClick = onBackClick
+                        onBackClick = onBackClick,
+                        onFavoriteClick = {
+                            // favorite action
+                            favoriteViewModel.toggleFavorite(detailData)
+
+                            // snack bar show action
+                            scope.launch {
+
+                                val message = if (isFavorite) {
+                                    "Berhasil Dihapus"
+                                } else {
+                                    "Berhasil Ditambahkan"
+                                }
+
+                                val result = snackBarHostState.showSnackbar(
+                                    message = message,
+                                    actionLabel = "undo",
+                                    duration = SnackbarDuration.Short
+                                )
+
+                                when (result) {
+                                    SnackbarResult.ActionPerformed -> {
+                                        favoriteViewModel.toggleFavorite(detailData)
+                                    }
+                                    SnackbarResult.Dismissed -> {}
+                                }
+                            }
+                        },
+                        favIcon = if (isFavorite) Icons.Filled.Favorite else Icons.Default.FavoriteBorder
                     )
 
                     /**

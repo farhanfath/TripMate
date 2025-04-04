@@ -7,6 +7,7 @@ import androidx.paging.map
 import gli.project.tripmate.data.local.datasource.FavoriteDataSource
 import gli.project.tripmate.data.mapper.toDomain
 import gli.project.tripmate.data.mapper.toFavoriteEntity
+import gli.project.tripmate.domain.model.DetailPlace
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.model.local.Favorite
 import gli.project.tripmate.domain.repository.FavoriteRepository
@@ -17,15 +18,15 @@ import javax.inject.Inject
 class FavoriteRepositoryImpl @Inject constructor(
     private val favoriteDataSource: FavoriteDataSource
 ) : FavoriteRepository {
-    override suspend fun addFavorite(place: Place) {
+    override suspend fun addFavorite(place: DetailPlace) {
         favoriteDataSource.addFavorite(place.toFavoriteEntity())
     }
 
-    override suspend fun removeFavorite(place: Place) {
+    override suspend fun removeFavorite(place: DetailPlace) {
         favoriteDataSource.removeFavorite(place.toFavoriteEntity())
     }
 
-    override suspend fun removeFavoriteById(favId: Int) {
+    override suspend fun removeFavoriteById(favId: String) {
         favoriteDataSource.removeFavoriteById(favId)
     }
 
@@ -41,5 +42,5 @@ class FavoriteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun isFavorite(favId: Int): Boolean = favoriteDataSource.isFavorite(favId)
+    override suspend fun isFavorite(favId: String): Boolean = favoriteDataSource.isFavorite(favId)
 }

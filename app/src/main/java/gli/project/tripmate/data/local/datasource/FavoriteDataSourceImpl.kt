@@ -12,9 +12,9 @@ class FavoriteDataSourceImpl @Inject constructor(
 
     override suspend fun removeFavorite(place: FavoriteEntity) = favoriteDao.removeFavorite(place)
 
-    override suspend fun removeFavoriteById(id: Int) = favoriteDao.removeFavoriteById(id)
+    override suspend fun removeFavoriteById(id: String) = favoriteDao.removeFavoriteById(id)
 
     override fun getAllFavorites(): PagingSource<Int, FavoriteEntity> =favoriteDao.getAllFavorites()
 
-    override suspend fun isFavorite(id: Int): Boolean = favoriteDao.isFavorite(id)
+    override suspend fun isFavorite(id: String): Boolean = favoriteDao.isFavorite(id)
 }

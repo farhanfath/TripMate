@@ -180,7 +180,11 @@ fun MainNavScreen(
                 )
             }
             composable<MainNavigation.Favorite> {
-                FavoriteScreen()
+                FavoriteScreen(
+                    onDetailClick = { placeId, placeName ->
+                        onDetailClick(placeId, placeName)
+                    }
+                )
             }
             composable<MainNavigation.Collection> {
                 CollectionScreen()

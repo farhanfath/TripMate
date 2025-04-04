@@ -1,7 +1,7 @@
 package gli.project.tripmate.data.mapper
 
 import gli.project.tripmate.data.local.model.FavoriteEntity
-import gli.project.tripmate.domain.model.Place
+import gli.project.tripmate.domain.model.DetailPlace
 import gli.project.tripmate.domain.model.local.Favorite
 
 fun FavoriteEntity.toDomain() : Favorite {
@@ -15,11 +15,12 @@ fun FavoriteEntity.toDomain() : Favorite {
     )
 }
 
-fun Place.toFavoriteEntity() : FavoriteEntity {
+fun DetailPlace.toFavoriteEntity() : FavoriteEntity {
     return FavoriteEntity(
+        id = placeId,
         placeId = placeId,
         placeName = name,
-        placeImage = image,
+        placeImage = imageUrl?: "",
         location = "$city, $country"
     )
 }

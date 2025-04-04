@@ -121,7 +121,7 @@ fun LobbyScreen(
                     .height(30.dp)
                     .fillMaxWidth()
             )
-        },
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

@@ -19,13 +19,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.NotListedLocation
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,8 +44,8 @@ import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.presentation.ui.component.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.CustomShimmer
 import gli.project.tripmate.presentation.ui.component.SeeMoreCard
-import gli.project.tripmate.presentation.ui.component.error.RowSectionError
 import gli.project.tripmate.presentation.ui.component.error.PagingFooterError
+import gli.project.tripmate.presentation.ui.component.error.RowSectionError
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.util.extensions.emptyTextHandler
 import gli.project.tripmate.presentation.util.extensions.handlePagingAppendState
@@ -123,7 +120,7 @@ fun Nearby(
                                     // add the data to recent view
                                     onAddRecentView(place)
                                 },
-                                place = place,
+                                place = place
                             )
                         }
                     }
@@ -185,7 +182,7 @@ fun Nearby(
 @Composable
 fun NearbyItem(
     onDetailClick: () -> Unit,
-    place: Place,
+    place: Place
 ) {
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
@@ -219,28 +216,8 @@ fun NearbyItem(
                     modifier = Modifier
                         .padding(12.dp)
                         .fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.TopEnd
-                    ) {
-                        FilledIconButton(
-                            onClick = {},
-                            modifier = Modifier.size(30.dp),
-                            colors = IconButtonDefaults.iconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                            )
-                        ) {
-                            Icon(
-                                modifier = Modifier.padding(6.dp),
-                                imageVector = Icons.Outlined.FavoriteBorder,
-                                contentDescription = "",
-                                tint = Color.White
-                            )
-                        }
-                    }
-
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.BottomStart
@@ -349,5 +326,4 @@ fun NearbyItem(
             }
         }
     }
-
 }

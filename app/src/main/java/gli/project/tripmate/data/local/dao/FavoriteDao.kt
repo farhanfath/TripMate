@@ -18,11 +18,11 @@ interface FavoriteDao {
     suspend fun removeFavorite(place: FavoriteEntity)
 
     @Query("DELETE FROM place_favorite WHERE id = :id")
-    suspend fun removeFavoriteById(id: Int)
+    suspend fun removeFavoriteById(id: String)
 
     @Query("SELECT * FROM place_favorite")
     fun getAllFavorites() : PagingSource<Int, FavoriteEntity>
 
     @Query("SELECT EXISTS(SELECT 1 FROM place_favorite WHERE id = :id)")
-    suspend fun isFavorite(id: Int): Boolean
+    suspend fun isFavorite(id: String): Boolean
 }

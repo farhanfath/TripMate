@@ -1,6 +1,7 @@
 package gli.project.tripmate.data.usecase
 
 import androidx.paging.PagingData
+import gli.project.tripmate.domain.model.DetailPlace
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.model.local.Favorite
 import gli.project.tripmate.domain.repository.FavoriteRepository
@@ -15,11 +16,11 @@ import javax.inject.Inject
 class FavoriteUseCaseImpl @Inject constructor(
     private val repository: FavoriteRepository
 ) : FavoriteUseCase {
-    override suspend fun addFavorite(place: Place) = repository.addFavorite(place)
+    override suspend fun addFavorite(place: DetailPlace) = repository.addFavorite(place)
 
-    override suspend fun removeFavorite(place: Place) = repository.removeFavorite(place)
+    override suspend fun removeFavorite(place: DetailPlace) = repository.removeFavorite(place)
 
-    override suspend fun removeFavoriteById(favId: Int) = repository.removeFavoriteById(favId)
+    override suspend fun removeFavoriteById(favId: String) = repository.removeFavoriteById(favId)
 
     override fun getAllFavorites(): Flow<ResultResponse<PagingData<Favorite>>> = flow {
         emit(ResultResponse.Loading)
@@ -31,5 +32,5 @@ class FavoriteUseCaseImpl @Inject constructor(
         }
     }
 
-    override suspend fun isFavorite(favId: Int): Boolean = repository.isFavorite(favId)
+    override suspend fun isFavorite(favId: String): Boolean = repository.isFavorite(favId)
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -14,12 +13,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun DetailActionButton(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
+    favIcon: ImageVector
 ) {
     Row(
         modifier = Modifier
@@ -49,10 +51,12 @@ fun DetailActionButton(
                 containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ),
-            onClick = {}
+            onClick = {
+                onFavoriteClick()
+            }
         ) {
             Icon(
-                imageVector = Icons.Default.FavoriteBorder,
+                imageVector = favIcon,
                 contentDescription = ""
             )
         }
