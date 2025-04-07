@@ -19,4 +19,8 @@
     <string name="hours_ago">Last seen: %d hours ago</string>
     <string name="minutes_ago">Last seen: %d minutes ago</string>
     <string name="just_now">Just seen</string>
+
+    <!--  activity name  -->
+    <string name="title_activity_auth">AuthActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

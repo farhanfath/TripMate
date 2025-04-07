@@ -9,8 +9,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import gli.project.tripmate.presentation.receiver.LocationProviderChangedReceiver
-import gli.project.tripmate.presentation.ui.component.location.LocationPermissionHandler
-import gli.project.tripmate.presentation.ui.navigation.MainNavHost
+import gli.project.tripmate.presentation.ui.component.main.location.LocationPermissionHandler
+import gli.project.tripmate.presentation.ui.navigation.main.MainNavHost
 import gli.project.tripmate.presentation.ui.theme.TripMateTheme
 import gli.project.tripmate.presentation.viewmodel.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.FavoriteViewModel
@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
             val locationViewModel: LocationViewModel = hiltViewModel()
             val chatViewModel: ChatViewModel = hiltViewModel()
             val recentViewViewModel: RecentViewViewModel = hiltViewModel()
-            val favoriteViewModel: FavoriteViewModel = hiltViewModel()
 
             MainApp {
                 LocationPermissionHandler(locationViewModel) { permissionResult, onLocationRequestPermission ->
@@ -43,7 +42,6 @@ class MainActivity : ComponentActivity() {
                         locationViewModel = locationViewModel,
                         chatViewModel = chatViewModel,
                         recentViewViewModel = recentViewViewModel,
-                        favoriteViewModel = favoriteViewModel,
                         permissionResult = permissionResult,
                         onLocationRequestPermission = onLocationRequestPermission
                     )
