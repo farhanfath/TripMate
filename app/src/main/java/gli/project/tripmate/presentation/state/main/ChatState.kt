@@ -1,7 +1,7 @@
-package gli.project.tripmate.presentation.ui.state
+package gli.project.tripmate.presentation.state.main
 
 import gli.project.tripmate.domain.util.ResultResponse
-import gli.project.tripmate.presentation.viewmodel.Message
+import gli.project.tripmate.presentation.viewmodel.main.Message
 
 data class ChatState(
     val message : List<Message> = emptyList(),

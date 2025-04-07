@@ -12,10 +12,10 @@ import gli.project.tripmate.presentation.ui.screen.main.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.MainNavScreen
 import gli.project.tripmate.presentation.ui.screen.main.more.MoreNearbyScreen
-import gli.project.tripmate.presentation.viewmodel.ChatViewModel
-import gli.project.tripmate.presentation.viewmodel.LocationViewModel
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
-import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
+import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
+import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @Composable
 fun MainNavHost(
@@ -25,7 +25,8 @@ fun MainNavHost(
     recentViewViewModel: RecentViewViewModel,
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
-    onLocationRequestPermission: () -> Unit
+    onLocationRequestPermission: () -> Unit,
+    onUserLogout: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -66,6 +67,9 @@ fun MainNavHost(
                         navController.navigate(
                             MainNavigation.MoreNearby
                         )
+                    },
+                    onUserLogout = {
+                        onUserLogout()
                     }
                 )
             }

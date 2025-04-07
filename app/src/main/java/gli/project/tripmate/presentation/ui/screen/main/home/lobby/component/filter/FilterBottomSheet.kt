@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import gli.project.tripmate.domain.util.constants.HOTEL
 import gli.project.tripmate.presentation.ui.component.common.BaseModalBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.home.lobby.component.filter.component.CategoryFilterSection
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 
 @Composable
 fun FilterBottomSheet(

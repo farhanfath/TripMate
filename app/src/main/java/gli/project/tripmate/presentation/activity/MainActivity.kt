@@ -1,5 +1,6 @@
 package gli.project.tripmate.presentation.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,11 +13,10 @@ import gli.project.tripmate.presentation.receiver.LocationProviderChangedReceive
 import gli.project.tripmate.presentation.ui.component.main.location.LocationPermissionHandler
 import gli.project.tripmate.presentation.ui.navigation.main.MainNavHost
 import gli.project.tripmate.presentation.ui.theme.TripMateTheme
-import gli.project.tripmate.presentation.viewmodel.ChatViewModel
-import gli.project.tripmate.presentation.viewmodel.FavoriteViewModel
-import gli.project.tripmate.presentation.viewmodel.LocationViewModel
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
-import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
+import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
+import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -43,7 +43,12 @@ class MainActivity : ComponentActivity() {
                         chatViewModel = chatViewModel,
                         recentViewViewModel = recentViewViewModel,
                         permissionResult = permissionResult,
-                        onLocationRequestPermission = onLocationRequestPermission
+                        onLocationRequestPermission = onLocationRequestPermission,
+                        onUserLogout = {
+                            val intent = Intent(this, AuthActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     )
                 }
             }

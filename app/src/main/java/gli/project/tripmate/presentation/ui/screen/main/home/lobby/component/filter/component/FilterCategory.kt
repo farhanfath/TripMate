@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.domain.model.PlaceCategory
 import gli.project.tripmate.domain.util.constants.DataConstants
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import kotlinx.coroutines.flow.map
 
 @Composable

@@ -1,7 +1,5 @@
 package gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.gallery
 
-import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.gallery.component.GalleryRowGrid
 import gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.gallery.component.MoreGalleryBottomSheet
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 
 @Composable
 fun GalleryTab(

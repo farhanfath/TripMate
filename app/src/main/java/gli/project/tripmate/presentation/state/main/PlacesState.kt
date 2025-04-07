@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.state
+package gli.project.tripmate.presentation.state.main
 
 import androidx.paging.PagingData
 import gli.project.tripmate.domain.model.DetailPlace

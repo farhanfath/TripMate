@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.component.SwipeableFavoriteItem
-import gli.project.tripmate.presentation.viewmodel.FavoriteViewModel
+import gli.project.tripmate.presentation.viewmodel.main.FavoriteViewModel
 
 @Composable
 fun FavoriteScreen(

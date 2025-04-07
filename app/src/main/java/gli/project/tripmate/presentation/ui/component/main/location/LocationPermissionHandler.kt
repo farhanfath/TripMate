@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import gli.project.tripmate.presentation.viewmodel.LocationViewModel
+import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
 
 @Composable
 fun LocationPermissionHandler(

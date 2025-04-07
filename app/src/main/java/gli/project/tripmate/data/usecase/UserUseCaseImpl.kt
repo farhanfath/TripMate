@@ -14,9 +14,9 @@ class UserUseCaseImpl @Inject constructor(
     override suspend fun userRegister(
         email: String,
         password: String
-    ): Flow<ResultResponse<Unit>> = userRepository.userRegister(email,password)
+    ): ResultResponse<Unit> = userRepository.userRegister(email,password)
 
-    override suspend fun userLogin(email: String, password: String): Flow<ResultResponse<Unit>> = userRepository.userLogin(email, password)
+    override suspend fun userLogin(email: String, password: String): ResultResponse<Unit> = userRepository.userLogin(email, password)
 
     override suspend fun userLogout() = userRepository.userLogout()
 
@@ -25,7 +25,7 @@ class UserUseCaseImpl @Inject constructor(
     override suspend fun changePassword(
         oldPassword: String,
         newPassword: String
-    ): Flow<ResultResponse<Unit>> = userRepository.changePassword(oldPassword, newPassword)
+    ): ResultResponse<Unit> = userRepository.changePassword(oldPassword, newPassword)
 
-    override suspend fun editUserProfile(user: User): Flow<ResultResponse<Unit>> = userRepository.editUserProfile(user)
+    override suspend fun editUserProfile(user: User): ResultResponse<Unit> = userRepository.editUserProfile(user)
 }

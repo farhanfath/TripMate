@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.viewmodel
+package gli.project.tripmate.presentation.viewmodel.main
 
 import android.content.Context
 import androidx.activity.result.IntentSenderRequest
@@ -9,7 +9,7 @@ import gli.project.tripmate.data.helper.LocationDataStore
 import gli.project.tripmate.data.helper.LocationHelper
 import gli.project.tripmate.domain.usecase.LocationUseCase
 import gli.project.tripmate.domain.util.ResultResponse
-import gli.project.tripmate.presentation.ui.state.LocationState
+import gli.project.tripmate.presentation.state.main.LocationState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.viewmodel
+package gli.project.tripmate.presentation.viewmodel.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

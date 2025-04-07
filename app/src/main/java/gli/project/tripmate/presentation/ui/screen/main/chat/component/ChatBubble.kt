@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.presentation.util.extensions.parseMarkdown
-import gli.project.tripmate.presentation.viewmodel.Message
+import gli.project.tripmate.presentation.viewmodel.main.Message
 
 @Composable
 fun ChatBubble(message: Message) {

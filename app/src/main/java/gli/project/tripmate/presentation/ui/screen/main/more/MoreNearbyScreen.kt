@@ -19,7 +19,7 @@ import gli.project.tripmate.presentation.ui.component.common.error.CustomNoConne
 import gli.project.tripmate.presentation.ui.screen.main.category.component.NearbyPlaceLongItem
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.util.extensions.handlePagingState
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 
 @Composable
 fun MoreNearbyScreen(

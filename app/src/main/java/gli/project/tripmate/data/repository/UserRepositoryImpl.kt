@@ -10,10 +10,6 @@ import gli.project.tripmate.domain.repository.UserRepository
 import gli.project.tripmate.domain.util.ErrorMessage
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.util.LogUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import java.io.IOException
 import javax.inject.Inject
@@ -27,10 +23,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun userRegister(
         email: String,
         password: String
-    ): Flow<ResultResponse<Unit>> = flow {
-        try {
-            emit(ResultResponse.Loading)
-
+    ): ResultResponse<Unit> {
+        return try {
             // Register with Firebase Authentication
             auth.createUserWithEmailAndPassword(email, password).await()
 
@@ -45,23 +39,20 @@ class UserRepositoryImpl @Inject constructor(
                 lastLogin = 0L
             )
             userPath.document(user.uid).set(userData).await()
-
-            emit(ResultResponse.Success(Unit))
+            ResultResponse.Success(Unit)
         } catch (e: FirebaseAuthInvalidUserException) {
-            emit(ResultResponse.Error(ErrorMessage.INVALID_USER))
+            ResultResponse.Error(ErrorMessage.INVALID_USER)
         } catch (e: FirebaseAuthInvalidCredentialsException) {
-            emit(ResultResponse.Error(ErrorMessage.PASS_ERROR))
+            ResultResponse.Error(ErrorMessage.PASS_ERROR)
         } catch (e: IOException) {
-            emit(ResultResponse.Error(ErrorMessage.NETWORK_ERROR))
+            ResultResponse.Error(ErrorMessage.NETWORK_ERROR)
         } catch (e: Exception) {
-            emit(ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR))
+            ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR)
         }
-    }.flowOn(Dispatchers.IO)
+    }
 
-    override suspend fun userLogin(email: String, password: String): Flow<ResultResponse<Unit>> = flow {
-        try {
-            emit(ResultResponse.Loading)
-
+    override suspend fun userLogin(email: String, password: String): ResultResponse<Unit> {
+        return try {
             // login process
             auth.signInWithEmailAndPassword(email, password).await()
 
@@ -69,17 +60,17 @@ class UserRepositoryImpl @Inject constructor(
             val user = auth.currentUser ?: throw Exception(ErrorMessage.FAILED_LOGIN)
             userPath.document(user.uid).update("lastLogin", System.currentTimeMillis()).await()
 
-            emit(ResultResponse.Success(Unit))
+            ResultResponse.Success(Unit)
         } catch (e: FirebaseAuthInvalidUserException) {
-            emit(ResultResponse.Error(ErrorMessage.INVALID_USER))
+            ResultResponse.Error(ErrorMessage.INVALID_USER)
         } catch (e: FirebaseAuthInvalidCredentialsException) {
-            emit(ResultResponse.Error(ErrorMessage.PASS_ERROR))
+            ResultResponse.Error(ErrorMessage.PASS_ERROR)
         } catch (e: IOException) {
-            emit(ResultResponse.Error(ErrorMessage.NETWORK_ERROR))
+            ResultResponse.Error(ErrorMessage.NETWORK_ERROR)
         } catch (e: Exception) {
-            emit(ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR))
+            ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR)
         }
-    }.flowOn(Dispatchers.IO)
+    }
 
     override suspend fun userLogout() {
         auth.signOut()
@@ -101,10 +92,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun changePassword(
         oldPassword: String,
         newPassword: String
-    ): Flow<ResultResponse<Unit>> = flow {
-        try {
-            emit(ResultResponse.Loading)
-
+    ): ResultResponse<Unit> {
+        return try {
             // Check if user is logged in
             val user = auth.currentUser
             if (user != null && user.email != null) {
@@ -114,19 +103,17 @@ class UserRepositoryImpl @Inject constructor(
 
                 // Change password
                 user.updatePassword(newPassword).await()
-                emit(ResultResponse.Success(Unit))
+                ResultResponse.Success(Unit)
             } else {
                 throw Exception("User not logged in")
             }
         } catch (e: Exception) {
-            emit(ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR))
+            ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR)
         }
     }
 
-    override suspend fun editUserProfile(user: User): Flow<ResultResponse<Unit>> = flow {
-        try {
-            emit(ResultResponse.Loading)
-
+    override suspend fun editUserProfile(user: User): ResultResponse<Unit> {
+        return try {
             // Pastikan user yang diedit ada
             val existingUser = userPath.document(user.id).get().await()
             if (!existingUser.exists()) {
@@ -135,9 +122,9 @@ class UserRepositoryImpl @Inject constructor(
 
             // Update data user di Firestore
             userPath.document(user.id).set(user).await()
-            emit(ResultResponse.Success(Unit))
+            ResultResponse.Success(Unit)
         } catch (e: Exception) {
-            emit(ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR))
+            ResultResponse.Error(e.message ?: ErrorMessage.UNKNOWN_ERROR)
         }
     }
 }

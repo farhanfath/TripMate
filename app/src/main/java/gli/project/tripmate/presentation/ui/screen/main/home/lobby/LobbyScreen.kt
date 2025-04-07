@@ -41,9 +41,9 @@ import gli.project.tripmate.presentation.ui.screen.main.home.lobby.component.Sea
 import gli.project.tripmate.presentation.ui.screen.main.home.lobby.component.filter.FilterBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.home.lobby.component.location.LocationBottomSheet
 import gli.project.tripmate.presentation.ui.screen.main.home.lobby.component.location.LocationPermissionCard
-import gli.project.tripmate.presentation.viewmodel.LocationViewModel
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
-import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
+import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @Composable
 fun LobbyScreen(

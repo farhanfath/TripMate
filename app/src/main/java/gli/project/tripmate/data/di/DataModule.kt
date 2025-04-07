@@ -2,6 +2,8 @@ package gli.project.tripmate.data.di
 
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,11 +21,13 @@ import gli.project.tripmate.data.repository.FavoriteRepositoryImpl
 import gli.project.tripmate.data.repository.LocationRepositoryImpl
 import gli.project.tripmate.data.repository.PlacesRepositoryImpl
 import gli.project.tripmate.data.repository.RecentViewRepositoryImpl
+import gli.project.tripmate.data.repository.UserRepositoryImpl
 import gli.project.tripmate.domain.repository.ChatRepository
 import gli.project.tripmate.domain.repository.FavoriteRepository
 import gli.project.tripmate.domain.repository.LocationRepository
 import gli.project.tripmate.domain.repository.PlacesRepository
 import gli.project.tripmate.domain.repository.RecentViewRepository
+import gli.project.tripmate.domain.repository.UserRepository
 import javax.inject.Singleton
 
 @Module
@@ -71,6 +75,15 @@ object DataModule {
         favDataSource: FavoriteDataSource
     ): FavoriteRepository {
         return FavoriteRepositoryImpl(favDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        auth: FirebaseAuth,
+        fireStore: FirebaseFirestore
+    ): UserRepository {
+        return UserRepositoryImpl(auth, fireStore)
     }
 
     @Provides

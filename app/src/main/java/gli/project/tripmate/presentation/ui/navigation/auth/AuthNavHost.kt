@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import gli.project.tripmate.presentation.ui.navigation.navitem.AuthNavigation
 import gli.project.tripmate.presentation.ui.screen.auth.login.LoginScreen
 import gli.project.tripmate.presentation.ui.screen.auth.register.RegisterScreen
+import gli.project.tripmate.presentation.ui.screen.auth.splash.SplashScreen
 import gli.project.tripmate.presentation.ui.screen.auth.welcome.WelcomeScreen
 
 @Composable
@@ -16,8 +17,21 @@ fun AuthNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AuthNavigation.Welcome
+        startDestination = AuthNavigation.Splash
     ) {
+        composable<AuthNavigation.Splash> {
+            SplashScreen(
+                onUserAvailable = {
+                    onIntentToMain()
+                },
+                onUserNotAvailable = {
+                    navController.navigate(AuthNavigation.Welcome) {
+                        popUpTo(AuthNavigation.Splash) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable<AuthNavigation.Welcome> {
             WelcomeScreen(
                 onNavigateToLogin = {
@@ -48,7 +62,7 @@ fun AuthNavHost(
                     navController.navigateUp()
                 },
                 onRegisterSuccess = {
-
+                    navController.navigateUp()
                 }
             )
         }

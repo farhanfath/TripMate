@@ -1,11 +1,11 @@
-package gli.project.tripmate.presentation.viewmodel
+package gli.project.tripmate.presentation.viewmodel.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gli.project.tripmate.domain.usecase.ChatUseCase
 import gli.project.tripmate.domain.util.ResultResponse
-import gli.project.tripmate.presentation.ui.state.ChatState
+import gli.project.tripmate.presentation.state.main.ChatState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,6 +46,7 @@ class ChatViewModel @Inject constructor(
                     }
                 }
                 ResultResponse.Loading -> {}
+                ResultResponse.Initiate -> {}
             }
         }
     }

@@ -31,7 +31,7 @@ import gli.project.tripmate.presentation.ui.component.common.CustomTopBarWithNav
 import gli.project.tripmate.presentation.ui.screen.main.chat.component.ChatBubble
 import gli.project.tripmate.presentation.ui.screen.main.chat.component.PulsatingDots
 import gli.project.tripmate.presentation.util.extensions.customResponseHandler
-import gli.project.tripmate.presentation.viewmodel.ChatViewModel
+import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
 
 @Composable
 fun ChatScreen(

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import gli.project.tripmate.domain.model.local.RecentView
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
 import gli.project.tripmate.presentation.util.extensions.formatToRelativeTime
-import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
+import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @Composable
 fun HistoryView(

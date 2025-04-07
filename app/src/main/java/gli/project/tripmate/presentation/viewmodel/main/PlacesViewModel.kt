@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.viewmodel
+package gli.project.tripmate.presentation.viewmodel.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,7 @@ import gli.project.tripmate.domain.model.PexelImage
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.usecase.PlacesUseCase
 import gli.project.tripmate.domain.util.ResultResponse
-import gli.project.tripmate.presentation.ui.state.PlacesState
+import gli.project.tripmate.presentation.state.main.PlacesState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

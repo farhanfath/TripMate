@@ -21,6 +21,6 @@
     <string name="just_now">Just seen</string>
 
     <!--  activity name  -->
-    <string name="title_activity_auth">AuthActivity</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_auth">TripMate</string>
+    <string name="title_activity_main">TripMate</string>
 </resources>

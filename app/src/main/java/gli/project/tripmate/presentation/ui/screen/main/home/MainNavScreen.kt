@@ -49,9 +49,9 @@ import gli.project.tripmate.presentation.ui.screen.main.home.collection.Collecti
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.FavoriteScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.lobby.LobbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.profile.ProfileScreen
-import gli.project.tripmate.presentation.viewmodel.LocationViewModel
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
-import gli.project.tripmate.presentation.viewmodel.RecentViewViewModel
+import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @Composable
 fun MainNavScreen(
@@ -64,7 +64,8 @@ fun MainNavScreen(
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit,
     onCategoryDetailClick: (name: String, endpoint: String) -> Unit,
-    onSeeMoreClick: () -> Unit
+    onSeeMoreClick: () -> Unit,
+    onUserLogout: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -190,7 +191,11 @@ fun MainNavScreen(
                 CollectionScreen()
             }
             composable<MainNavigation.Profile> {
-                ProfileScreen()
+                ProfileScreen(
+                    onUserLogout = {
+                        onUserLogout()
+                    }
+                )
             }
         }
     }

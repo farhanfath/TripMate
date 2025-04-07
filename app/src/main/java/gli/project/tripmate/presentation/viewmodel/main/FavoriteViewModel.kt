@@ -1,11 +1,10 @@
-package gli.project.tripmate.presentation.viewmodel
+package gli.project.tripmate.presentation.viewmodel.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gli.project.tripmate.domain.model.DetailPlace
-import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.model.local.Favorite
 import gli.project.tripmate.domain.usecase.FavoriteUseCase
 import gli.project.tripmate.domain.util.ResultResponse
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

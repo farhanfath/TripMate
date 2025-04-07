@@ -59,8 +59,8 @@ import gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.rev
 import gli.project.tripmate.domain.util.constants.DataConstants
 import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
-import gli.project.tripmate.presentation.viewmodel.FavoriteViewModel
-import gli.project.tripmate.presentation.viewmodel.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.FavoriteViewModel
+import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 

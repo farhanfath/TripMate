@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 sealed class AuthNavigation {
 
     @Serializable
+    data object Splash: AuthNavigation()
+
+    @Serializable
     data object Welcome : AuthNavigation()
 
     @Serializable

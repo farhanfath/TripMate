@@ -1,17 +1,14 @@
 package gli.project.tripmate.presentation.ui.screen.auth.login
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,11 +19,14 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,12 +39,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Lock
 import compose.icons.tablericons.Mail
 import gli.project.tripmate.presentation.ui.component.auth.CustomInputField
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.common.CustomTopBar
+import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
+import gli.project.tripmate.presentation.viewmodel.auth.UserViewModel
 
 @Composable
 fun LoginScreen(
@@ -57,19 +60,10 @@ fun LoginScreen(
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
 
-    // viewmodel
-//    val viewModel : UserViewModel = koinViewModel()
-//    val isLoading by viewModel.isLoading.collectAsState()
-//    val currentUser by viewModel.currentUser.collectAsState()
+    val viewModel: UserViewModel = hiltViewModel()
+    val authState = viewModel.authState.collectAsState()
 
-//    val enableStatus = !isLoading
-//
-//    LaunchedEffect(currentUser) {
-//        viewModel.getCurrentUser()
-//        currentUser?.let {
-//            onLoginSuccess()
-//        }
-//    }
+    val enableStatus = !authState.value.onProcess
 
     LazyColumn(
         modifier = Modifier
@@ -150,7 +144,7 @@ fun LoginScreen(
                 CustomInputField(
                     valueState = email,
                     placeHolder = "Masukkan Email Anda",
-                    enabled = true,
+                    enabled = enableStatus,
                     leadingIcon = TablerIcons.Mail,
                 )
                 Spacer(modifier = Modifier.size(20.dp))
@@ -162,7 +156,7 @@ fun LoginScreen(
                 CustomInputField(
                     valueState = password,
                     placeHolder = "Masukkan Password",
-                    enabled = true,
+                    enabled = enableStatus,
                     leadingIcon = TablerIcons.Lock,
                     trailingIconAction = {
                         val customIcon = if (passwordVisible.value) {
@@ -198,20 +192,20 @@ fun LoginScreen(
                 /**
                  * //TODO: forgot password feature coming soon
                  */
-//                TextButton(
-//                    modifier = Modifier
-//                        .align(Alignment.End),
-//                    onClick = {
-//                        onForgotPass()
-//                    }
-//                ) {
-//                    Text(
-//                        textAlign = TextAlign.End,
-//                        text = "Lupa Password?",
-//                        color = MaterialTheme.colorScheme.secondary,
-//                        style = MaterialTheme.typography.titleSmall
-//                    )
-//                }
+                TextButton(
+                    modifier = Modifier
+                        .align(Alignment.End),
+                    onClick = {
+                        onForgotPass()
+                    }
+                ) {
+                    Text(
+                        textAlign = TextAlign.End,
+                        text = "Lupa Password?",
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -223,7 +217,7 @@ fun LoginScreen(
                         pressedElevation = 15.dp,
                         disabledElevation = 0.dp
                     ),
-                    enabled = true,
+                    enabled = enableStatus,
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .fillMaxWidth(),
@@ -236,33 +230,39 @@ fun LoginScreen(
                                 Toast.makeText(context, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-//                                viewModel.login(
-//                                    email = email.value,
-//                                    password = password.value,
-//                                    onSuccess = {
-//                                        Toast.makeText(context, "Login berhasil", Toast.LENGTH_SHORT).show()
-//                                    },
-//                                    onError = {
-//                                        Log.d("LoginScreen", "Error: $it")
-//                                    }
-//                                )
+                                viewModel.userLogin(
+                                    email = email.value,
+                                    password = password.value
+                                )
                             }
                         }
-                        onLoginSuccess()
                     }
                 ) {
-//                    if(isLoading) {
-//                        CircularProgressIndicator(
-//                            modifier = Modifier.size(20.dp),
-//                            color = MaterialTheme.colorScheme.onSecondary
-//                        )
-//                    } else {
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            text = "Login",
-                        )
-//                    }
+                    HandlerResponseCompose(
+                        response = authState.value.loginStatus,
+                        onInitiate = {
+                            Text(
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                text = "Login",
+                            )
+                        },
+                        onLoading = {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = MaterialTheme.colorScheme.onSecondary
+                            )
+                        },
+                        onSuccess = {
+                            onLoginSuccess()
+                            Toast.makeText(context, "Login berhasil", Toast.LENGTH_SHORT).show()
+                            viewModel.resetAllAuthStatus()
+                        },
+                        onError = { err ->
+                            Toast.makeText(context, err.message, Toast.LENGTH_SHORT).show()
+                            viewModel.resetAllAuthStatus()
+                        }
+                    )
                 }
             }
         }
