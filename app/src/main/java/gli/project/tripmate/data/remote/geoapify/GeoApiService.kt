@@ -1,7 +1,6 @@
 package gli.project.tripmate.data.remote.geoapify
 
 import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
-import gli.project.tripmate.data.remote.geoapify.model.GeoCodeResponse
 import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
 import gli.project.tripmate.data.util.ApiEndpoint
 import retrofit2.http.GET

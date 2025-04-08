@@ -20,6 +20,7 @@ data class PlacesState(
     val userLongitude : Double = 0.0,
     val detailImage: ResultResponse<PexelImage> = ResultResponse.Loading,
     val placesCategory: List<PlaceCategory> = DataConstants.placeFilterCategories,
-    val area: String = "",
-    val category: String = ""
+    val searchQuery: String = "",
+    val category: String = "",
+    val isSearchStarted: Boolean = false
 )

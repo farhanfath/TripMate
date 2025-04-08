@@ -12,6 +12,7 @@ import gli.project.tripmate.presentation.ui.screen.main.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.MainNavScreen
 import gli.project.tripmate.presentation.ui.screen.main.more.MoreNearbyScreen
+import gli.project.tripmate.presentation.ui.screen.main.search.SearchScreen
 import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
@@ -37,6 +38,11 @@ fun MainNavHost(
         ) {
             composable<MainNavigation.Lobby> {
                 MainNavScreen(
+                    onSearchClick = {
+                        navController.navigate(
+                            MainNavigation.Search
+                        )
+                    },
                     onDetailClick = { placeId, placeName ->
                         navController.navigate(
                             MainNavigation.DetailTour(
@@ -130,6 +136,23 @@ fun MainNavHost(
                         )
                     )
                 }
+            )
+        }
+
+        composable<MainNavigation.Search> {
+            SearchScreen(
+                onBackClick = {
+                    navController.navigateUp()
+                },
+                onDetailClick = { placeId, placeName ->
+                    navController.navigate(
+                        MainNavigation.DetailTour(
+                            placeId = placeId,
+                            placeName = placeName
+                        )
+                    )
+                },
+                placesViewModel = placeViewModel
             )
         }
     }

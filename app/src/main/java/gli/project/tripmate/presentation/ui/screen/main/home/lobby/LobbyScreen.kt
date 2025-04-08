@@ -47,6 +47,7 @@ import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @Composable
 fun LobbyScreen(
+    onSearchClick: () -> Unit,
     onDetailClick: (placeId: String, placeName: String) -> Unit,
     placesViewModel: PlacesViewModel,
     locationViewModel: LocationViewModel,
@@ -140,6 +141,7 @@ fun LobbyScreen(
                     Column {
                         Greeting()
                         SearchBar(
+                            onSearchClick = onSearchClick,
                             onFilterClick = {
                                 showFilterBottomSheet = true
                             }

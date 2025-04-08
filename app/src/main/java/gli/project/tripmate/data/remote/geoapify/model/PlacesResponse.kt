@@ -56,7 +56,7 @@ data class Properties(
 	val historic: Historic,
 
     @field:SerializedName("city")
-	val city: String,
+	val city: String?,
 
     @field:SerializedName("formatted")
 	val formatted: String,

@@ -12,7 +12,7 @@ fun PlacesResponse.toDomain() : List<Place> {
             placeId = properties.placeId,
             name = properties.name ?: "",
             country = properties.country,
-            city = properties.city,
+            city = properties.city ?: "",
             image = properties.wikiAndMedia?.image ?: "",
             lat = properties.lat,
             lon = properties.lon
@@ -27,7 +27,7 @@ fun FeaturesItem.toDomain() : Place {
         placeId = properties.placeId,
         name = properties.name ?: "",
         country = properties.country,
-        city = properties.city,
+        city = properties.city ?: "",
         image = properties.wikiAndMedia?.image ?: "",
         lat = properties.lat,
         lon = properties.lon

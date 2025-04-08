@@ -3,6 +3,7 @@ package gli.project.tripmate.domain.util.constants
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
 import gli.project.tripmate.domain.model.PlaceCategory
 
 object DataConstants {
@@ -22,6 +23,7 @@ object DataConstants {
 
     // List for filter
     val placeFilterCategories = listOf(
+        PlaceCategory("All", TOURISM, Icons.Default.Tour),
         PlaceCategory("Hotels", HOTEL, Icons.Default.LocalHotel),
         PlaceCategory("Huts", HUT, Icons.Default.Cabin),
         PlaceCategory("Apartments", APARTMENT, Icons.Default.Apartment),

@@ -1,5 +1,8 @@
 package gli.project.tripmate.domain.util.constants
 
+// all categories endpoint
+const val TOURISM = "tourism"
+
 // Accommodation
 const val HOTEL = "accommodation.hotel"
 const val HUT = "accommodation.hut"

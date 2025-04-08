@@ -11,14 +11,21 @@ import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.domain.usecase.PlacesUseCase
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.state.main.PlacesState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PlacesViewModel @Inject constructor(
     private val useCase: PlacesUseCase,
@@ -26,6 +33,8 @@ class PlacesViewModel @Inject constructor(
 ) : ViewModel() {
     private val _placesState = MutableStateFlow(PlacesState())
     val placesState = _placesState.asStateFlow()
+
+    private val _searchTrigger = MutableSharedFlow<Pair<String, String>>(replay = 0)
 
     init {
         loadDefaultNearbyPlaces()
@@ -150,16 +159,36 @@ class PlacesViewModel @Inject constructor(
     }
 
     // get places search by area
-    private val _area = _placesState.value.area
-    private val _category = _placesState.value.category
-
-    val placesByArea = useCase.getPlacesByArea(area = _area, category = _category)
-        .map { result ->
-            if (result is ResultResponse.Success) result.data else PagingData.empty()
+    val searchResults = _searchTrigger
+        .flatMapLatest { (query, category) ->
+            _placesState.update { it.copy(isSearchStarted = true) }
+            useCase.getPlacesByArea(query, category)
+        }
+        .map {
+            if (it is ResultResponse.Success) it.data else PagingData.empty()
         }
         .cachedIn(viewModelScope)
 
-    fun search(area: String, category: String) {
-        _placesState.update { it.copy(area = area, category = category) }
+    fun updateSearchQuery(query: String) {
+        _placesState.update { it.copy(searchQuery = query) }
+    }
+
+    fun setCategory(category: String) {
+        _placesState.update { it.copy(category = category) }
+    }
+
+    fun triggerSearch() {
+        val query = _placesState.value.searchQuery
+        val category = _placesState.value.category
+
+        if (query.isNotBlank()) {
+            viewModelScope.launch {
+                _searchTrigger.emit(query to category)
+            }
+        }
+    }
+
+    fun clearSearch() {
+        _placesState.update { it.copy(searchQuery = "", isSearchStarted = false) }
     }
 }

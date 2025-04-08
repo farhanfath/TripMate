@@ -3,7 +3,6 @@ package gli.project.tripmate.data.remote.geoapify.datasource
 import androidx.paging.PagingSource
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
-import gli.project.tripmate.data.remote.geoapify.model.GeoCodeResponse
 import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
 import gli.project.tripmate.data.remote.geoapify.paging.GeoApifyPagingSource
 import gli.project.tripmate.domain.model.Place

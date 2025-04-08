@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchBar(
+    onSearchClick: () -> Unit,
     onFilterClick: () -> Unit
 ) {
     Row(
@@ -49,7 +50,7 @@ fun SearchBar(
                 }
                 .weight(6f)
                 .clickable {
-
+                    onSearchClick()
                 }
         ) {
             Row(
