@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,6 +16,8 @@ import androidx.compose.ui.unit.*
 import gli.project.tripmate.R
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.common.CustomTopBar
+import gli.project.tripmate.presentation.util.iconUrl
+import gli.project.tripmate.presentation.util.tripImage
 
 @Composable
 fun WelcomeScreen(
@@ -33,21 +36,20 @@ fun WelcomeScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             CustomImageLoader(
-                url = "https://cdn-icons-png.flaticon.com/512/9617/9617876.png",
-                desc = "Duck Logo",
+                url = iconUrl,
+                desc = "icon Logo",
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.size(10.dp))
             Text(
-                text = "DigiDuck",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.ExtraBold
             )
         }
-
-        Image(
-            painter = painterResource(R.drawable.placeholder_restaurant),
-            contentDescription = "Welcome Image",
+        CustomImageLoader(
+            url = tripImage,
+            desc = "",
             modifier = Modifier
                 .padding(top = 20.dp)
                 .size(340.dp)

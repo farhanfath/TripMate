@@ -7,6 +7,7 @@ import gli.project.tripmate.domain.usecase.UserUseCase
 import gli.project.tripmate.domain.util.ResultResponse
 import gli.project.tripmate.presentation.state.auth.AppEntryState
 import gli.project.tripmate.presentation.state.auth.AuthState
+import gli.project.tripmate.presentation.util.LogUtil
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,6 +23,10 @@ class UserViewModel @Inject constructor(
 
     private val _appEntryState = MutableStateFlow(AppEntryState())
     val appEntryState = _appEntryState.asStateFlow()
+
+    init {
+        getCurrentUser()
+    }
 
     fun userRegister(email: String, password: String) {
         viewModelScope.launch {
@@ -47,6 +52,21 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    private fun getCurrentUser() {
+        viewModelScope.launch {
+            _authState.update { it.copy(
+                onProcess = true,
+                currentUser = null
+            ) }
+            val user = userUseCase.getCurrentUser()
+            _authState.update { it.copy(
+                onProcess = false,
+                currentUser = user
+            ) }
+            LogUtil.d("UserViewModel", "User ditemukan: $user")
+        }
+    }
+
     fun resetAllAuthStatus() {
         _authState.update {
             it.copy(
@@ -62,6 +82,9 @@ class UserViewModel @Inject constructor(
     fun userLogout() {
         viewModelScope.launch {
             userUseCase.userLogout()
+            _authState.update { it.copy(
+                currentUser = null
+            ) }
         }
     }
 

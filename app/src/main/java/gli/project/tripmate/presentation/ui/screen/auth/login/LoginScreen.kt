@@ -47,6 +47,7 @@ import gli.project.tripmate.presentation.ui.component.auth.CustomInputField
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.common.CustomTopBar
 import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
+import gli.project.tripmate.presentation.util.iconUrl
 import gli.project.tripmate.presentation.viewmodel.auth.UserViewModel
 
 @Composable
@@ -102,8 +103,8 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CustomImageLoader(
-                    url = "https://cdn-icons-png.flaticon.com/512/9617/9617876.png",
-                    desc = "Duck Logo",
+                    url = iconUrl,
+                    desc = "App Logo",
                     modifier = Modifier
                         .padding(bottom = 20.dp)
                         .size(80.dp)
