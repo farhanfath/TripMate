@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CollectionsBookmark
+import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -43,7 +46,8 @@ import gli.project.tripmate.presentation.viewmodel.auth.UserViewModel
 
 @Composable
 fun ProfileScreen(
-    onUserLogout: () -> Unit = {}
+    onFavoriteClick: () -> Unit,
+    onUserLogout: () -> Unit
 ) {
     val userViewModel : UserViewModel = hiltViewModel()
 
@@ -52,18 +56,6 @@ fun ProfileScreen(
     val userState by userViewModel.authState.collectAsState()
 
     LazyColumn {
-        item {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                text = "Profile",
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            )
-        }
         // profile section
         item {
             Column(
@@ -135,21 +127,17 @@ fun ProfileScreen(
                         title = "Pengaturan Kata Sandi",
                         arrowVisible = true,
                         onItemClick = {
-//                            onChangePassClick()
-                        }
-                    )
 
-                    HorizontalDivider()
-
-                    ProfileSectionItem(
-                        icon = LineAwesomeIcons.LockSolid,
-                        title = "Pengaturan Kata Sandi",
-                        arrowVisible = true,
-                        onItemClick = {
-//                            onChangePassClick()
                         }
                     )
                 }
+                Text(
+                    text = "Koleksi Pengguna",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -160,11 +148,20 @@ fun ProfileScreen(
                     )
                 ){
                     ProfileSectionItem(
-                        icon = LineAwesomeIcons.LockSolid,
-                        title = "Pengaturan Kata Sandi",
+                        icon = Icons.Outlined.CollectionsBookmark,
+                        title = "Koleksi Tempat Wisata",
                         arrowVisible = true,
                         onItemClick = {
-//                            onChangePassClick()
+                            onFavoriteClick()
+                        }
+                    )
+                    HorizontalDivider()
+                    ProfileSectionItem(
+                        icon = Icons.Outlined.RateReview,
+                        title = "Riwayat Rating",
+                        arrowVisible = true,
+                        onItemClick = {
+
                         }
                     )
                 }

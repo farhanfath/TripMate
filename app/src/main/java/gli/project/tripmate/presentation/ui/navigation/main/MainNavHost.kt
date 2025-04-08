@@ -11,6 +11,7 @@ import gli.project.tripmate.presentation.ui.screen.main.category.CategoryScreen
 import gli.project.tripmate.presentation.ui.screen.main.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.MainNavScreen
+import gli.project.tripmate.presentation.ui.screen.main.home.favorite.FavoriteScreen
 import gli.project.tripmate.presentation.ui.screen.main.more.MoreNearbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.search.SearchScreen
 import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
@@ -76,6 +77,11 @@ fun MainNavHost(
                     },
                     onUserLogout = {
                         onUserLogout()
+                    },
+                    onFavoriteClick = {
+                        navController.navigate(
+                            MainNavigation.Favorite
+                        )
                     }
                 )
             }
@@ -153,6 +159,20 @@ fun MainNavHost(
                     )
                 },
                 placesViewModel = placeViewModel
+            )
+        }
+
+
+        composable<MainNavigation.Favorite> {
+            FavoriteScreen(
+                onDetailClick = { placeId, placeName ->
+                    navController.navigate(
+                        MainNavigation.DetailTour(
+                            placeId = placeId,
+                            placeName = placeName
+                        )
+                    )
+                }
             )
         }
     }

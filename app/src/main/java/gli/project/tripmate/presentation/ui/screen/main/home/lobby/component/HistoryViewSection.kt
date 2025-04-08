@@ -59,13 +59,6 @@ fun HistoryView(
                         fontWeight = FontWeight.Bold
                     )
                 )
-                Text(
-                    text = "See All",
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        color = MaterialTheme.colorScheme.secondary,
-                        textDecoration = TextDecoration.Underline
-                    )
-                )
             }
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 10.dp)

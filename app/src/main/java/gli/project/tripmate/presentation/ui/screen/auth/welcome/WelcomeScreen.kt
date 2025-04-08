@@ -55,7 +55,7 @@ fun WelcomeScreen(
                 .size(340.dp)
         )
         Text(
-            text = "Mari Mulai Smart Farming!",
+            text = "Temukan Perjalanan Terbaikmu!",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 20.sp,
@@ -63,7 +63,7 @@ fun WelcomeScreen(
         )
         Spacer(modifier = Modifier.size(10.dp))
         Text(
-            text = "Kelola produksi telur, pantau kesehatan bebek, dan optimalkan peternakan dengan mudah dalam satu aplikasi.",
+            text = "Jelajahi destinasi impian dan dapatkan rekomendasi perjalanan yang pas hanya untukmu.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.outline,
             fontSize = 12.sp,

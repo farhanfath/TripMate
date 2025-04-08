@@ -66,7 +66,8 @@ fun MainNavScreen(
     onLocationRequestPermission: () -> Unit,
     onCategoryDetailClick: (name: String, endpoint: String) -> Unit,
     onSeeMoreClick: () -> Unit,
-    onUserLogout: () -> Unit
+    onUserLogout: () -> Unit,
+    onFavoriteClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -182,13 +183,6 @@ fun MainNavScreen(
                     onSeeMoreClick = onSeeMoreClick
                 )
             }
-            composable<MainNavigation.Favorite> {
-                FavoriteScreen(
-                    onDetailClick = { placeId, placeName ->
-                        onDetailClick(placeId, placeName)
-                    }
-                )
-            }
             composable<MainNavigation.Collection> {
                 CollectionScreen()
             }
@@ -196,6 +190,9 @@ fun MainNavScreen(
                 ProfileScreen(
                     onUserLogout = {
                         onUserLogout()
+                    },
+                    onFavoriteClick = {
+                        onFavoriteClick()
                     }
                 )
             }
