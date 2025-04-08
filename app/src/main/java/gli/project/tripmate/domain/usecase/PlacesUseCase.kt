@@ -17,4 +17,6 @@ interface PlacesUseCase {
     fun getDetailPlaceImageList(query: String): Flow<ResultResponse<PagingData<PexelImage>>>
 
     suspend fun getPexelDetailImage(query: String) : ResultResponse<PexelImage>
+
+    fun getPlacesByArea(area: String, category: String) : Flow<ResultResponse<PagingData<Place>>>
 }

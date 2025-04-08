@@ -1,6 +1,7 @@
 package gli.project.tripmate.data.remote.geoapify
 
 import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
+import gli.project.tripmate.data.remote.geoapify.model.GeoCodeResponse
 import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
 import gli.project.tripmate.data.util.ApiEndpoint
 import retrofit2.http.GET
@@ -19,4 +20,14 @@ interface GeoApiService {
     suspend fun getDetailPlace(
         @Query("id") id: String,
     ) : DetailPlaceResponse
+
+//    @GET(ApiEndpoint.SEARCH_AUTOCOMPLETE)
+//    suspend fun getSearchPlaces(
+//        @Query("text") text: String
+//    ) :
+
+    @GET(ApiEndpoint.SEARCH)
+    suspend fun getCoordinatesByArea(
+        @Query("text") area: String
+    ): PlacesResponse
 }

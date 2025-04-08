@@ -59,4 +59,17 @@ class PlacesUseCaseImpl @Inject constructor(
     override suspend fun getPexelDetailImage(query: String): ResultResponse<PexelImage> {
         return repository.getPlaceDetailBackgroundImage(query)
     }
+
+    override fun getPlacesByArea(
+        area: String,
+        category: String
+    ): Flow<ResultResponse<PagingData<Place>>> = flow {
+        emit(ResultResponse.Loading)
+        try {
+            val places = repository.getPlacesByArea(area = area, category = category)
+            emitAll(places.map { ResultResponse.Success(it) })
+        } catch (e: Exception) {
+            emit(ResultResponse.Error(e.message ?: "Unknown error"))
+        }
+    }.flowOn(Dispatchers.IO)
 }

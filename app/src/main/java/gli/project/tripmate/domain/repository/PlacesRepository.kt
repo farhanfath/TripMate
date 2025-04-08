@@ -18,4 +18,6 @@ interface PlacesRepository {
     // image with from pexels api
     fun getPlacesDetailImageList(query: String) : Flow<PagingData<PexelImage>>
     suspend fun getPlaceDetailBackgroundImage(query: String) : ResultResponse<PexelImage>
+
+    suspend fun getPlacesByArea(area: String, category: String) : Flow<PagingData<Place>>
 }

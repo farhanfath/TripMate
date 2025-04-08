@@ -96,4 +96,21 @@ class PlacesRepositoryImpl @Inject constructor(
             ResultResponse.Error(ErrorMessage.SERVER_ERROR)
         }
     }
+
+    override suspend fun getPlacesByArea(area: String, category: String): Flow<PagingData<Place>> {
+        val geoResponse = geoRemoteDataSource.getCoordinatesByArea(area)
+        val loc = geoResponse.features.firstOrNull()?.properties
+            ?: throw Exception("Area tidak ditemukan")
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false,
+                initialLoadSize = 20
+            ),
+            pagingSourceFactory = {
+                geoRemoteDataSource.getNearbyPlacesPagingSource(category, loc.lat, loc.lon, 10000)
+            }
+        ).flow
+    }
 }

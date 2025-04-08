@@ -19,5 +19,7 @@ data class PlacesState(
     val userLatitude : Double = 0.0,
     val userLongitude : Double = 0.0,
     val detailImage: ResultResponse<PexelImage> = ResultResponse.Loading,
-    val placesCategory: List<PlaceCategory> = DataConstants.placeFilterCategories
+    val placesCategory: List<PlaceCategory> = DataConstants.placeFilterCategories,
+    val area: String = "",
+    val category: String = ""
 )

@@ -148,4 +148,18 @@ class PlacesViewModel @Inject constructor(
             }
         }
     }
+
+    // get places search by area
+    private val _area = _placesState.value.area
+    private val _category = _placesState.value.category
+
+    val placesByArea = useCase.getPlacesByArea(area = _area, category = _category)
+        .map { result ->
+            if (result is ResultResponse.Success) result.data else PagingData.empty()
+        }
+        .cachedIn(viewModelScope)
+
+    fun search(area: String, category: String) {
+        _placesState.update { it.copy(area = area, category = category) }
+    }
 }

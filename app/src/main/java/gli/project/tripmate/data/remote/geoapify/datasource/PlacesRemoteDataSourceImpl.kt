@@ -3,6 +3,7 @@ package gli.project.tripmate.data.remote.geoapify.datasource
 import androidx.paging.PagingSource
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.geoapify.model.DetailPlaceResponse
+import gli.project.tripmate.data.remote.geoapify.model.GeoCodeResponse
 import gli.project.tripmate.data.remote.geoapify.model.PlacesResponse
 import gli.project.tripmate.data.remote.geoapify.paging.GeoApifyPagingSource
 import gli.project.tripmate.domain.model.Place
@@ -22,5 +23,9 @@ class PlacesRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getDetailPlace(id: String): DetailPlaceResponse {
         return geoApiService.getDetailPlace(id)
+    }
+
+    override suspend fun getCoordinatesByArea(text: String): PlacesResponse {
+        return geoApiService.getCoordinatesByArea(text)
     }
 }
