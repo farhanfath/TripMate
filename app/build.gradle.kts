@@ -9,6 +9,10 @@ plugins {
     alias(libs.plugins.devtools.ksp) // ksp
     alias(libs.plugins.kotlin.serialization) // serialization
     alias(libs.plugins.kotlin.parcelize) // parcelize
+    // google map
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    // firebase
+    alias(libs.plugins.google.gms.google.services)
 }
 
 val localProperties = Properties().apply {
@@ -29,9 +33,19 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val geoApiBaseUrl = localProperties.getProperty("GEO_API_BASE_URL")
-        val apiKey = localProperties.getProperty("API_KEY")
-        buildConfigField("String", "BASE_URL", "\"$geoApiBaseUrl\"")
-        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        val geoApiKey = localProperties.getProperty("GEOPIFY_API_KEY")
+        val mapApiKey = localProperties.getProperty("MAPS_API_KEY")
+        val imageBaseUrl = localProperties.getProperty("PEXELS_API_BASE_URL")
+        val imageKey = localProperties.getProperty("PEXELS_API_KEY")
+        val geminiBaseUrl = localProperties.getProperty("GEMINI_API_BASE_URL")
+        val geminiKey = localProperties.getProperty("GEMINI_API_KEY")
+        buildConfigField("String", "GEO_API_BASE_URL", "\"$geoApiBaseUrl\"")
+        buildConfigField("String", "GEOPIFY_API_KEY", "\"$geoApiKey\"")
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapApiKey\"")
+        buildConfigField("String", "IMAGE_BASE_URL", "\"$imageBaseUrl\"")
+        buildConfigField("String", "IMAGE_API_KEY", "\"$imageKey\"")
+        buildConfigField("String", "GEMINI_BASE_URL", "\"$geminiBaseUrl\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
     }
 
     buildTypes {
@@ -110,6 +124,11 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences)
 
+    // firebase - firestore
+    implementation(libs.firebase.firestore)
+    // firebase - auth
+    implementation(libs.firebase.auth)
+
     /**
      * App Dependency
      */
@@ -147,4 +166,13 @@ dependencies {
 
     // paging compose
     implementation(libs.androidx.paging.compose)
+
+    // maps
+    implementation(libs.maps.compose)
+    implementation(libs.maps.services)
+    // places
+    implementation(libs.google.maps.places)
+
+    // google play location service
+    implementation(libs.play.services.location)
 }

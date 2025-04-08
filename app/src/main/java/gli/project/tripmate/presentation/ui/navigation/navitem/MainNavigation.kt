@@ -14,14 +14,35 @@ sealed class MainNavigation {
     data object Favorite : MainNavigation()
 
     @Serializable
+    data object Collection : MainNavigation()
+
+    @Serializable
     data object Profile : MainNavigation()
 
     @Serializable
     data object ChatAI : MainNavigation()
 
+    @Serializable
+    data object Search : MainNavigation()
+
     /**
      * Detail
      */
     @Serializable
-    data object DetailTour : MainNavigation()
+    data class DetailTour(
+        val placeId: String,
+        val placeName: String
+    ) : MainNavigation()
+
+    @Serializable
+    data class DetailCategory(
+        val categoryName: String,
+        val categoryEndpoint: String
+    ) : MainNavigation()
+
+    /**
+     * more screen
+     */
+    @Serializable
+    data object MoreNearby : MainNavigation()
 }
