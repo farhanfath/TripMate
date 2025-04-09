@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import gli.project.tripmate.presentation.ui.theme.surfaceVariantLight
+import gli.project.tripmate.presentation.ui.theme.SurfaceVariantLight
 
 @Composable
 fun ProfileSectionItem(
@@ -40,7 +40,7 @@ fun ProfileSectionItem(
             .clickable {
                 onItemClick()
             },
-        color = surfaceVariantLight,
+        color = SurfaceVariantLight,
     ) {
         Row(
             modifier = Modifier

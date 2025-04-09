@@ -1,5 +1,6 @@
 package gli.project.tripmate.presentation.ui.navigation.main
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -45,12 +46,7 @@ fun MainNavHost(
                         )
                     },
                     onDetailClick = { placeId, placeName ->
-                        navController.navigate(
-                            MainNavigation.DetailTour(
-                                placeId = placeId,
-                                placeName = placeName
-                            )
-                        )
+                        navigateToDetail(navController, placeId, placeName)
                     },
                     placeViewModel = placeViewModel,
                     locationViewModel = locationViewModel,
@@ -118,12 +114,7 @@ fun MainNavHost(
                     navController.navigateUp()
                 },
                 onDetailClick = { placeId, placeName ->
-                    navController.navigate(
-                        MainNavigation.DetailTour(
-                            placeId = placeId,
-                            placeName = placeName
-                        )
-                    )
+                    navigateToDetail(navController, placeId, placeName)
                 }
             )
         }
@@ -135,12 +126,7 @@ fun MainNavHost(
                     navController.navigateUp()
                 },
                 onDetailClick = { placeId, placeName ->
-                    navController.navigate(
-                        MainNavigation.DetailTour(
-                            placeId = placeId,
-                            placeName = placeName
-                        )
-                    )
+                    navigateToDetail(navController, placeId, placeName)
                 }
             )
         }
@@ -151,12 +137,7 @@ fun MainNavHost(
                     navController.navigateUp()
                 },
                 onDetailClick = { placeId, placeName ->
-                    navController.navigate(
-                        MainNavigation.DetailTour(
-                            placeId = placeId,
-                            placeName = placeName
-                        )
-                    )
+                    navigateToDetail(navController, placeId, placeName)
                 },
                 placesViewModel = placeViewModel
             )
@@ -166,14 +147,22 @@ fun MainNavHost(
         composable<MainNavigation.Favorite> {
             FavoriteScreen(
                 onDetailClick = { placeId, placeName ->
-                    navController.navigate(
-                        MainNavigation.DetailTour(
-                            placeId = placeId,
-                            placeName = placeName
-                        )
-                    )
+                    navigateToDetail(navController, placeId, placeName)
                 }
             )
         }
     }
+}
+
+private fun navigateToDetail(
+    navController: NavHostController,
+    placeId: String,
+    placeName: String
+) {
+    navController.navigate(
+        MainNavigation.DetailTour(
+            placeId = placeId,
+            placeName = placeName
+        )
+    )
 }
