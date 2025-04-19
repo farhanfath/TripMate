@@ -44,7 +44,13 @@ googleGmsGoogleServices = "4.4.2"
 firebaseFirestore = "25.1.3"
 firebaseAuth = "23.2.0"
 
+# accompanist permission
+accompanistPermissions = "0.32.0"
+
 [libraries]
+# accompanist permission
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
+
 # datastore - preferences
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastorePreferences" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }

@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.screen.main.chat.component
+package gli.project.tripmate.presentation.ui.screen.main.chat.component.gemini
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

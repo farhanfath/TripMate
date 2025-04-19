@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import gli.project.tripmate.BuildConfig
 import gli.project.tripmate.data.remote.gemini.GeminiApiService
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
+import gli.project.tripmate.data.remote.n8n.N8nApiService
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
 import gli.project.tripmate.presentation.util.LogUtil
 import okhttp3.Interceptor
@@ -27,6 +28,7 @@ object ApiModule {
     private const val PEXELS_API_KEY = BuildConfig.PEXELS_API_KEY
     private const val GEMINI_API_BASE_URL = BuildConfig.GEMINI_BASE_URL
     private const val GEMINI_API_KEY = BuildConfig.GEMINI_API_KEY
+    private const val N8N_BASE_URL = BuildConfig.N8N_BASE_URL
 
     @Provides
     @Singleton
@@ -158,6 +160,20 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @Named("N8nOkhttpClient")
+    fun provideN8nOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     @Named("GeoRetrofit")
     fun provideGeoRetrofit(@Named("GeoOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -191,6 +207,17 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @Named("N8nRetrofit")
+    fun provideN8nRetrofit(@Named("N8nOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(N8N_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     @Named("GeoApiService")
     fun provideGeoApiService(@Named("GeoRetrofit") retrofit: Retrofit): GeoApiService {
         return retrofit.create(GeoApiService::class.java)
@@ -208,5 +235,12 @@ object ApiModule {
     @Named("GeminiApiService")
     fun provideGeminiApiService(@Named("GeminiRetrofit") retrofit: Retrofit): GeminiApiService {
         return retrofit.create(GeminiApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("N8nApiService")
+    fun provideN8nApiService(@Named("N8nRetrofit") retrofit: Retrofit): N8nApiService {
+        return retrofit.create(N8nApiService::class.java)
     }
 }

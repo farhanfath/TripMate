@@ -15,16 +15,19 @@ import gli.project.tripmate.data.local.datasource.FavoriteDataSource
 import gli.project.tripmate.data.local.datasource.RecentViewDataSource
 import gli.project.tripmate.data.remote.gemini.datasource.GeminiDataSource
 import gli.project.tripmate.data.remote.geoapify.datasource.PlacesRemoteDataSource
+import gli.project.tripmate.data.remote.n8n.datasource.N8nDataSource
 import gli.project.tripmate.data.remote.pexels.datasource.PexelRemoteDataSource
 import gli.project.tripmate.data.repository.ChatRepositoryImpl
 import gli.project.tripmate.data.repository.FavoriteRepositoryImpl
 import gli.project.tripmate.data.repository.LocationRepositoryImpl
+import gli.project.tripmate.data.repository.N8nRepositoryImpl
 import gli.project.tripmate.data.repository.PlacesRepositoryImpl
 import gli.project.tripmate.data.repository.RecentViewRepositoryImpl
 import gli.project.tripmate.data.repository.UserRepositoryImpl
 import gli.project.tripmate.domain.repository.ChatRepository
 import gli.project.tripmate.domain.repository.FavoriteRepository
 import gli.project.tripmate.domain.repository.LocationRepository
+import gli.project.tripmate.domain.repository.N8nRepository
 import gli.project.tripmate.domain.repository.PlacesRepository
 import gli.project.tripmate.domain.repository.RecentViewRepository
 import gli.project.tripmate.domain.repository.UserRepository
@@ -59,6 +62,14 @@ object DataModule {
         chatDataSource: GeminiDataSource
     ): ChatRepository {
         return ChatRepositoryImpl(chatDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideN8nRepository(
+        n8nDataSource: N8nDataSource
+    ): N8nRepository {
+        return N8nRepositoryImpl(n8nDataSource)
     }
 
     @Provides

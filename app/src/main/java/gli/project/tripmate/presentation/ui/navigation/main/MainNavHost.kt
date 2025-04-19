@@ -10,6 +10,7 @@ import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.main.category.CategoryScreen
 import gli.project.tripmate.presentation.ui.screen.main.chat.ChatScreen
+import gli.project.tripmate.presentation.ui.screen.main.chat.ConversationScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.MainNavScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.FavoriteScreen
@@ -17,6 +18,7 @@ import gli.project.tripmate.presentation.ui.screen.main.more.MoreNearbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.search.SearchScreen
 import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
+import gli.project.tripmate.presentation.viewmodel.main.N8nViewModel
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
@@ -95,8 +97,13 @@ fun MainNavHost(
         }
 
         composable<MainNavigation.ChatAI> {
-            ChatScreen(
-                chatViewModel = chatViewModel,
+//            ChatScreen(
+//                chatViewModel = chatViewModel,
+//                onBackClick = {
+//                    navController.navigateUp()
+//                }
+//            )
+            ConversationScreen(
                 onBackClick = {
                     navController.navigateUp()
                 }

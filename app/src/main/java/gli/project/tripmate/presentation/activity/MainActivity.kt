@@ -15,6 +15,7 @@ import gli.project.tripmate.presentation.ui.navigation.main.MainNavHost
 import gli.project.tripmate.presentation.ui.theme.TripMateTheme
 import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
+import gli.project.tripmate.presentation.viewmodel.main.N8nViewModel
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 

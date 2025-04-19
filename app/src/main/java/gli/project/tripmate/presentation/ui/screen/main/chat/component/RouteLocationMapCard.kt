@@ -1,9 +1,8 @@
-package gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.about.component
+package gli.project.tripmate.presentation.ui.screen.main.chat.component
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,13 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsCar
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,15 +39,13 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import gli.project.tripmate.presentation.util.extensions.locationRangeFormat
 
 @Composable
-fun LocationMapCard(
+fun RouteLocationCardMap(
     latitude: Double,
     longitude: Double,
     locationName: String,
-    modifier: Modifier = Modifier,
-    userRange: Double,
+    locationDetail: String
 ) {
     val context = LocalContext.current
     val location = remember { LatLng(latitude, longitude) }
@@ -89,18 +88,19 @@ fun LocationMapCard(
         }
     }
 
-    Card(
-        modifier = modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Column {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                .background(Color.LightGray)
+        ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp)
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                contentAlignment = Alignment.Center
             ) {
                 GoogleMap(
                     modifier = Modifier.fillMaxSize(),
@@ -115,65 +115,53 @@ fun LocationMapCard(
                     )
                 }
             }
+        }
 
-            // Location information and view route button
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = locationName,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Box(
-                        modifier = Modifier.padding(end = 10.dp)
-                    ) {
-                        Text(
-                            text = locationName,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.basicMarquee()
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Box(
-                        modifier = Modifier.padding(end = 10.dp)
-                    ) {
-                        Text(
-                            text = locationRangeFormat(userRange),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.basicMarquee()
-                        )
-                    }
-                }
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = locationDetail,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-                Button(
-                    onClick = openGoogleMapsForDirections,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.DirectionsCar,
-                            contentDescription = "View Route",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                        Text(
-                            text = "Lihat Rute",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = openGoogleMapsForDirections,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Navigation,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Petunjuk Arah")
             }
         }
     }
+
 }

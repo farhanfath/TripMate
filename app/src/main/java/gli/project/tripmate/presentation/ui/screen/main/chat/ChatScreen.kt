@@ -28,8 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.presentation.ui.component.common.CustomTopBarWithNavigation
-import gli.project.tripmate.presentation.ui.screen.main.chat.component.ChatBubble
-import gli.project.tripmate.presentation.ui.screen.main.chat.component.PulsatingDots
+import gli.project.tripmate.presentation.ui.screen.main.chat.component.gemini.ChatBubble
+import gli.project.tripmate.presentation.ui.screen.main.chat.component.gemini.PulsatingDots
 import gli.project.tripmate.presentation.util.extensions.customResponseHandler
 import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
 
