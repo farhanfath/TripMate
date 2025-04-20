@@ -5,3 +5,8 @@ enum class N8nType {
     TRAVEL_LIST,
     ROUTE
 }
+
+enum class InputType {
+    VOICE,
+    TEXT
+}

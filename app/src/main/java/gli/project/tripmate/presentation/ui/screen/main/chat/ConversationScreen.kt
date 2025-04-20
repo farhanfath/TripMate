@@ -48,7 +48,6 @@ import gli.project.tripmate.presentation.ui.screen.main.chat.component.VoiceReco
 import gli.project.tripmate.presentation.viewmodel.main.N8nViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ConversationScreen(
     onBackClick: () -> Unit
@@ -65,15 +64,6 @@ fun ConversationScreen(
     val listState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-
-    val recordAudioPermission = rememberPermissionState(android.Manifest.permission.RECORD_AUDIO)
-
-    // Request permission if not granted
-    LaunchedEffect(Unit) {
-        if (!recordAudioPermission.status.isGranted) {
-            recordAudioPermission.launchPermissionRequest()
-        }
-    }
 
     // Show error in Snackbar
     LaunchedEffect(error) {
@@ -175,7 +165,7 @@ fun ConversationScreen(
                 IconButton(
                     onClick = {
                         if (inputText.isNotBlank()) {
-                            n8nViewModel.processUserInput(inputText)
+                            n8nViewModel.textProcessInput(inputText)
                             inputText = ""
                         }
                     }
@@ -185,19 +175,6 @@ fun ConversationScreen(
                         imageVector = Icons.AutoMirrored.Filled.Send,
                         contentDescription = "Send Message",
                         tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-                if (recordAudioPermission.status.isGranted) {
-                    VoiceRecorderButton(
-                        isListening = isListening,
-                        isLoading = isLoading,
-                        onClick = {
-                            if (isListening) {
-                                n8nViewModel.stopListening()
-                            } else {
-                                n8nViewModel.startListening()
-                            }
-                        }
                     )
                 }
             }

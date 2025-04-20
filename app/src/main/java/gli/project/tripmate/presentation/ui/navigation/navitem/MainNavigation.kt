@@ -25,6 +25,9 @@ sealed class MainNavigation {
     @Serializable
     data object Search : MainNavigation()
 
+    @Serializable
+    data object Call : MainNavigation()
+
     /**
      * Detail
      */

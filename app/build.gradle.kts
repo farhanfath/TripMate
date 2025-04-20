@@ -82,6 +82,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -181,4 +184,16 @@ dependencies {
     // accompanist permission
     // Permissions
     implementation (libs.accompanist.permissions)
+
+    // agora
+    implementation(libs.agora.voice.sdk)
+
+    // supabase and ktor
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.1.4")
+    implementation("io.github.jan-tennert.supabase:realtime-kt:3.1.4")
+    implementation ("io.ktor:ktor-client-core:3.0.2")
+    implementation("io.ktor:ktor-client-android:3.0.2")
+    implementation("io.ktor:ktor-client-websockets:3.0.2")
+    implementation("io.ktor:ktor-client-cio:3.0.2")
+    implementation("io.ktor:ktor-client-okhttp:3.0.2")
 }

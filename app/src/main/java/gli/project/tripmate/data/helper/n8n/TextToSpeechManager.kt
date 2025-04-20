@@ -1,8 +1,12 @@
 package gli.project.tripmate.data.helper.n8n
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import gli.project.tripmate.presentation.util.extensions.parseMarkdown
+import gli.project.tripmate.presentation.viewmodel.main.N8nViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +30,22 @@ class TextToSpeechManager @Inject constructor(
     val error: StateFlow<String?> = _error.asStateFlow()
 
     init {
+        initializeTextToSpeech()
+    }
+
+    // Tambahkan fungsi initialize publik untuk reinisialisasi
+    fun initialize() {
+        // Hentikan dan bersihkan instance lama
+        textToSpeech?.stop()
+        textToSpeech?.shutdown()
+        textToSpeech = null
+
+        // Reset state
+        _isSpeaking.value = false
+        _isInitialized.value = false
+        _error.value = null
+
+        // Inisialisasi ulang
         initializeTextToSpeech()
     }
 
@@ -61,9 +81,17 @@ class TextToSpeechManager @Inject constructor(
 
     fun speak(text: String) {
         if (_isInitialized.value) {
-            textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
+            textToSpeech?.speak(parseMarkdown(text), TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
         } else {
             _error.value = "Text-to-Speech is not initialized yet"
+            // Coba inisialisasi ulang jika belum diinisialisasi
+            initialize()
+            // Tambahkan penundaan singkat lalu coba bicara lagi
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (_isInitialized.value) {
+                    textToSpeech?.speak(parseMarkdown(text), TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
+                }
+            }, 500)
         }
     }
 
@@ -73,7 +101,14 @@ class TextToSpeechManager @Inject constructor(
     }
 
     fun destroy() {
-        textToSpeech?.stop()
+        stop()
         textToSpeech?.shutdown()
+        textToSpeech = null
+        _isInitialized.value = false
     }
+}
+
+// Tambahkan extension function untuk N8nViewModel
+fun N8nViewModel.initializeTextToSpeech() {
+    (textToSpeechManager as? TextToSpeechManager)?.initialize()
 }

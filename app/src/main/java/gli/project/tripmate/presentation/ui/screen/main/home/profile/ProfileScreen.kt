@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.HeadsetMic
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.AlertDialog
@@ -48,7 +49,8 @@ import gli.project.tripmate.presentation.viewmodel.auth.UserViewModel
 fun ProfileScreen(
     onFavoriteClick: () -> Unit,
     onUserLogout: () -> Unit,
-    onRatingHistoryClick: () -> Unit
+    onRatingHistoryClick: () -> Unit,
+    onCustomerServiceCallClick: () -> Unit
 ) {
     val userViewModel : UserViewModel = hiltViewModel()
 
@@ -162,6 +164,41 @@ fun ProfileScreen(
                         title = "Riwayat Rating",
                         arrowVisible = true,
                         onItemClick = onRatingHistoryClick
+                    )
+                }
+            }
+        }
+
+        // customer service section
+        item {
+            Column(
+                Modifier
+                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Layanan Pengguna",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 12.dp),
+                    border = BorderStroke(
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        width = 1.dp
+                    )
+                ){
+                    ProfileSectionItem(
+                        icon = Icons.Default.HeadsetMic,
+                        title = "Hubungi Call Center Kami",
+                        arrowVisible = true,
+                        onItemClick = {
+                            onCustomerServiceCallClick()
+                        }
                     )
                 }
             }

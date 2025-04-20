@@ -66,7 +66,8 @@ fun MainNavScreen(
     onSeeMoreClick: () -> Unit,
     onUserLogout: () -> Unit,
     onFavoriteClick: () -> Unit,
-    onHistoryRatingClick: () -> Unit
+    onHistoryRatingClick: () -> Unit,
+    onCustomerServiceCallClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -192,6 +193,9 @@ fun MainNavScreen(
                     },
                     onRatingHistoryClick = {
                         onHistoryRatingClick()
+                    },
+                    onCustomerServiceCallClick = {
+                        onCustomerServiceCallClick()
                     }
                 )
             }

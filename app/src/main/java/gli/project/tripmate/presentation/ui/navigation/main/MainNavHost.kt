@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
+import gli.project.tripmate.presentation.ui.screen.call.N8nActiveCallScreen
 import gli.project.tripmate.presentation.ui.screen.main.category.CategoryScreen
 import gli.project.tripmate.presentation.ui.screen.main.chat.ConversationScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
@@ -27,7 +28,8 @@ fun MainNavHost(
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
     onLocationRequestPermission: () -> Unit,
-    onUserLogout: () -> Unit
+    onUserLogout: () -> Unit,
+    onCustomerServiceIntent: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -80,6 +82,11 @@ fun MainNavHost(
                     onHistoryRatingClick = {
                         navController.navigate(
                             MainNavigation.RatingCollection
+                        )
+                    },
+                    onCustomerServiceCallClick = {
+                        navController.navigate(
+                            MainNavigation.Call
                         )
                     }
                 )
@@ -158,6 +165,19 @@ fun MainNavHost(
             RatingCollectionScreen(
                 onBackClick = {
                     navController.navigateUp()
+                }
+            )
+        }
+
+        composable<MainNavigation.Call> {
+            N8nActiveCallScreen(
+                onEndCallClick = {
+                    navController.navigateUp()
+                },
+                assistantName = "Ai Agent",
+                callStartTime = System.currentTimeMillis(),
+                onCustomerServiceIntent = {
+                    onCustomerServiceIntent()
                 }
             )
         }
