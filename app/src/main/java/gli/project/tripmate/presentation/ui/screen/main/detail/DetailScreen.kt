@@ -19,6 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.RateReview
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -48,6 +51,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import gli.project.tripmate.domain.util.constants.DataConstants
+import gli.project.tripmate.presentation.state.main.RatingsState
 import gli.project.tripmate.presentation.ui.component.common.CustomShimmer
 import gli.project.tripmate.presentation.ui.component.common.error.CustomNoConnectionPlaceholder
 import gli.project.tripmate.presentation.ui.screen.main.detail.component.BackDropImage
@@ -56,11 +61,12 @@ import gli.project.tripmate.presentation.ui.screen.main.detail.component.DetailI
 import gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.about.AboutTab
 import gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.gallery.GalleryTab
 import gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.review.ReviewTab
-import gli.project.tripmate.domain.util.constants.DataConstants
-import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
+import gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.review.component.RatingDialog
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
+import gli.project.tripmate.presentation.util.extensions.HandlerResponseCompose
 import gli.project.tripmate.presentation.viewmodel.main.FavoriteViewModel
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.RatingViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -76,10 +82,26 @@ fun DetailScreen(
     val placeDetailState by viewModel.placesState.collectAsState()
     val userRange = viewModel.placesState.map { it.placeRange }.collectAsState(0.0).value
 
+    // rating handler
+    val ratingViewModel = hiltViewModel<RatingViewModel>()
+    val ratingsState by ratingViewModel.ratingsState.collectAsState()
+    val averageRating by ratingViewModel.averageRating.collectAsState()
+    val ratingDistribution by ratingViewModel.ratingDistribution.collectAsState()
+    val ratings = when (ratingsState) {
+        is RatingsState.Success ->
+            (ratingsState as RatingsState.Success).ratings
+        else -> emptyList()
+    }
+
     LaunchedEffect(Unit) {
         viewModel.getDetailPlaces(placeId)
         viewModel.getPexelDetailImage(placeName)
         favoriteViewModel.checkFavoriteStatus(placeId)
+    }
+
+    // load ratings data
+    LaunchedEffect(placeId) {
+        ratingViewModel.loadRatings(placeId)
     }
 
     /**
@@ -120,9 +142,22 @@ fun DetailScreen(
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
+    // rating dialog
+    var showRatingDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showRatingDialog = true }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.RateReview,
+                    contentDescription = ""
+                )
+            }
         }
     ) { innerPadding ->
         HandlerResponseCompose(
@@ -193,7 +228,9 @@ fun DetailScreen(
                         item {
                             DetailInformation(
                                 data = detailData,
-                                placeName = placeName
+                                placeName = placeName,
+                                totalReview = ratings.size,
+                                ratingStats = averageRating
                             )
                         }
 
@@ -260,7 +297,12 @@ fun DetailScreen(
                                             viewModel = viewModel,
                                             detailPlaceName = detailData.name
                                         )
-                                        2 -> ReviewTab()
+                                        2 -> ReviewTab(
+                                            ratingsState = ratingsState,
+                                            averageRating = averageRating,
+                                            ratingDistribution = ratingDistribution,
+                                            totalReviews = ratings
+                                        )
                                     }
                                 }
                             }
@@ -274,6 +316,17 @@ fun DetailScreen(
                     title = "Error Acquired",
                     desc = ErrorMessageHelper.getUiErrorMessage(errorStatus, LocalContext.current)
                 )
+            }
+        )
+
+        RatingDialog(
+            showDialog = showRatingDialog,
+            onDismiss = { showRatingDialog = false },
+            onRatingSubmitted = { rating, description ->
+                ratingViewModel.updateNewRatingValue(rating)
+                ratingViewModel.updateNewRatingDescription(description)
+                ratingViewModel.addRating(placeId)
+                showRatingDialog = false
             }
         )
     }

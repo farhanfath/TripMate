@@ -38,11 +38,14 @@ import gli.project.tripmate.presentation.ui.theme.size_10
 import gli.project.tripmate.presentation.ui.theme.size_16
 import gli.project.tripmate.presentation.util.extensions.emptyTextHandler
 import gli.project.tripmate.presentation.util.extensions.formatOperatingHours
+import gli.project.tripmate.presentation.util.extensions.ratingFormat
 
 @Composable
 fun DetailInformation(
     data: DetailPlace,
-    placeName: String
+    placeName: String,
+    totalReview: Int,
+    ratingStats: Double
 ) {
     Row(
         modifier = Modifier
@@ -124,14 +127,14 @@ fun DetailInformation(
                     tint = Color.Yellow
                 )
                 Text(
-                    text = "4.5",
+                    text = ratingFormat(ratingStats),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold
                     ),
                     modifier = Modifier.padding(horizontal = padding_4)
                 )
                 Text(
-                    text = "(123 reviews)",
+                    text = "($totalReview reviews)",
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold
                     )

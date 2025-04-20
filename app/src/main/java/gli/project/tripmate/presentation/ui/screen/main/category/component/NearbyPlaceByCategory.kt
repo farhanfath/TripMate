@@ -78,42 +78,6 @@ fun NearbyPlaceLongItem(
                         .fillMaxWidth(),
                     scale = ContentScale.Crop
                 )
-                Column(
-                    modifier = Modifier
-                        .padding(padding_12)
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.BottomStart
-                    ) {
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                            )
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(vertical = padding_4, horizontal = padding_8),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(padding_4)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Outlined.NotListedLocation,
-                                    contentDescription = "",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(size_15)
-                                )
-                                Text(
-                                    text = "10 km",
-                                    style = MaterialTheme.typography.labelSmall.copy(
-                                        color = Color.White
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.size(10.dp))
@@ -132,12 +96,6 @@ fun NearbyPlaceLongItem(
                         text = emptyTextHandler(place.name, stringResource(id = R.string.name_not_available))
                     )
                 }
-                Text(
-                    text = "from $250",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        fontWeight = FontWeight.Light
-                    )
-                )
             }
 
             Spacer(modifier = Modifier.size(8.dp))
@@ -167,27 +125,6 @@ fun NearbyPlaceLongItem(
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "",
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(15.dp)
-                    )
-                    Text(
-                        text = "4.5",
-                        modifier = Modifier.padding(horizontal = 2.dp),
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                    Text(
-                        text = "(125)",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                        style = MaterialTheme.typography.labelSmall
-                    )
                 }
             }
         }

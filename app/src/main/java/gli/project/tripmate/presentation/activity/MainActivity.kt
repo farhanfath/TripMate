@@ -13,9 +13,7 @@ import gli.project.tripmate.presentation.receiver.LocationProviderChangedReceive
 import gli.project.tripmate.presentation.ui.component.main.location.LocationPermissionHandler
 import gli.project.tripmate.presentation.ui.navigation.main.MainNavHost
 import gli.project.tripmate.presentation.ui.theme.TripMateTheme
-import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
-import gli.project.tripmate.presentation.viewmodel.main.N8nViewModel
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
@@ -32,7 +30,6 @@ class MainActivity : ComponentActivity() {
             // viewModel
             val placeViewModel : PlacesViewModel = hiltViewModel()
             val locationViewModel: LocationViewModel = hiltViewModel()
-            val chatViewModel: ChatViewModel = hiltViewModel()
             val recentViewViewModel: RecentViewViewModel = hiltViewModel()
 
             MainApp {
@@ -41,7 +38,6 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         placeViewModel = placeViewModel,
                         locationViewModel = locationViewModel,
-                        chatViewModel = chatViewModel,
                         recentViewViewModel = recentViewViewModel,
                         permissionResult = permissionResult,
                         onLocationRequestPermission = onLocationRequestPermission,

@@ -1,4 +1,4 @@
-package gli.project.tripmate.presentation.ui.screen.main.chat.component.gemini
+package gli.project.tripmate.presentation.ui.screen.main.chat.component
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat

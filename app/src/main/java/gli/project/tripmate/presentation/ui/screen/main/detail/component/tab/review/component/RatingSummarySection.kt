@@ -26,10 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import gli.project.tripmate.presentation.util.extensions.ratingFormat
 
 @Composable
 fun RatingBarSummary(
-    rating: Float = 4.4f,
+    rating: Double = 4.4,
     maxRating: Int = 5,
     totalReviews: Int = 20,
     ratingDistribution: Map<String, Int> = mapOf(
@@ -55,16 +56,16 @@ fun RatingBarSummary(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = "${String.format("%.1f", rating)}",
-                    style = MaterialTheme.typography.headlineMedium,
+                    text =  ratingFormat(rating),
+                    style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
                     text = "/${maxRating}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
 
@@ -74,13 +75,13 @@ fun RatingBarSummary(
             Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = "Based on",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
             Text(
                 text = "$totalReviews reviews",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
         }
 
@@ -146,7 +147,7 @@ fun RatingDistributionRow(
                     .fillMaxWidth()
                     .height(6.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
                         shape = RoundedCornerShape(3.dp)
                     )
                     .align(Alignment.CenterStart)
@@ -162,8 +163,8 @@ fun RatingDistributionRow(
                         color = when(label) {
                             "Excellent" -> MaterialTheme.colorScheme.primary
                             "Very Good" -> MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
-                            "Good" -> MaterialTheme.colorScheme.tertiary
-                            "Average" -> MaterialTheme.colorScheme.tertiary.copy(alpha = 0.8f)
+                            "Good" -> MaterialTheme.colorScheme.secondary
+                            "Average" -> MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f)
                             "Poor" -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.primary
                         },
@@ -179,14 +180,14 @@ fun RatingDistributionRow(
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.width(50.dp),
             textAlign = TextAlign.End,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         )
     }
 }
 
 @Composable
 fun RatingBar(
-    rating: Float,
+    rating: Double,
     maxRating: Int = 5,
     starSize: Dp = 12.dp
 ) {
@@ -194,10 +195,14 @@ fun RatingBar(
         horizontalArrangement = Arrangement.Center
     ) {
         for (i in 1..maxRating) {
+            val icon = when {
+                i <= rating -> Icons.Filled.Star
+                i <= rating + 0.5f -> Icons.AutoMirrored.Filled.StarHalf
+                else -> Icons.Filled.StarOutline
+            }
+
             Icon(
-                imageVector = if (i <= rating) Icons.Filled.Star
-                else if (i <= rating + 0.5f) Icons.AutoMirrored.Filled.StarHalf
-                else Icons.Filled.StarOutline,
+                imageVector = icon,
                 contentDescription = "Star $i",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(starSize)

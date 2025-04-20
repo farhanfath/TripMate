@@ -1,5 +1,6 @@
 package gli.project.tripmate.presentation.ui.screen.main.detail.component.tab.review.component
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,45 +14,70 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import gli.project.tripmate.domain.model.firestore.Rating
+import gli.project.tripmate.presentation.state.main.RatingsState
+import gli.project.tripmate.presentation.ui.component.common.empty.EmptyRatingsView
 import gli.project.tripmate.presentation.ui.theme.padding_10
 import gli.project.tripmate.presentation.ui.theme.padding_4
 import gli.project.tripmate.presentation.ui.theme.size_8
 
 @Composable
-fun ReviewSection(onShowMoreReviews: () -> Unit) {
-    repeat(3) {
-        ReviewItem()
-    }
+fun ReviewSection(
+    ratingState: RatingsState,
+    onShowMoreReviews: () -> Unit) {
+    when(ratingState) {
+        is RatingsState.Loading -> {}
+        is RatingsState.Success -> {
+            if (ratingState.ratings.isEmpty()) {
+                EmptyRatingsView(
+                    desc = "This place hasn’t received any ratings yet. Be the first to share your experience!"
+                )
+            }
+            ratingState.ratings.take(5).forEach { ratingData ->
+                ReviewItem(
+                    ratingData = ratingData
+                )
+            }
 
-    OutlinedButton(
-        shape = RoundedCornerShape(padding_4),
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onShowMoreReviews
-    ) {
-        Text(
-            text = "see all review for this location"
-        )
+            if (ratingState.ratings.size >= 5) {
+                OutlinedButton(
+                    shape = RoundedCornerShape(padding_4),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onShowMoreReviews
+                ) {
+                    Text(
+                        text = "see all review for this location"
+                    )
+                }
+            }
+        }
+        is RatingsState.Error -> {
+            Text(text = ratingState.message)
+            Log.d("error", "error ${ratingState.message}")
+        }
     }
 }
 
 @Composable
-fun ReviewItem() {
+fun ReviewItem(
+    ratingData: Rating
+) {
     Column(
         modifier = Modifier
             .padding(vertical = padding_10)
             .fillMaxWidth()
     ) {
         Text(
-            text = "UserName",
+            text = ratingData.userName,
             style = MaterialTheme.typography.titleSmall.copy(
                 fontWeight = FontWeight.Bold
             )
         )
         Spacer(modifier = Modifier.size(padding_4))
-        RatingBar(rating = 4.5f, maxRating = 5)
+        RatingBar(rating = ratingData.ratingValue, maxRating = 5)
         Spacer(modifier = Modifier.size(size_8))
         Text(
-            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare faucibus sollicitudin. Nulla id mattis erat, nec imperdiet odio. Morbi fermentum ac massa id finibus. Cras faucibus viverra metus ut pretium. Quisque nibh enim, vehicula id semper a, maximus at sem. In dui magna, sodales quis turpis sed, pellentesque porttitor sapien. Ut id scelerisque ipsum, et consectetur magna. Maecenas aliquet, elit id vulputate feugiat, leo dolor cursus turpis, vel venenatis leo nibh sed sapien. Nulla orci lectus, aliquam non nisi in, consectetur blandit nisi. Nullam augue sapien, vulputate ac elementum sit amet, imperdiet non nisl.",
+            text = ratingData.description,
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Justify

@@ -47,7 +47,8 @@ import gli.project.tripmate.presentation.viewmodel.auth.UserViewModel
 @Composable
 fun ProfileScreen(
     onFavoriteClick: () -> Unit,
-    onUserLogout: () -> Unit
+    onUserLogout: () -> Unit,
+    onRatingHistoryClick: () -> Unit
 ) {
     val userViewModel : UserViewModel = hiltViewModel()
 
@@ -160,9 +161,7 @@ fun ProfileScreen(
                         icon = Icons.Outlined.RateReview,
                         title = "Riwayat Rating",
                         arrowVisible = true,
-                        onItemClick = {
-
-                        }
+                        onItemClick = onRatingHistoryClick
                     )
                 }
             }

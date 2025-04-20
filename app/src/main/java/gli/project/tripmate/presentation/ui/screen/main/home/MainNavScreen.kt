@@ -41,12 +41,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import gli.project.tripmate.R
-import gli.project.tripmate.presentation.ui.component.main.BottomNavShape
 import gli.project.tripmate.presentation.ui.component.common.CustomTopBar
+import gli.project.tripmate.presentation.ui.component.main.BottomNavShape
 import gli.project.tripmate.presentation.ui.navigation.main.bottomnav.navItems
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
-import gli.project.tripmate.presentation.ui.screen.main.home.collection.CollectionScreen
-import gli.project.tripmate.presentation.ui.screen.main.home.favorite.FavoriteScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.lobby.LobbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.profile.ProfileScreen
 import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
@@ -67,7 +65,8 @@ fun MainNavScreen(
     onCategoryDetailClick: (name: String, endpoint: String) -> Unit,
     onSeeMoreClick: () -> Unit,
     onUserLogout: () -> Unit,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: () -> Unit,
+    onHistoryRatingClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -183,9 +182,6 @@ fun MainNavScreen(
                     onSeeMoreClick = onSeeMoreClick
                 )
             }
-            composable<MainNavigation.Collection> {
-                CollectionScreen()
-            }
             composable<MainNavigation.Profile> {
                 ProfileScreen(
                     onUserLogout = {
@@ -193,6 +189,9 @@ fun MainNavScreen(
                     },
                     onFavoriteClick = {
                         onFavoriteClick()
+                    },
+                    onRatingHistoryClick = {
+                        onHistoryRatingClick()
                     }
                 )
             }

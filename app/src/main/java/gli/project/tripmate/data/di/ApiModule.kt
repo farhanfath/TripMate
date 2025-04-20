@@ -5,11 +5,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import gli.project.tripmate.BuildConfig
-import gli.project.tripmate.data.remote.gemini.GeminiApiService
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.n8n.N8nApiService
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
-import gli.project.tripmate.presentation.util.LogUtil
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,8 +24,6 @@ object ApiModule {
     private const val GEOPIFY_API_KEY = BuildConfig.GEOPIFY_API_KEY
     private const val PEXELS_API_BASE_URL = BuildConfig.PEXELS_API_BASE_URL
     private const val PEXELS_API_KEY = BuildConfig.PEXELS_API_KEY
-    private const val GEMINI_API_BASE_URL = BuildConfig.GEMINI_BASE_URL
-    private const val GEMINI_API_KEY = BuildConfig.GEMINI_API_KEY
     private const val N8N_BASE_URL = BuildConfig.N8N_BASE_URL
 
     @Provides
@@ -42,13 +38,6 @@ object ApiModule {
     @Named("PexelsApiKey")
     fun providePexelsApiKey(): String {
         return PEXELS_API_KEY
-    }
-
-    @Provides
-    @Singleton
-    @Named("GeminiApiKey")
-    fun provideGeminiApiKey(): String {
-        return GEMINI_API_KEY
     }
 
     @Provides
@@ -92,26 +81,6 @@ object ApiModule {
 
     @Provides
     @Singleton
-    @Named("GeminiApiKeyInterceptor")
-    fun provideGeminiApiKeyInterceptor(@Named("GeminiApiKey") key: String): Interceptor {
-        return Interceptor { chain ->
-            val originalRequest = chain.request()
-            val newUrl = originalRequest.url.newBuilder()
-                .addQueryParameter("key", key)
-                .build()
-
-            val newRequest = originalRequest.newBuilder()
-                .url(newUrl)
-                .build()
-
-            LogUtil.d("Interceptor", "Request URL: ${newRequest.url}")
-
-            chain.proceed(newRequest)
-        }
-    }
-
-    @Provides
-    @Singleton
     @Named("GeoOkhttpClient")
     fun provideGeoOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
@@ -132,22 +101,6 @@ object ApiModule {
     fun providePexelsOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         @Named("PexelsApiKeyInterceptor")apiKeyInterceptor: Interceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(apiKeyInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    @Named("GeminiOkhttpClient")
-    fun provideGeminiOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor,
-        @Named("GeminiApiKeyInterceptor")apiKeyInterceptor: Interceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(apiKeyInterceptor)
@@ -196,17 +149,6 @@ object ApiModule {
 
     @Provides
     @Singleton
-    @Named("GeminiRetrofit")
-    fun provideGeminiRetrofit(@Named("GeminiOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(GEMINI_API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-    }
-
-    @Provides
-    @Singleton
     @Named("N8nRetrofit")
     fun provideN8nRetrofit(@Named("N8nOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -228,13 +170,6 @@ object ApiModule {
     @Named("PexelsApiService")
     fun providePexelsApiService(@Named("PexelsRetrofit") retrofit: Retrofit): PexelsApiService {
         return retrofit.create(PexelsApiService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    @Named("GeminiApiService")
-    fun provideGeminiApiService(@Named("GeminiRetrofit") retrofit: Retrofit): GeminiApiService {
-        return retrofit.create(GeminiApiService::class.java)
     }
 
     @Provides

@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import gli.project.tripmate.presentation.ui.component.common.CustomTopBar
+import gli.project.tripmate.presentation.ui.component.common.CustomTopBarWithNavigation
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.component.EmptyFavoriteState
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.component.ErrorState
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.component.SwipeableFavoriteItem
@@ -27,7 +27,12 @@ fun FavoriteScreen(
 
     Scaffold(
         topBar = {
-            CustomTopBar()
+            CustomTopBarWithNavigation(
+                title = "Travel Location Collection",
+                onBackClick = {
+
+                }
+            )
         }
     ) { innerPadding ->
         LazyColumn(

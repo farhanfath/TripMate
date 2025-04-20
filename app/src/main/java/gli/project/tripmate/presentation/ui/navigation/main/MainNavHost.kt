@@ -1,6 +1,5 @@
 package gli.project.tripmate.presentation.ui.navigation.main
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,16 +8,14 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.main.category.CategoryScreen
-import gli.project.tripmate.presentation.ui.screen.main.chat.ChatScreen
 import gli.project.tripmate.presentation.ui.screen.main.chat.ConversationScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.MainNavScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.FavoriteScreen
+import gli.project.tripmate.presentation.ui.screen.main.home.rating_collection.RatingCollectionScreen
 import gli.project.tripmate.presentation.ui.screen.main.more.MoreNearbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.search.SearchScreen
-import gli.project.tripmate.presentation.viewmodel.main.ChatViewModel
 import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
-import gli.project.tripmate.presentation.viewmodel.main.N8nViewModel
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
@@ -26,7 +23,6 @@ import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 fun MainNavHost(
     navController: NavHostController,
     placeViewModel: PlacesViewModel,
-    chatViewModel: ChatViewModel,
     recentViewViewModel: RecentViewViewModel,
     locationViewModel: LocationViewModel,
     permissionResult: Boolean,
@@ -80,6 +76,11 @@ fun MainNavHost(
                         navController.navigate(
                             MainNavigation.Favorite
                         )
+                    },
+                    onHistoryRatingClick = {
+                        navController.navigate(
+                            MainNavigation.RatingCollection
+                        )
                     }
                 )
             }
@@ -97,12 +98,6 @@ fun MainNavHost(
         }
 
         composable<MainNavigation.ChatAI> {
-//            ChatScreen(
-//                chatViewModel = chatViewModel,
-//                onBackClick = {
-//                    navController.navigateUp()
-//                }
-//            )
             ConversationScreen(
                 onBackClick = {
                     navController.navigateUp()
@@ -155,6 +150,14 @@ fun MainNavHost(
             FavoriteScreen(
                 onDetailClick = { placeId, placeName ->
                     navigateToDetail(navController, placeId, placeName)
+                }
+            )
+        }
+
+        composable<MainNavigation.RatingCollection> {
+            RatingCollectionScreen(
+                onBackClick = {
+                    navController.navigateUp()
                 }
             )
         }

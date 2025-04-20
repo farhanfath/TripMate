@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -37,7 +35,6 @@ import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
 import gli.project.tripmate.presentation.ui.theme.padding_10
 import gli.project.tripmate.presentation.ui.theme.padding_12
 import gli.project.tripmate.presentation.ui.theme.padding_16
-import gli.project.tripmate.presentation.ui.theme.padding_2
 import gli.project.tripmate.presentation.ui.theme.padding_4
 import gli.project.tripmate.presentation.ui.theme.size_15
 import gli.project.tripmate.presentation.ui.theme.size_280
@@ -163,27 +160,6 @@ fun HistoryViewItem(
                                 style = MaterialTheme.typography.labelSmall
                             )
                         }
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = "",
-                            tint = Color.Yellow,
-                            modifier = Modifier.size(size_15)
-                        )
-                        Text(
-                            text = "4.5",
-                            modifier = Modifier.padding(horizontal = padding_2),
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                        Text(
-                            text = "(125)",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                            style = MaterialTheme.typography.labelSmall
-                        )
                     }
                 }
             }

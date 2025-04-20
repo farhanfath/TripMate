@@ -216,26 +216,19 @@ fun NearbyItem(
 
             Spacer(modifier = Modifier.size(10.dp))
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth()
             ) {
                 Box(
-                    modifier = Modifier.width(80.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         modifier = Modifier.basicMarquee(),
                         text = emptyTextHandler(place.name, stringResource(id = R.string.name_not_available))
                     )
                 }
-                Text(
-                    text = "from $250",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        fontWeight = FontWeight.Light
-                    )
-                )
             }
 
             Spacer(modifier = Modifier.size(8.dp))
@@ -265,27 +258,6 @@ fun NearbyItem(
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "",
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(15.dp)
-                    )
-                    Text(
-                        text = "4.5",
-                        modifier = Modifier.padding(horizontal = 2.dp),
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                    Text(
-                        text = "(125)",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                        style = MaterialTheme.typography.labelSmall
-                    )
                 }
             }
         }

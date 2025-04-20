@@ -14,7 +14,7 @@ sealed class MainNavigation {
     data object Favorite : MainNavigation()
 
     @Serializable
-    data object Collection : MainNavigation()
+    data object RatingCollection : MainNavigation()
 
     @Serializable
     data object Profile : MainNavigation()

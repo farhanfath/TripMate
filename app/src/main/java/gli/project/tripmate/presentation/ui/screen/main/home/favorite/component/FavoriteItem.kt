@@ -208,7 +208,7 @@ fun FavoriteItemContent(
                         )
                     }
 
-                    RatingBar(rating = 4.5f, maxRating = 5, starSize = 18.dp)
+                    RatingBar(rating = 4.5, maxRating = 5, starSize = 18.dp)
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically

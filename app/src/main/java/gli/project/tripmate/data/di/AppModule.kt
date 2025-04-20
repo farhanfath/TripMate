@@ -9,6 +9,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import gli.project.tripmate.data.helper.LocationDataStore
+import gli.project.tripmate.data.helper.LocationHelper
 import gli.project.tripmate.data.helper.n8n.SpeechRecognizerManager
 import gli.project.tripmate.data.helper.n8n.TextToSpeechManager
 import javax.inject.Singleton
@@ -22,6 +24,20 @@ object AppModule {
         @ApplicationContext context: Context
     ): FusedLocationProviderClient {
         return LocationServices.getFusedLocationProviderClient(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationDataStore(): LocationDataStore {
+        return LocationDataStore()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationHelper(
+        @ApplicationContext context: Context
+    ): LocationHelper {
+        return LocationHelper(context = context)
     }
 
     @Provides

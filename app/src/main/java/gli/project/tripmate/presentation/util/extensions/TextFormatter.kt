@@ -106,6 +106,10 @@ fun locationRangeFormat(range: Double) : String {
     return String.format(Locale("id", "ID"), "%.1f", range) + " km dari Lokasi anda"
 }
 
+fun ratingFormat(rating: Double) : String {
+    return String.format(Locale("id", "ID"), "%.1f", rating)
+}
+
 fun formatOperatingHours(input: String?): String {
     val daysMap = mapOf(
         "Mo" to "Senin",
@@ -145,6 +149,22 @@ fun Long.formatToRelativeTime(context: Context): String {
         diff < 1000 * 60 * 60 -> context.getString(R.string.minutes_ago, diff / (1000 * 60))
         diff < 1000 * 60 * 60 * 24 -> context.getString(R.string.hours_ago, diff / (1000 * 60 * 60))
         diff < 1000 * 60 * 60 * 24 * 7 -> context.getString(R.string.days_ago, diff / (1000 * 60 * 60 * 24))
+        else -> {
+            val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            formatter.format(Date(this))
+        }
+    }
+}
+
+fun Long.formatToRecentTime(context: Context): String {
+    val now = System.currentTimeMillis()
+    val diff = now - this
+
+    return when {
+        diff < 1000 * 60 -> context.getString(R.string.since_just_now)
+        diff < 1000 * 60 * 60 -> context.getString(R.string.since_minutes_ago, diff / (1000 * 60))
+        diff < 1000 * 60 * 60 * 24 -> context.getString(R.string.since_hours_ago, diff / (1000 * 60 * 60))
+        diff < 1000 * 60 * 60 * 24 * 7 -> context.getString(R.string.since_days_ago, diff / (1000 * 60 * 60 * 24))
         else -> {
             val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             formatter.format(Date(this))

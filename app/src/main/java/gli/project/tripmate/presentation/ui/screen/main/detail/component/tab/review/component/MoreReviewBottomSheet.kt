@@ -8,61 +8,72 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Flag
-import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import gli.project.tripmate.domain.model.firestore.Rating
+import gli.project.tripmate.presentation.state.main.RatingsState
 import gli.project.tripmate.presentation.ui.component.common.BaseModalBottomSheet
 import gli.project.tripmate.presentation.ui.component.common.DashedDivider
-import gli.project.tripmate.presentation.ui.theme.padding_10
-import gli.project.tripmate.presentation.ui.theme.padding_15
 import gli.project.tripmate.presentation.ui.theme.padding_16
 import gli.project.tripmate.presentation.ui.theme.padding_20
 import gli.project.tripmate.presentation.ui.theme.padding_4
 import gli.project.tripmate.presentation.ui.theme.padding_8
 import gli.project.tripmate.presentation.ui.theme.size_1
-import gli.project.tripmate.presentation.ui.theme.size_16
 import gli.project.tripmate.presentation.ui.theme.size_8
+import gli.project.tripmate.presentation.util.extensions.formatToRecentTime
 
 @Composable
 fun MoreReviewBottomSheet(
+    ratingState: RatingsState,
     isVisible: Boolean,
     onDismiss: () -> Unit
+
 ) {
     BaseModalBottomSheet(
         isVisible = isVisible,
         onDismiss = onDismiss
     ) {
         LazyColumn {
-            items(10) { index ->
-                ReviewCardItem()
+            when(ratingState) {
+                is RatingsState.Loading -> {}
+                is RatingsState.Success -> {
+                    val ratings = ratingState.ratings
+                    itemsIndexed(ratings) { index, rating ->
+                        ReviewCardItem(
+                            ratingData = rating,
+                        )
 
-                if (index < 9) {
-                    DashedDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = padding_16),
-                        thickness = size_1,
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        dashWidth = padding_8,
-                        dashGap = padding_4
-                    )
+                        if (index < ratings.lastIndex) {
+                            DashedDivider(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = padding_16),
+                                thickness = size_1,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                dashWidth = padding_8,
+                                dashGap = padding_4
+                            )
+                        }
+                    }
                 }
+                is RatingsState.Error -> {}
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun ReviewCardItem() {
+fun ReviewCardItem(
+    ratingData: Rating
+) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .padding(horizontal = padding_20, vertical = padding_20)
@@ -75,13 +86,13 @@ fun ReviewCardItem() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "UserName",
+                    text = ratingData.userName,
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontWeight = FontWeight.Bold
                     )
                 )
                 Text(
-                    text = "Feb 5, 2024",
+                    text = ratingData.timestamp.formatToRecentTime(context),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Light,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
@@ -89,57 +100,14 @@ fun ReviewCardItem() {
                 )
             }
             Spacer(modifier = Modifier.size(padding_4))
-            RatingBar(rating = 4.5f, maxRating = 5)
+            RatingBar(rating = ratingData.ratingValue, maxRating = 5)
             Spacer(modifier = Modifier.size(size_8))
             Text(
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ornare faucibus sollicitudin. Nulla id mattis erat, nec imperdiet odio. Morbi fermentum ac massa id finibus. Cras faucibus viverra metus ut pretium. Quisque nibh enim, vehicula id semper a, maximus at sem. In dui magna, sodales quis turpis sed, pellentesque porttitor sapien. Ut id scelerisque ipsum, et consectetur magna. Maecenas aliquet, elit id vulputate feugiat, leo dolor cursus turpis, vel venenatis leo nibh sed sapien. Nulla orci lectus, aliquam non nisi in, consectetur blandit nisi. Nullam augue sapien, vulputate ac elementum sit amet, imperdiet non nisl.",
+                text = ratingData.description,
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Light,
                 )
             )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = padding_20, bottom = padding_10),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(padding_4),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.size(size_16),
-                    imageVector = Icons.Outlined.ThumbUp,
-                    contentDescription = "Like",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = "Helpful (10)",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            Spacer(modifier = Modifier.padding(horizontal = padding_15))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(padding_4),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.size(size_16),
-                    imageVector = Icons.Filled.Flag,
-                    contentDescription = "Like",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = "Report",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
         }
     }
 }
