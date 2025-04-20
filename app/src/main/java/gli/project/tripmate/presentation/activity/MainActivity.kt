@@ -40,9 +40,7 @@ class MainActivity : ComponentActivity() {
                 getNotification(
                     coroutineScope = coroutineScope,
                     onGetNotification = { appId, channelName, token, userId ->
-                        Log.d("Progress to agora", "appid: $appId, channel: $channelName, token: $token, userId: $userId")
-
-                        if(userId == "customer") {
+                        if(userId == "\"customer\"") {
                             val notificationManager = CallNotificationManager(context)
                             notificationManager.showIncomingCallNotification(
                                 appId = appId,
