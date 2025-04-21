@@ -19,7 +19,8 @@ import gli.project.tripmate.presentation.viewmodel.main.FavoriteViewModel
 
 @Composable
 fun FavoriteScreen(
-    onDetailClick: (placeId: String, placeName: String) -> Unit
+    onDetailClick: (placeId: String, placeName: String) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val favoriteViewModel : FavoriteViewModel = hiltViewModel()
 
@@ -29,9 +30,7 @@ fun FavoriteScreen(
         topBar = {
             CustomTopBarWithNavigation(
                 title = "Travel Location Collection",
-                onBackClick = {
-
-                }
+                onBackClick = onBackClick
             )
         }
     ) { innerPadding ->

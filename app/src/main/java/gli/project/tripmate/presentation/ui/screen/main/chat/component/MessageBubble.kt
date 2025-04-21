@@ -31,41 +31,12 @@ import gli.project.tripmate.domain.model.n8n.type.N8nType
 @Composable
 fun MessageBubble(
     item: ConversationItem,
-    onTravelSpotClick: (TravelSpot) -> Unit = {}
+    onTravelSpotClick: (TravelSpot) -> Unit = {},
+    onFeatureActionRequest: (String) -> Unit
 ) = when (item.type) {
     N8nType.TEXT -> {
         // Regular text message
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = if (item.isUser) Arrangement.End else Arrangement.Start
-        ) {
-            Card(
-                shape = RoundedCornerShape(
-                    topStart = if (item.isUser) 16.dp else 0.dp,
-                    topEnd = if (item.isUser) 0.dp else 16.dp,
-                    bottomStart = 16.dp,
-                    bottomEnd = 16.dp
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (item.isUser)
-                        MaterialTheme.colorScheme.primary
-                    else
-                        MaterialTheme.colorScheme.secondary
-                ),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 2.dp
-                ),
-                modifier = Modifier.widthIn(max = 300.dp)
-            ) {
-                Text(
-                    text = item.text,
-                    color = Color.White,
-                    modifier = Modifier.padding(12.dp)
-                )
-            }
-        }
+        RegularBubbleMessage(item = item)
     }
     N8nType.TRAVEL_LIST -> {
         // Travel list message
@@ -215,6 +186,47 @@ fun MessageBubble(
                     )
                 }
             }
+        }
+    }
+    N8nType.FEATURE -> {
+        RegularBubbleMessage(item = item)
+        onFeatureActionRequest(item.actionFeature?.action ?: "")
+    }
+}
+
+@Composable
+fun RegularBubbleMessage(
+    item: ConversationItem
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = if (item.isUser) Arrangement.End else Arrangement.Start
+    ) {
+        Card(
+            shape = RoundedCornerShape(
+                topStart = if (item.isUser) 16.dp else 0.dp,
+                topEnd = if (item.isUser) 0.dp else 16.dp,
+                bottomStart = 16.dp,
+                bottomEnd = 16.dp
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = if (item.isUser)
+                    MaterialTheme.colorScheme.primary
+                else
+                    MaterialTheme.colorScheme.secondary
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 2.dp
+            ),
+            modifier = Modifier.widthIn(max = 300.dp)
+        ) {
+            Text(
+                text = item.text,
+                color = Color.White,
+                modifier = Modifier.padding(12.dp)
+            )
         }
     }
 }

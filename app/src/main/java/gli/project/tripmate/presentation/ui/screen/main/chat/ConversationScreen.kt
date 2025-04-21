@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,8 +33,6 @@ import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -73,17 +70,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import gli.project.tripmate.data.helper.n8n.startContinuousListening
-import gli.project.tripmate.presentation.ui.component.common.CustomTopBarWithNavigation
 import gli.project.tripmate.presentation.ui.screen.main.chat.component.MessageBubble
 import gli.project.tripmate.presentation.ui.screen.main.chat.component.PulsatingDots
-import gli.project.tripmate.presentation.ui.screen.main.chat.component.VoiceRecorderButton
 import gli.project.tripmate.presentation.viewmodel.main.N8nViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -91,7 +84,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun ConversationScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onFeatureActionRequest: (String) -> Unit
 ) {
     val n8nViewModel: N8nViewModel = hiltViewModel()
     var inputText by remember { mutableStateOf("") }
@@ -275,7 +269,8 @@ fun ConversationScreen(
                                     coroutineScope.launch {
                                         snackbarHostState.showSnackbar("Selected: ${travelSpot.name}")
                                     }
-                                }
+                                },
+                                onFeatureActionRequest = onFeatureActionRequest
                             )
                         }
                         when {
@@ -304,9 +299,9 @@ fun ConversationScreen(
                     isListening = isListening,
                     onMicClick = {
                         if (isListening) {
-                            n8nViewModel.stopListening()
+                            n8nViewModel.stopListening(isFromConversationScreen = true)
                         } else {
-                            n8nViewModel.startListening()
+                            n8nViewModel.startListening(isFromConversationScreen = true)
                         }
                     },
                     focusRequester = focusRequester
@@ -598,146 +593,3 @@ fun InputArea(
         }
     }
 }
-
-//@Composable
-//fun ConversationScreen(
-//    onBackClick: () -> Unit
-//) {
-//    val n8nViewModel: N8nViewModel = hiltViewModel()
-//    var inputText by remember { mutableStateOf("") }
-//
-//    val conversation by n8nViewModel.conversation.collectAsState()
-//    val isListening by n8nViewModel.isListening.collectAsState()
-//    val isSpeaking by n8nViewModel.isSpeaking.collectAsState()
-//    val isLoading by n8nViewModel.isLoading.collectAsState()
-//    val error by n8nViewModel.error.collectAsState()
-//
-//    val listState = rememberLazyListState()
-//    val snackbarHostState = remember { SnackbarHostState() }
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    // Show error in Snackbar
-//    LaunchedEffect(error) {
-//        error?.let {
-//            coroutineScope.launch {
-//                snackbarHostState.showSnackbar(it)
-//                println(it)
-//                n8nViewModel.clearError()
-//            }
-//        }
-//    }
-//
-//    // Scroll to bottom when new message is added
-//    LaunchedEffect(conversation.size) {
-//        if (conversation.isNotEmpty()) {
-//            listState.animateScrollToItem(conversation.size - 1)
-//        }
-//    }
-//
-//    Scaffold(
-//        topBar = {
-//            CustomTopBarWithNavigation(
-//                title = "Trip Assistant",
-//                onBackClick = onBackClick
-//            )
-//        },
-//        snackbarHost = { SnackbarHost(snackbarHostState) },
-//        modifier = Modifier.fillMaxSize()
-//    ) { paddingValues ->
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(paddingValues)
-//        ) {
-//            // Status Indicator
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(16.dp),
-//                horizontalArrangement = Arrangement.Center,
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                when {
-//                    isListening -> Text("Mendengarkan...")
-//                    isLoading -> {
-//                        CircularProgressIndicator(
-//                            modifier = Modifier
-//                                .width(16.dp)
-//                                .height(16.dp)
-//                        )
-//                        Spacer(modifier = Modifier.width(8.dp))
-//                        Text("Memproses...")
-//                    }
-//                    isSpeaking -> Text("Berbicara...")
-//                    conversation.isEmpty() -> {
-//                        Text("Tekan tombol untuk mulai berbicara")
-//                    }
-//                    else -> Text("Siap mendengarkan")
-//                }
-//            }
-//
-//            // Conversation Messages
-//            LazyColumn(
-//                state = listState,
-//                contentPadding = PaddingValues(16.dp),
-//                verticalArrangement = Arrangement.spacedBy(8.dp),
-//                modifier = Modifier.weight(1f)
-//            ) {
-//                items(conversation) { item ->
-//                    MessageBubble(
-//                        item = item,
-//                        onTravelSpotClick = { travelSpot ->
-//                            // Handle click on travel spot item
-//                            coroutineScope.launch {
-//                                snackbarHostState.showSnackbar("Selected: ${travelSpot.name}")
-//                                // Tambahkan tindakan lain jika diperlukan, seperti membuka detail, dsb.
-//                            }
-//                        }
-//                    )
-//                }
-//                when {
-//                    isLoading -> {
-//                        item {
-//                            PulsatingDots()
-//                        }
-//                    }
-//                }
-//            }
-//            Row(
-//                modifier = Modifier
-//                    .background(color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f))
-//                    .fillMaxWidth()
-//                    .padding(16.dp),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                OutlinedTextField(
-//                    colors = TextFieldDefaults.colors(
-//                        unfocusedContainerColor = Color.White,
-//                        focusedContainerColor = Color.White,
-//                        unfocusedIndicatorColor = Color.Transparent,
-//                        focusedIndicatorColor = Color.Transparent
-//                    ),
-//                    value = inputText,
-//                    onValueChange = { inputText = it },
-//                    modifier = Modifier.weight(1f),
-//                    placeholder = { Text("Tanya TripMate...") }
-//                )
-//                IconButton(
-//                    onClick = {
-//                        if (inputText.isNotBlank()) {
-//                            n8nViewModel.textProcessInput(inputText)
-//                            inputText = ""
-//                        }
-//                    }
-//                ) {
-//                    Icon(
-//                        modifier = Modifier.padding(start = 8.dp),
-//                        imageVector = Icons.AutoMirrored.Filled.Send,
-//                        contentDescription = "Send Message",
-//                        tint = MaterialTheme.colorScheme.primary
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}

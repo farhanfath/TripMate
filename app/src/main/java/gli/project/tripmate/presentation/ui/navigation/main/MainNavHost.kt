@@ -108,6 +108,21 @@ fun MainNavHost(
             ConversationScreen(
                 onBackClick = {
                     navController.navigateUp()
+                },
+                onFeatureActionRequest = { actionRequest ->
+                    when (actionRequest) {
+                        "rating" -> {
+                            navController.navigate(
+                                MainNavigation.RatingCollection
+                            )
+                        }
+                        "collection" -> {
+                            navController.navigate(
+                                MainNavigation.Favorite
+                            )
+                        }
+                        else -> {}
+                    }
                 }
             )
         }
@@ -157,6 +172,9 @@ fun MainNavHost(
             FavoriteScreen(
                 onDetailClick = { placeId, placeName ->
                     navigateToDetail(navController, placeId, placeName)
+                },
+                onBackClick = {
+                    navController.navigateUp()
                 }
             )
         }

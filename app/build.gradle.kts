@@ -189,11 +189,11 @@ dependencies {
     implementation(libs.agora.voice.sdk)
 
     // supabase and ktor
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.1.4")
-    implementation("io.github.jan-tennert.supabase:realtime-kt:3.1.4")
-    implementation ("io.ktor:ktor-client-core:3.0.2")
-    implementation("io.ktor:ktor-client-android:3.0.2")
-    implementation("io.ktor:ktor-client-websockets:3.0.2")
-    implementation("io.ktor:ktor-client-cio:3.0.2")
-    implementation("io.ktor:ktor-client-okhttp:3.0.2")
+    implementation(libs.supabase.postgrest.kt)
+    implementation(libs.supabase.realtime.kt)
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.android)
+    implementation(libs.ktor.websockets)
+    implementation(libs.ktor.cio)
+    implementation(libs.ktor.okhttp)
 }
