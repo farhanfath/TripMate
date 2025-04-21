@@ -21,9 +21,9 @@ import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
 
 class ActiveCallActivity : ComponentActivity() {
-    private val myAppId = "77faa575c4c042ffae211778204ef6e3"
-    private val channelName = "RndCall"
-    private val token = "007eJxTYIj4bmn1JHWt1VTLbxKTBG8nywReXP97yrpJJxblVSoLa29WYDA3T0tMNDU3TTZJNjAxSktLTDUyNDQ3tzAyMElNM0s1vlnGktEQyMhwMLWQkZEBAkF8doagvBTnxJwcBgYAwJogdQ=="
+    private val myAppId = "ad51e95058144d25b0b6822ed2e6e193"
+    private val channelName = "CrossPlatformCall"
+    private val token = "007eJxTYLCZuvWTSQrT7doPPvv9F374VB3SsvspVyGrYDyj/+ktdVwKDIkppoaplqYGphaGJiYpRqZJBklmFkZGqSlGqWaphpbGes9YMxoCGRk+zWpgZWSAQBBfkMG5KL+4OCAnsSQtvyjXOTEnh4EBAAAmJCU="
 
     private var mRtcEngine: RtcEngine? = null
     private val mRtcEventHandler = object : IRtcEngineEventHandler() {

@@ -1,6 +1,13 @@
 package gli.project.tripmate.presentation.ui.navigation.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,6 +15,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.call.N8nActiveCallScreen
+import gli.project.tripmate.presentation.ui.screen.call.component.CustomerServiceDialog
 import gli.project.tripmate.presentation.ui.screen.main.category.CategoryScreen
 import gli.project.tripmate.presentation.ui.screen.main.chat.ConversationScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
@@ -31,6 +39,8 @@ fun MainNavHost(
     onUserLogout: () -> Unit,
     onCustomerServiceIntent: () -> Unit
 ) {
+    var showCustomerServiceDialog by remember { mutableStateOf(false) }
+
     NavHost(
         navController = navController,
         startDestination = MainNavigation.Main
@@ -121,6 +131,9 @@ fun MainNavHost(
                                 MainNavigation.Favorite
                             )
                         }
+                        "customer_service" -> {
+                            showCustomerServiceDialog = true
+                        }
                         else -> {}
                     }
                 }
@@ -199,6 +212,19 @@ fun MainNavHost(
                 }
             )
         }
+    }
+
+    AnimatedVisibility(
+        visible = showCustomerServiceDialog,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        CustomerServiceDialog(
+            onDismissRequest = { showCustomerServiceDialog = false },
+            onConnectConfirmed = {
+                onCustomerServiceIntent()
+            }
+        )
     }
 }
 
