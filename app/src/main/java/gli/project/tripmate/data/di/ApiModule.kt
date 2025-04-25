@@ -8,6 +8,7 @@ import gli.project.tripmate.BuildConfig
 import gli.project.tripmate.data.remote.geoapify.GeoApiService
 import gli.project.tripmate.data.remote.n8n.N8nApiService
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
+import gli.project.tripmate.data.remote.travelai.TravelAiApiService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,6 +26,7 @@ object ApiModule {
     private const val PEXELS_API_BASE_URL = BuildConfig.PEXELS_API_BASE_URL
     private const val PEXELS_API_KEY = BuildConfig.PEXELS_API_KEY
     private const val N8N_BASE_URL = BuildConfig.N8N_BASE_URL
+    private const val TRAVEL_AI_BASE_URL = BuildConfig.TRAVEL_AI_BASE_URL
 
     @Provides
     @Singleton
@@ -127,6 +129,20 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @Named("TravelAiOkhttpClient")
+    fun provideTravelAiOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     @Named("GeoRetrofit")
     fun provideGeoRetrofit(@Named("GeoOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -160,6 +176,17 @@ object ApiModule {
 
     @Provides
     @Singleton
+    @Named("TravelAiRetrofit")
+    fun provideTravelAiRetrofit(@Named("TravelAiOkhttpClient") okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(TRAVEL_AI_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     @Named("GeoApiService")
     fun provideGeoApiService(@Named("GeoRetrofit") retrofit: Retrofit): GeoApiService {
         return retrofit.create(GeoApiService::class.java)
@@ -177,5 +204,12 @@ object ApiModule {
     @Named("N8nApiService")
     fun provideN8nApiService(@Named("N8nRetrofit") retrofit: Retrofit): N8nApiService {
         return retrofit.create(N8nApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("TravelAiApiService")
+    fun provideTravelAiApiService(@Named("TravelAiRetrofit") retrofit: Retrofit): TravelAiApiService {
+        return retrofit.create(TravelAiApiService::class.java)
     }
 }

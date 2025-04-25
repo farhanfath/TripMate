@@ -24,6 +24,7 @@ import gli.project.tripmate.presentation.ui.screen.main.home.favorite.FavoriteSc
 import gli.project.tripmate.presentation.ui.screen.main.home.rating_collection.RatingCollectionScreen
 import gli.project.tripmate.presentation.ui.screen.main.more.MoreNearbyScreen
 import gli.project.tripmate.presentation.ui.screen.main.search.SearchScreen
+import gli.project.tripmate.presentation.ui.screen.product.ProductChatScreen
 import gli.project.tripmate.presentation.viewmodel.main.LocationViewModel
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
@@ -97,6 +98,11 @@ fun MainNavHost(
                     onCustomerServiceCallClick = {
                         navController.navigate(
                             MainNavigation.Call
+                        )
+                    },
+                    onProductRecommendationClick = {
+                        navController.navigate(
+                            MainNavigation.ProductChat
                         )
                     }
                 )
@@ -188,6 +194,13 @@ fun MainNavHost(
                 },
                 onBackClick = {
                     navController.navigateUp()
+                },
+                onExploreClick = {
+                    navController.navigate(
+                        MainNavigation.Lobby
+                    ) {
+                        popUpTo<MainNavigation.Main>()
+                    }
                 }
             )
         }
@@ -209,6 +222,14 @@ fun MainNavHost(
                 callStartTime = System.currentTimeMillis(),
                 onCustomerServiceIntent = {
                     onCustomerServiceIntent()
+                }
+            )
+        }
+
+        composable<MainNavigation.ProductChat> {
+            ProductChatScreen(
+                onBackClick = {
+                    navController.navigateUp()
                 }
             )
         }

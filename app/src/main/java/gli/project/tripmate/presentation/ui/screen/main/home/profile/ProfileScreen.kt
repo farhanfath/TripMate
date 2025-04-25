@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HeadsetMic
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.AlertDialog
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,7 +52,8 @@ fun ProfileScreen(
     onFavoriteClick: () -> Unit,
     onUserLogout: () -> Unit,
     onRatingHistoryClick: () -> Unit,
-    onCustomerServiceCallClick: () -> Unit
+    onCustomerServiceCallClick: () -> Unit,
+    onProductRecommendationClick: () -> Unit
 ) {
     val userViewModel : UserViewModel = hiltViewModel()
 
@@ -79,7 +82,8 @@ fun ProfileScreen(
                             color = MaterialTheme.colorScheme.outlineVariant
                         )
                         .clip(CircleShape)
-                        .size(80.dp)
+                        .size(80.dp),
+                    scale = ContentScale.Crop
                 )
                 if (userState.onProcess) {
                     CustomShimmer(
@@ -203,6 +207,42 @@ fun ProfileScreen(
                 }
             }
         }
+
+        // additional feature section
+        item {
+            Column(
+                Modifier
+                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Fitur Lainnya",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 12.dp),
+                    border = BorderStroke(
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        width = 1.dp
+                    )
+                ){
+                    ProfileSectionItem(
+                        icon = Icons.Default.ShoppingBag,
+                        title = "Rekomendasi produk belanja",
+                        arrowVisible = true,
+                        onItemClick = {
+                            onProductRecommendationClick()
+                        }
+                    )
+                }
+            }
+        }
+
         // footer and logout
         item {
             Column(

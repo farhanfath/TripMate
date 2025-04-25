@@ -19,6 +19,9 @@ import gli.project.tripmate.data.remote.n8n.datasource.N8nDataSourceImpl
 import gli.project.tripmate.data.remote.pexels.PexelsApiService
 import gli.project.tripmate.data.remote.pexels.datasource.PexelRemoteDataSource
 import gli.project.tripmate.data.remote.pexels.datasource.PexelRemoteDataSourceImpl
+import gli.project.tripmate.data.remote.travelai.TravelAiApiService
+import gli.project.tripmate.data.remote.travelai.datasource.TravelAiDataSource
+import gli.project.tripmate.data.remote.travelai.datasource.TravelAiDataSourceImpl
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -42,6 +45,12 @@ object DataSourceModule {
     @Singleton
     fun provideN8nRemoteDataSource(@Named("N8nApiService") apiService: N8nApiService): N8nDataSource {
         return N8nDataSourceImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTravelAiRemoteDataSource(@Named("TravelAiApiService") apiService: TravelAiApiService): TravelAiDataSource {
+        return TravelAiDataSourceImpl(apiService)
     }
 
     @Provides

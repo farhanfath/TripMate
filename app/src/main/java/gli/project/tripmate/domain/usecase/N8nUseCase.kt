@@ -5,4 +5,5 @@ import gli.project.tripmate.domain.model.n8n.type.InputType
 
 interface N8nUseCase {
     suspend fun sendMessageToWebhook(message: String, inputType: InputType): Result<WebhookResponse>
+    suspend fun sendTravelMessageToWebhook(message: String, inputType: InputType): Result<WebhookResponse>
 }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
@@ -41,7 +42,7 @@ fun Greeting() {
     ) {
         Column {
             Text(
-                text = "Hi, ${userState.currentUser?.userName}",
+                text = "Hello, ${userState.currentUser?.userName}",
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary
@@ -60,7 +61,8 @@ fun Greeting() {
             modifier = Modifier
                 .size(size_50)
                 .border(width = size_0_5, color = MaterialTheme.colorScheme.onPrimary, shape = CircleShape)
-                .clip(CircleShape)
+                .clip(CircleShape),
+            scale = ContentScale.Crop
         )
     }
 }

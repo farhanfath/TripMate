@@ -4,10 +4,11 @@ enum class N8nType {
     TEXT,
     TRAVEL_LIST,
     ROUTE,
-    FEATURE
+    FEATURE,
+    PRODUCT
 }
 
 enum class InputType {
     VOICE,
-    TEXT
+    TEXT,
 }

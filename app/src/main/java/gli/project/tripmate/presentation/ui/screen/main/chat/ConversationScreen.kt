@@ -53,7 +53,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -262,6 +261,11 @@ fun ConversationScreen(
                                     // Handle click on travel spot item
                                     coroutineScope.launch {
                                         snackbarHostState.showSnackbar("Selected: ${travelSpot.name}")
+                                    }
+                                },
+                                onProductClick = { product ->
+                                    coroutineScope.launch {
+                                        snackbarHostState.showSnackbar("Selected: ${product.productName}")
                                     }
                                 },
                                 onFeatureActionRequest = onFeatureActionRequest

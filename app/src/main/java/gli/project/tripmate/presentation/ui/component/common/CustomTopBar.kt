@@ -22,11 +22,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomTopBar(
-    additionalContent: @Composable () -> Unit = {}
+    modifier: Modifier = Modifier,
+    additionalContent: @Composable () -> Unit = {},
 ) {
     Column {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .height(35.dp)
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.primary)

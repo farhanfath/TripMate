@@ -11,6 +11,8 @@ data class ConversationItem(
     val travelSpots: List<TravelSpot>? = null,
     val locationMap: LocationMap? = null,
     val actionFeature: FeatureAction? = null,
+    val searchQuery: String? = null,
+    val productList: List<Product>? = null,
     val type: N8nType = N8nType.TEXT,
     val inputType: InputType = InputType.TEXT
 )

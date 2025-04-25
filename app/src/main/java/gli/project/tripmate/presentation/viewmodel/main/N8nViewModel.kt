@@ -87,6 +87,30 @@ class N8nViewModel @Inject constructor(
 
                 _isLoading.value = true
                 try {
+                    val result = n8nUseCase.sendTravelMessageToWebhook(input, inputType = InputType.TEXT)
+                    result.onSuccess { response ->
+                        addAssistantMessage(response)
+                    }.onFailure { throwable ->
+                        _error.value = "Error: ${throwable.message}"
+                        addAssistantMessage(
+                            WebhookResponse("Sorry, I'm having trouble connecting to the server.")
+                        )
+                    }
+                } finally {
+                    _isLoading.value = false
+                }
+            }
+        }
+    }
+
+    // for product conversation screen
+    fun textProductProcessInput(input: String) {
+        if (input.isNotBlank()) {
+            viewModelScope.launch {
+                addUserMessage(input, inputType = InputType.TEXT)
+
+                _isLoading.value = true
+                try {
                     val result = n8nUseCase.sendMessageToWebhook(input, inputType = InputType.TEXT)
                     result.onSuccess { response ->
                         addAssistantMessage(response)
@@ -114,7 +138,7 @@ class N8nViewModel @Inject constructor(
 
                 _isLoading.value = true
                 try {
-                    val result = n8nUseCase.sendMessageToWebhook(input, inputType = inputType)
+                    val result = n8nUseCase.sendTravelMessageToWebhook(input, inputType = inputType)
                     result.onSuccess { response ->
                         addAssistantMessage(response)
                         textToSpeechManager.speak(response.response)
@@ -175,6 +199,15 @@ class N8nViewModel @Inject constructor(
                     isUser = false,
                     actionFeature = response.actionFeature,
                     type = N8nType.FEATURE
+                )
+            }
+            N8nType.PRODUCT -> {
+                ConversationItem(
+                    text = response.response,
+                    isUser = false,
+                    searchQuery = response.searchQuery,
+                    productList = response.productList,
+                    type = N8nType.PRODUCT
                 )
             }
             else -> {

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,11 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.NotListedLocation
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -43,9 +37,10 @@ import gli.project.tripmate.R
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
 import gli.project.tripmate.presentation.ui.component.common.CustomShimmer
-import gli.project.tripmate.presentation.ui.component.main.SeeMoreCard
 import gli.project.tripmate.presentation.ui.component.common.error.PagingFooterError
 import gli.project.tripmate.presentation.ui.component.common.error.RowSectionError
+import gli.project.tripmate.presentation.ui.component.main.SeeMoreCard
+import gli.project.tripmate.presentation.ui.screen.main.home.lobby.component.loading.NearbyPlacesLoadingItem
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.util.extensions.emptyTextHandler
 import gli.project.tripmate.presentation.util.extensions.handlePagingAppendState
@@ -91,12 +86,7 @@ fun Nearby(
                 items = placeData,
                 onLoading = {
                     items(5) {
-                        CustomShimmer(
-                            modifier = Modifier
-                                .padding(vertical = 10.dp, horizontal = 4.dp)
-                                .height(200.dp)
-                                .width(180.dp)
-                        )
+                        NearbyPlacesLoadingItem()
                     }
                 },
                 onSuccess = {
@@ -142,12 +132,7 @@ fun Nearby(
                             items = placeData,
                             onLoading = {
                                 item {
-                                    CustomShimmer(
-                                        modifier = Modifier
-                                            .padding(vertical = 10.dp, horizontal = 4.dp)
-                                            .height(200.dp)
-                                            .width(180.dp)
-                                    )
+                                    NearbyPlacesLoadingItem()
                                 }
                             },
                             onError = { error ->

@@ -34,7 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -190,7 +190,7 @@ fun IncomingCallScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             // Decline call button - slide animation
-            var declineOffsetY by remember { mutableStateOf(100f) }
+            var declineOffsetY by remember { mutableFloatStateOf(100f) }
 
             LaunchedEffect(key1 = true) {
                 animate(
@@ -232,7 +232,7 @@ fun IncomingCallScreen(
             }
 
             // Accept call button - slide animation
-            var acceptOffsetY by remember { mutableStateOf(100f) }
+            var acceptOffsetY by remember { mutableFloatStateOf(100f) }
 
             LaunchedEffect(key1 = true) {
                 delay(200)

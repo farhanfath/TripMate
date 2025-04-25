@@ -25,14 +25,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import gli.project.tripmate.domain.model.n8n.ConversationItem
+import gli.project.tripmate.domain.model.n8n.Product
 import gli.project.tripmate.domain.model.n8n.TravelSpot
 import gli.project.tripmate.domain.model.n8n.type.N8nType
+import gli.project.tripmate.presentation.ui.screen.product.component.ProductListComponent
+import gli.project.tripmate.presentation.util.extensions.parseMarkdown
 
 @Composable
 fun MessageBubble(
     item: ConversationItem,
     onTravelSpotClick: (TravelSpot) -> Unit = {},
-    onFeatureActionRequest: (String) -> Unit
+    onFeatureActionRequest: (String) -> Unit,
+    onProductClick: (Product) -> Unit
 ) = when (item.type) {
     N8nType.TEXT -> {
         // Regular text message
@@ -192,6 +196,12 @@ fun MessageBubble(
         RegularBubbleMessage(item = item)
         onFeatureActionRequest(item.actionFeature?.action ?: "")
     }
+    N8nType.PRODUCT -> {
+        ProductListComponent(
+            item = item,
+            onProductClick = onProductClick
+        )
+    }
 }
 
 @Composable
@@ -223,7 +233,7 @@ fun RegularBubbleMessage(
             modifier = Modifier.widthIn(max = 300.dp)
         ) {
             Text(
-                text = item.text,
+                text = parseMarkdown(item.text),
                 color = Color.White,
                 modifier = Modifier.padding(12.dp)
             )

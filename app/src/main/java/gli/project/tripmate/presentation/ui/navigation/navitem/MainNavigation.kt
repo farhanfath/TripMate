@@ -23,6 +23,9 @@ sealed class MainNavigation {
     data object ChatAI : MainNavigation()
 
     @Serializable
+    data object ProductChat : MainNavigation()
+
+    @Serializable
     data object Search : MainNavigation()
 
     @Serializable

@@ -40,6 +40,7 @@ android {
         val geminiBaseUrl = localProperties.getProperty("GEMINI_API_BASE_URL")
         val geminiKey = localProperties.getProperty("GEMINI_API_KEY")
         val n8nBaseUrl = localProperties.getProperty("N8N_BASE_URL")
+        val travelAiBaseUrl = localProperties.getProperty("TRAVEL_AI_BASE_URL")
         buildConfigField("String", "GEO_API_BASE_URL", "\"$geoApiBaseUrl\"")
         buildConfigField("String", "GEOPIFY_API_KEY", "\"$geoApiKey\"")
         buildConfigField("String", "MAPS_API_KEY", "\"$mapApiKey\"")
@@ -48,6 +49,7 @@ android {
         buildConfigField("String", "GEMINI_BASE_URL", "\"$geminiBaseUrl\"")
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
         buildConfigField("String", "N8N_BASE_URL", "\"$n8nBaseUrl\"")
+        buildConfigField("String", "TRAVEL_AI_BASE_URL", "\"$travelAiBaseUrl\"")
     }
 
     buildTypes {
@@ -196,4 +198,7 @@ dependencies {
     implementation(libs.ktor.websockets)
     implementation(libs.ktor.cio)
     implementation(libs.ktor.okhttp)
+
+    // lottie
+    implementation ("com.airbnb.android:lottie-compose:6.6.6")
 }

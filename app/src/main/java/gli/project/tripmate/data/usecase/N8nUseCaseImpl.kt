@@ -12,4 +12,11 @@ class N8nUseCaseImpl @Inject constructor(
     override suspend fun sendMessageToWebhook(message: String, inputType: InputType): Result<WebhookResponse> {
        return n8nRepository.sendMessageToWebhook(message, inputType)
     }
+
+    override suspend fun sendTravelMessageToWebhook(
+        message: String,
+        inputType: InputType
+    ): Result<WebhookResponse> {
+        return n8nRepository.sendTravelMessageToWebhook(message, inputType)
+    }
 }
