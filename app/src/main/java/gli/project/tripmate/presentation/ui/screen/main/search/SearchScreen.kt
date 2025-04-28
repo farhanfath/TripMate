@@ -11,7 +11,6 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,6 @@ import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -36,20 +34,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -69,18 +63,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.R
 import gli.project.tripmate.domain.model.PlaceCategory
 import gli.project.tripmate.domain.util.constants.DataConstants
 import gli.project.tripmate.domain.util.constants.TOURISM
-import gli.project.tripmate.presentation.ui.component.common.CustomShimmer
 import gli.project.tripmate.presentation.ui.component.common.CustomTopBar
-import gli.project.tripmate.presentation.ui.screen.main.category.component.NearbyPlaceLongItem
-import gli.project.tripmate.presentation.ui.screen.main.search.component.CategorySearchGroup
 import gli.project.tripmate.presentation.ui.screen.main.search.component.ListSearchBottomSheet
-import gli.project.tripmate.presentation.util.extensions.HandleComposePagingState
-import gli.project.tripmate.presentation.util.extensions.handlePagingAppendState
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
 import kotlinx.coroutines.flow.map
 
@@ -303,7 +291,7 @@ fun AnimatedCategorySearchGroup(
                 shape = RoundedCornerShape(24.dp),
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = if (isSelected) 4.dp else 1.dp
-                )
+                ),
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -403,111 +391,3 @@ fun PopularDestinationCard(name: String, imageRes: Int) {
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EnhancedListSearchBottomSheet(
-    onDetailClick: (placeId: String, placeName: String) -> Unit,
-    onDismiss: () -> Unit,
-    isVisible: Boolean,
-    placesViewModel: PlacesViewModel
-) {
-    val placesByArea = placesViewModel.searchResults.collectAsLazyPagingItems()
-    if (isVisible) {
-        ModalBottomSheet(
-            onDismissRequest = onDismiss,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            dragHandle = {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Box(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .height(4.dp)
-                            .background(
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                                RoundedCornerShape(2.dp)
-                            )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        "Search Results",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-            }
-        ) {
-            HandleComposePagingState(
-                items = placesByArea,
-                onLoading = {
-                    LazyColumn {
-                        items(10) {
-                            CustomShimmer(
-                                modifier = Modifier
-                                    .padding(horizontal = 10.dp, vertical = 10.dp)
-                                    .height(200.dp)
-                                    .fillMaxWidth()
-                            )
-                        }
-                    }
-                },
-                onError = {
-
-                },
-                onSuccess = {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                    ) {
-                        items(
-                            count = placesByArea.itemCount,
-                            key = { index ->
-                                val place = placesByArea[index]
-                                if (place != null) {
-                                    "place_${place.placeId}_$index"
-                                } else {
-                                    "null_$index"
-                                }
-                            }
-                        ) { index ->
-                            placesByArea[index]?.let { place ->
-                                NearbyPlaceLongItem(
-                                    onDetailClick = {
-                                        onDetailClick(place.placeId, place.name)
-                                    },
-                                    place = place
-                                )
-                            }
-                        }
-
-                        handlePagingAppendState(
-                            items = placesByArea,
-                            onLoading = {
-                                item {
-                                    CustomShimmer(
-                                        modifier = Modifier
-                                            .padding(horizontal = 10.dp)
-                                            .height(200.dp)
-                                            .fillMaxWidth()
-                                    )
-                                }
-                            },
-                            onError = {
-                                item { Text("Terjadi error saat load awal") }
-                            },
-                            onNotLoading = {}
-                        )
-                    }
-
-                }
-            )
-        }
-    }
-}
-

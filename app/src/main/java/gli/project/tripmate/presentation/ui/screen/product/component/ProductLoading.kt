@@ -74,9 +74,6 @@ fun ProductLoadingAnimation() {
                 .width(200.dp)
                 .height(100.dp),
             shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 4.dp
-            ),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
             )

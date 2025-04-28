@@ -6,5 +6,6 @@ data class RecentView(
     val placeName: String,
     val placeImage: String,
     val location: String,
-    val timeStamp: Long
+    val timeStamp: Long,
+    val categories: List<String>,
 )

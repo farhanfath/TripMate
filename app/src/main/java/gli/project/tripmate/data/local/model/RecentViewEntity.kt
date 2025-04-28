@@ -14,5 +14,6 @@ data class RecentViewEntity(
     val placeName: String,
     val placeImage: String,
     val location: String,
+    val categories: List<String>,
     val timeStamp: Long = System.currentTimeMillis()
 ) : Parcelable

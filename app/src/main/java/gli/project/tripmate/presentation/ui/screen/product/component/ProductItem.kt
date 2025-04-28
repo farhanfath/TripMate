@@ -179,7 +179,7 @@ fun ProductItem(
                     .padding(start = 12.dp)
             ) {
                 Text(
-                    text = product.productName,
+                    text = product.productName ?: "",
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -189,7 +189,7 @@ fun ProductItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = product.productDescription,
+                    text = product.productDescription ?: "",
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -199,7 +199,7 @@ fun ProductItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "ID: ${product.productId}",
+                    text = "ID: ${product.productId}" ?: "",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )

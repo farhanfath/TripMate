@@ -187,23 +187,6 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp),
                     ) {
-                        /**
-                         * //TODO: forgot password feature coming soon
-                         */
-                        TextButton(
-                            modifier = Modifier
-                                .align(Alignment.End),
-                            onClick = {
-                                onForgotPass()
-                            }
-                        ) {
-                            Text(
-                                textAlign = TextAlign.End,
-                                text = "Lupa Password?",
-                                color = MaterialTheme.colorScheme.secondary,
-                                style = MaterialTheme.typography.titleSmall
-                            )
-                        }
                         Button(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,

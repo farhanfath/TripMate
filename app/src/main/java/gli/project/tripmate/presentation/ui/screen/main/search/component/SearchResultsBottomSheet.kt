@@ -22,13 +22,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -65,12 +66,13 @@ import gli.project.tripmate.R
 import gli.project.tripmate.domain.model.Place
 import gli.project.tripmate.presentation.ui.component.common.BaseModalBottomSheet
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
-import gli.project.tripmate.presentation.ui.component.common.CustomShimmer
-import gli.project.tripmate.presentation.ui.screen.main.category.component.NearbyPlaceLongItem
 import gli.project.tripmate.presentation.util.extensions.HandleComposePagingState
 import gli.project.tripmate.presentation.util.extensions.emptyTextHandler
+import gli.project.tripmate.presentation.util.extensions.getRating
 import gli.project.tripmate.presentation.util.extensions.handlePagingAppendState
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
+import java.util.Locale
+import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -274,6 +276,7 @@ fun EnhancedNearbyPlaceItem(
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
+            .padding(top = 16.dp)
             .fillMaxWidth()
             .height(260.dp)
             .graphicsLayer {
@@ -289,7 +292,7 @@ fun EnhancedNearbyPlaceItem(
             // Image section
             Box(
                 modifier = Modifier
-                    .height(160.dp)
+                    .height(150.dp)
                     .fillMaxWidth()
             ) {
                 // Place image
@@ -317,21 +320,30 @@ fun EnhancedNearbyPlaceItem(
                 )
 
                 // Category chip on top-right corner
-                place.let { category ->
-                    Box(
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .align(Alignment.TopEnd)
+                Box(
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .align(Alignment.TopEnd)
+                ) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Surface(
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
-                            shape = RoundedCornerShape(16.dp)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
+                            Icon(
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = null,
+                                tint = Color(0xFFFFB800),
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = category.city,
-                                style = MaterialTheme.typography.labelSmall,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                text = getRating(),
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
@@ -355,6 +367,26 @@ fun EnhancedNearbyPlaceItem(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(place.categories) {category ->
+                        Surface(
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Text(
+                                text = category,
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
                 // Location with icon
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -374,53 +406,6 @@ fun EnhancedNearbyPlaceItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                }
-
-                // Additional info (if available)
-                if (place.placeId.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = null,
-                            tint = Color(0xFFFFB800),
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = place.placeId,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Medium
-                        )
-
-                        if (place.country.isNotEmpty()) {
-                            Text(
-                                text = " • ${place.country}",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                } else if (place.placeId.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.DirectionsCar,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = place.placeId,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
                 }
             }
         }

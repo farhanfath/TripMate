@@ -1,7 +1,14 @@
 package gli.project.tripmate.presentation.ui.screen.main.home.lobby.component
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,31 +23,36 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import gli.project.tripmate.domain.model.local.RecentView
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
 import gli.project.tripmate.presentation.ui.theme.padding_10
 import gli.project.tripmate.presentation.ui.theme.padding_12
 import gli.project.tripmate.presentation.ui.theme.padding_16
 import gli.project.tripmate.presentation.ui.theme.padding_4
-import gli.project.tripmate.presentation.ui.theme.size_15
-import gli.project.tripmate.presentation.ui.theme.size_280
-import gli.project.tripmate.presentation.ui.theme.size_75
-import gli.project.tripmate.presentation.ui.theme.size_80
 import gli.project.tripmate.presentation.util.extensions.formatToRelativeTime
+import gli.project.tripmate.presentation.util.extensions.formatToTimeAgo
+import gli.project.tripmate.presentation.util.extensions.getRating
 import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @Composable
@@ -87,21 +99,30 @@ fun HistoryViewItem(
     recentViewItem: RecentView,
     onDetailClick: (placeId: String, placeName: String) -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
             .padding(vertical = padding_10, horizontal = padding_4)
-            .width(size_280)
-            .padding(vertical = 10.dp, horizontal = 4.dp)
             .width(280.dp)
             .graphicsLayer {
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(16.dp)
                 clip = true
-                shadowElevation = 10f
+                shadowElevation = if (isPressed) 4f else 8f
+                scaleX = if (isPressed) 0.98f else 1f
+                scaleY = if (isPressed) 0.98f else 1f
             }
             .clickable {
                 onDetailClick(recentViewItem.placeId, recentViewItem.placeName)
             }
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
     ) {
         Row(
             modifier = Modifier
@@ -109,57 +130,145 @@ fun HistoryViewItem(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(padding_10)
         ) {
-            CustomImageLoader(
-                url = recentViewItem.placeImage,
+            // Image with interactive effects
+            Box(
                 modifier = Modifier
-                    .size(size_80)
-                    .clip(RoundedCornerShape(padding_10)),
-                scale = ContentScale.Crop
-            )
+                    .size(80.dp)
+            ) {
+                CustomImageLoader(
+                    url = recentViewItem.placeImage,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .border(
+                            width = 2.dp,
+                            color = if (isPressed)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                            else
+                                Color.Transparent,
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    scale = ContentScale.Crop
+                )
+
+                // Time badge
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(4.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(horizontal = 4.dp, vertical = 2.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "Rating",
+                            tint = Color.Yellow,
+                            modifier = Modifier.size(8.dp)
+                        )
+                        Text(
+                            text = getRating(),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
+            }
+
             Column(
                 modifier = Modifier
-                    .height(size_75),
+                    .height(80.dp)
+                    .weight(1f),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     Text(
                         text = recentViewItem.placeName,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold
-                        )
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
-                    Text(
-                        text = recentViewItem.timeStamp.formatToRelativeTime(context = LocalContext.current),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Thin,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AccessTime,
+                            contentDescription = "Time viewed",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                            modifier = Modifier.size(12.dp)
                         )
-                    )
+                        Text(
+                            text = recentViewItem.timeStamp.formatToRelativeTime(context = LocalContext.current),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Light,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            )
+                        )
+                    }
+
+                    // Show categories if available
+                    if (recentViewItem.categories.isNotEmpty()) {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            items(recentViewItem.categories.take(2)) { category ->
+                                Text(
+                                    text = category,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier
+                                        .background(
+                                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                                            shape = RoundedCornerShape(4.dp)
+                                        )
+                                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                    }
                 }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.LocationOn,
-                            contentDescription = "",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                            modifier = Modifier.size(size_15)
+                            contentDescription = "Location",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                            modifier = Modifier.size(14.dp)
                         )
-                        Box(
-                            modifier = Modifier.width(size_80)
-                        ) {
-                            Text(
-                                modifier = Modifier.basicMarquee(),
-                                text = recentViewItem.location,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                        }
+                        Text(
+                            modifier = Modifier
+                                .width(150.dp)
+                                .basicMarquee(),
+                            text = recentViewItem.location,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                            style = MaterialTheme.typography.labelSmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
             }

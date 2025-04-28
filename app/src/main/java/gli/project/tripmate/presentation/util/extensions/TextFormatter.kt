@@ -1,6 +1,9 @@
 package gli.project.tripmate.presentation.util.extensions
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -11,6 +14,7 @@ import gli.project.tripmate.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.random.Random
 
 fun parseMarkdown(text: String): AnnotatedString {
     return buildAnnotatedString {
@@ -169,5 +173,24 @@ fun Long.formatToRecentTime(context: Context): String {
             val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             formatter.format(Date(this))
         }
+    }
+}
+
+@Composable
+fun getRating() : String {
+    val rating = remember { String.format(
+        Locale("id", "ID"), "%.1f", Random.nextDouble(1.0, 5.0))
+    }
+    return rating
+}
+
+fun Long.formatToTimeAgo(): String {
+    val now = System.currentTimeMillis()
+    val diff = now - this
+
+    return when {
+        diff < 60 * 60 * 1000 -> "${diff / (60 * 1000)}m"
+        diff < 24 * 60 * 60 * 1000 -> "${diff / (60 * 60 * 1000)}h"
+        else -> "${diff / (24 * 60 * 60 * 1000)}d"
     }
 }

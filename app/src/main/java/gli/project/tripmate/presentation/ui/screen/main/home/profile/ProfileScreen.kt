@@ -106,38 +106,13 @@ fun ProfileScreen(
             }
         }
 
-        // account setting section
+        // user section
         item {
             Column(
                 Modifier
                     .padding(top = 20.dp)
                     .fillMaxWidth()
             ) {
-                Text(
-                    text = "Pengaturan Akun",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 12.dp),
-                    border = BorderStroke(
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                        width = 1.dp
-                    )
-                ){
-                    ProfileSectionItem(
-                        icon = LineAwesomeIcons.LockSolid,
-                        title = "Pengaturan Kata Sandi",
-                        arrowVisible = true,
-                        onItemClick = {
-
-                        }
-                    )
-                }
                 Text(
                     text = "Koleksi Pengguna",
                     style = MaterialTheme.typography.titleSmall,

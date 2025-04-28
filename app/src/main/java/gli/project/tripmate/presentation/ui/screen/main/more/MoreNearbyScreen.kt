@@ -16,14 +16,16 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import gli.project.tripmate.presentation.ui.component.common.CustomShimmer
 import gli.project.tripmate.presentation.ui.component.common.CustomTopBarWithNavigation
 import gli.project.tripmate.presentation.ui.component.common.error.CustomNoConnectionPlaceholder
-import gli.project.tripmate.presentation.ui.screen.main.category.component.NearbyPlaceLongItem
+import gli.project.tripmate.presentation.ui.screen.main.search.component.EnhancedNearbyPlaceItem
 import gli.project.tripmate.presentation.util.ErrorMessageHelper
 import gli.project.tripmate.presentation.util.extensions.handlePagingState
 import gli.project.tripmate.presentation.viewmodel.main.PlacesViewModel
+import gli.project.tripmate.presentation.viewmodel.main.RecentViewViewModel
 
 @Composable
 fun MoreNearbyScreen(
     placesViewModel: PlacesViewModel,
+    recentViewViewModel: RecentViewViewModel,
     onBackClick: () -> Unit,
     onDetailClick: (placeId: String, placeName: String) -> Unit
 ) {
@@ -70,11 +72,13 @@ fun MoreNearbyScreen(
                     ) { index ->
                         // get image from different api
                         nearbyPlacesState[index]?.let { place ->
-                            NearbyPlaceLongItem(
+                            EnhancedNearbyPlaceItem(
                                 onDetailClick = {
                                     onDetailClick(place.placeId, place.name)
+                                    recentViewViewModel.addRecentView(place)
                                 },
                                 place = place,
+                                index = index
                             )
                         }
                     }

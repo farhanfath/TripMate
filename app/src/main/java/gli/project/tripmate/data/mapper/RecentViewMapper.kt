@@ -11,7 +11,8 @@ fun RecentViewEntity.toDomain() : RecentView {
         placeName = placeName,
         placeImage = placeImage,
         location = location,
-        timeStamp = timeStamp
+        timeStamp = timeStamp,
+        categories = categories
     )
 }
 
@@ -20,7 +21,8 @@ fun Place.toEntity() : RecentViewEntity {
         placeId = placeId,
         placeName = name,
         placeImage = image,
-        location = "$city, $country"
+        location = "$city, $country",
+        categories = categories
     )
 }
 
@@ -31,6 +33,7 @@ fun RecentView.toEntity() : RecentViewEntity {
         placeName = placeName,
         placeImage = placeImage,
         location = location,
-        timeStamp = timeStamp
+        timeStamp = timeStamp,
+        categories = categories
     )
 }

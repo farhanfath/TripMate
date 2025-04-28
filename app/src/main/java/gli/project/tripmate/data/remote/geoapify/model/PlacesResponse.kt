@@ -98,7 +98,7 @@ data class Properties(
 	val state: String,
 
     @field:SerializedName("categories")
-	val categories: List<String>,
+	val categories: List<String>?,
 
     @field:SerializedName("village")
 	val village: String,

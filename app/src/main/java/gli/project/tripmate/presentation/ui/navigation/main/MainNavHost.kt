@@ -170,7 +170,8 @@ fun MainNavHost(
                 },
                 onDetailClick = { placeId, placeName ->
                     navigateToDetail(navController, placeId, placeName)
-                }
+                },
+                recentViewViewModel = recentViewViewModel
             )
         }
 

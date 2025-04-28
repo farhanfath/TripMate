@@ -126,7 +126,7 @@ fun ProductChatScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Product Assistant",
+                            text = "Alfagift Assistant",
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontWeight = FontWeight.Bold
                             )
@@ -304,7 +304,7 @@ fun EmptyConversationState(
             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
         )
         Text(
-            text = "Selamat Datang di Product Advisor",
+            text = "Selamat Datang di Alfagift Assistant",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center

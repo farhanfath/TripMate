@@ -15,7 +15,8 @@ fun PlacesResponse.toDomain() : List<Place> {
             city = properties.city ?: "",
             image = properties.wikiAndMedia?.image ?: "",
             lat = properties.lat,
-            lon = properties.lon
+            lon = properties.lon,
+            categories = properties.categories ?: listOf("")
         )
     }
 }
@@ -30,6 +31,7 @@ fun FeaturesItem.toDomain() : Place {
         city = properties.city ?: "",
         image = properties.wikiAndMedia?.image ?: "",
         lat = properties.lat,
-        lon = properties.lon
+        lon = properties.lon,
+        categories = properties.categories ?: listOf("")
     )
 }

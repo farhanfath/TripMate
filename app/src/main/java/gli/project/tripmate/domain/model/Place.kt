@@ -8,5 +8,6 @@ data class Place(
     val image: String,
     // for range from nearest
     val lat: Double,
-    val lon: Double
+    val lon: Double,
+    val categories: List<String>
 )
