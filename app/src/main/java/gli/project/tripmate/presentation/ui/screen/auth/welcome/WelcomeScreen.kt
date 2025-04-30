@@ -1,11 +1,14 @@
 package gli.project.tripmate.presentation.ui.screen.auth.welcome
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseOutQuad
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -261,6 +264,7 @@ fun OnboardingPage(
     var isSubtitleVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(isVisible, onboardingPage) {
+        // Reset visibility states when page changes or visibility changes
         isLottieVisible = false
         isTitleVisible = false
         isSubtitleVisible = false
@@ -287,7 +291,11 @@ fun OnboardingPage(
         // Lottie Animation
         AnimatedVisibility(
             visible = isLottieVisible,
-            enter = fadeIn(animationSpec = tween(700))
+            enter = fadeIn(animationSpec = tween(700)) +
+                    expandIn(
+                        animationSpec = tween(700),
+                        expandFrom = Alignment.Center
+                    )
         ) {
             Box(
                 modifier = Modifier
@@ -305,10 +313,15 @@ fun OnboardingPage(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Title
+        // Title with slide up and fade in animation
         AnimatedVisibility(
             visible = isTitleVisible,
-            enter = fadeIn(animationSpec = tween(700))
+            enter = slideInVertically(
+                initialOffsetY = { 40 },
+                animationSpec = tween(durationMillis = 800, easing = EaseOutQuad)
+            ) + fadeIn(
+                animationSpec = tween(durationMillis = 800, easing = EaseOutQuad)
+            )
         ) {
             Text(
                 text = onboardingPage.title,
@@ -322,10 +335,15 @@ fun OnboardingPage(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Subtitle
+        // Subtitle with slide up and fade in animation
         AnimatedVisibility(
             visible = isSubtitleVisible,
-            enter = fadeIn(animationSpec = tween(700))
+            enter = slideInVertically(
+                initialOffsetY = { 40 },
+                animationSpec = tween(durationMillis = 900, easing = EaseOutQuad)
+            ) + fadeIn(
+                animationSpec = tween(durationMillis = 900, easing = EaseOutQuad)
+            )
         ) {
             Text(
                 text = onboardingPage.subtitle,

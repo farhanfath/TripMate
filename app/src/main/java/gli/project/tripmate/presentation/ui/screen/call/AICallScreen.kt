@@ -8,8 +8,10 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -96,14 +98,15 @@ fun N8nActiveCallScreen(
     val conversation by viewModel.conversation.collectAsState()
     val isListening by viewModel.isListening.collectAsState()
     val isSpeaking by viewModel.isSpeaking.collectAsState()
-
-    // Ganti speechResult dengan currentTranscription yang baru
     val currentTranscription by viewModel.currentTranscription.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+
+    // Tambahkan state untuk tracking inisialisasi
+    var isInitialized by remember { mutableStateOf(false) }
 
     // customer service handler
     var showCustomerServiceDialog by remember { mutableStateOf(false) }
@@ -124,83 +127,83 @@ fun N8nActiveCallScreen(
         String.format(Locale("id", "ID"), "%02d:%02d", minutes, seconds)
     }
 
-    // Background gradient
-    val gradientColors = listOf(
-        MaterialTheme.colorScheme.primary,
-        MaterialTheme.colorScheme.inversePrimary
-    )
+    // Background gradient - dioptimasi menggunakan remember untuk menghindari rekomposisi
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val inversePrimary = MaterialTheme.colorScheme.inversePrimary
+    val gradientColors = remember {
+        listOf(
+            primaryColor,
+            inversePrimary
+        )
+    }
 
-    // permission handler
+    // Perbaikan request permission dengan dua langkah berbeda
     val recordAudioPermission = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
 
+    // Gabungkan semua permintaan izin ke dalam satu langkah untuk menghindari multiple requests
     val permissionsState = rememberMultiplePermissionsState(
-        permissions = buildList {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                // Android 13+ needs READ_MEDIA_AUDIO
-                add(Manifest.permission.READ_MEDIA_AUDIO)
-                add(Manifest.permission.POST_NOTIFICATIONS)
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                add(Manifest.permission.BLUETOOTH_CONNECT)
-                add(Manifest.permission.READ_PHONE_STATE)
-            } else {
-                // Android 12 and below needs storage permissions
-                add(Manifest.permission.READ_EXTERNAL_STORAGE)
-                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                add(Manifest.permission.RECORD_AUDIO)
-                add(Manifest.permission.CAMERA)
+        permissions = remember {
+            buildList {
+                add(Manifest.permission.RECORD_AUDIO) // Selalu tambahkan RECORD_AUDIO
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_AUDIO)
+                    add(Manifest.permission.POST_NOTIFICATIONS)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    add(Manifest.permission.BLUETOOTH_CONNECT)
+                    add(Manifest.permission.READ_PHONE_STATE)
+                } else {
+                    add(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    add(Manifest.permission.CAMERA)
+                }
             }
-
-
         }
     )
 
-    // Request permission if not granted
+    // Pisahkan init dari request permission
     LaunchedEffect(Unit) {
-        permissionsState.launchMultiplePermissionRequest()
-    }
+        // Reset audio services sekali saja di awal
+        viewModel.resetAudioServices()
 
-    LaunchedEffect(true) {
+        // Request permissions sekali
         if (!permissionsState.allPermissionsGranted) {
             permissionsState.launchMultiplePermissionRequest()
         }
-    }
 
-    LaunchedEffect(Unit) {
-        // Reset semua layanan audio
-        viewModel.resetAudioServices()
+        // Berikan delay yang cukup sebelum memulai listening
+        delay(500)
 
-        // Cek izin dan mulai listening
-        if (!recordAudioPermission.status.isGranted) {
-            recordAudioPermission.launchPermissionRequest()
-        } else {
-            delay(300)
+        // Mulai listening setelah inisialisasi selesai
+        if (recordAudioPermission.status.isGranted) {
             viewModel.startContinuousListening(coroutineScope)
+            isInitialized = true
         }
     }
 
-    // Start continuous listening when not speaking or loading
-    LaunchedEffect(Unit) {
-        // Mulai continuous listening saat composable pertama kali di-render
-        viewModel.startContinuousListening(coroutineScope)
-    }
+    // Manajemen listening yang lebih responsif
+    LaunchedEffect(isSpeaking, isLoading, isInitialized) {
+        if (!isInitialized) return@LaunchedEffect
 
-    // Berhenti mendengarkan saat speaking atau loading
-    LaunchedEffect(isSpeaking, isLoading) {
         if (isSpeaking || isLoading) {
             viewModel.stopListening()
         } else {
-            // Kembali mendengarkan otomatis setelah selesai berbicara atau memproses
-            delay(500) // Delay kecil sebelum mulai mendengarkan lagi
+            // Berikan delay yang lebih pendek untuk responsivitas yang lebih baik
+            delay(300)
             if (!isListening) {
                 viewModel.startListening()
             }
         }
     }
 
-    // Auto-scroll to bottom when conversation updates
+    // Auto-scroll ke bawah dengan animasi yang lebih smooth
     LaunchedEffect(conversation.size) {
         if (conversation.isNotEmpty()) {
-            listState.animateScrollToItem(conversation.size - 1)
+            delay(100) // Slight delay for smoother scrolling
+            listState.animateScrollToItem(
+                index = conversation.size - 1,
+                scrollOffset = 0
+            )
         }
     }
 
@@ -216,10 +219,11 @@ fun N8nActiveCallScreen(
         }
     }
 
-    // Clean up when composable is disposed
+    // Clean up saat composable dibuang
     DisposableEffect(Unit) {
         onDispose {
             viewModel.stopContinuousListening()
+            viewModel.stopSpeaking()
         }
     }
 
@@ -227,7 +231,7 @@ fun N8nActiveCallScreen(
     DisposableEffect(Unit) {
         getNotification(
             coroutineScope = coroutineScope,
-            onGetNotification = { appIdData, channelNameData, tokenData, userId ->
+            onGetNotification = { _, _, _, _ ->
                 showCustomerServiceDialog = true
             }
         )
@@ -268,13 +272,13 @@ fun N8nActiveCallScreen(
                 )
             }
 
-            // Conversation history (limited visibility)
+            // Conversation history (optimized visibility)
             LazyColumn(
                 state = listState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
-                    .padding(top = 120.dp, bottom = 300.dp)
+                    .padding(top = 120.dp, bottom = 280.dp) // Adjusted bottom padding
                     .alpha(0.9f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -286,14 +290,14 @@ fun N8nActiveCallScreen(
                 }
             }
 
-            // Assistant avatar and status
+            // Avatar dan status section
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 180.dp),
+                    .padding(bottom = 160.dp), // Adjusted position
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Avatar with animations based on state
+                // Optimasi animasi avatar
                 val infiniteTransition = rememberInfiniteTransition(label = "avatarAnimation")
                 val listeningScale by infiniteTransition.animateFloat(
                     initialValue = 1f,
@@ -313,10 +317,10 @@ fun N8nActiveCallScreen(
 
                 Box(
                     modifier = Modifier
-                        .size(140.dp)
+                        .size(120.dp) // Slightly smaller avatar
                         .scale(avatarScale)
                 ) {
-                    // Animated rings when listening
+                    // Animated rings when listening - optimized with key
                     if (isListening) {
                         repeat(3) { index ->
                             val pulseScale by infiniteTransition.animateFloat(
@@ -384,27 +388,30 @@ fun N8nActiveCallScreen(
                         }
                     }
 
+                    // Warna avatar - dioptimasi menggunakan remember
+                    val avatarBackgroundColor = when {
+                        isListening -> Color(0xFF4CAF50).copy(alpha = 0.2f)
+                        isSpeaking -> Color(0xFF2196F3).copy(alpha = 0.2f)
+                        isLoading -> Color(0xFFFFA000).copy(alpha = 0.2f)
+                        else -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                    }
+
+                    val avatarBorderColor = when {
+                        isListening -> Color(0xFF4CAF50)
+                        isSpeaking -> Color(0xFF2196F3)
+                        isLoading -> Color(0xFFFFA000)
+                        else -> Color.White
+                    }
+
                     // Assistant avatar
                     Box(
                         modifier = Modifier
-                            .size(200.dp)
+                            .size(180.dp)
                             .clip(CircleShape)
-                            .background(
-                                when {
-                                    isListening -> Color(0xFF4CAF50).copy(alpha = 0.2f)
-                                    isSpeaking -> Color(0xFF2196F3).copy(alpha = 0.2f)
-                                    isLoading -> Color(0xFFFFA000).copy(alpha = 0.2f)
-                                    else -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-                                }
-                            )
+                            .background(avatarBackgroundColor)
                             .border(
                                 width = 4.dp,
-                                color = when {
-                                    isListening -> Color(0xFF4CAF50)
-                                    isSpeaking -> Color(0xFF2196F3)
-                                    isLoading -> Color(0xFFFFA000)
-                                    else -> Color.White
-                                },
+                                color = avatarBorderColor,
                                 shape = CircleShape
                             ),
                         contentAlignment = Alignment.Center
@@ -421,7 +428,7 @@ fun N8nActiveCallScreen(
                                 imageVector = Icons.Filled.Assistant,
                                 contentDescription = "Assistant",
                                 tint = Color.White,
-                                modifier = Modifier.size(70.dp)
+                                modifier = Modifier.size(65.dp)
                             )
                         }
 
@@ -440,20 +447,34 @@ fun N8nActiveCallScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Status text
+                // Status text - lebih jelas dengan warna yang sesuai state
+                val statusText = when {
+                    isLoading -> "Processing..."
+                    isListening -> "Listening..."
+                    isSpeaking -> "Speaking..."
+                    else -> "Ready"
+                }
+
+                val statusColor = when {
+                    isLoading -> Color(0xFFFFA000)
+                    isListening -> Color(0xFF4CAF50)
+                    isSpeaking -> Color(0xFF2196F3)
+                    else -> Color.White
+                }
+
                 Text(
-                    text = when {
-                        isLoading -> "Processing..."
-                        isListening -> "Listening..."
-                        isSpeaking -> "Speaking..."
-                        else -> "Ready"
-                    },
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleMedium
+                    text = statusText,
+                    color = statusColor,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
                 )
 
-                // Current speech result (if any) - menggunakan currentTranscription
-                AnimatedVisibility(visible = isListening && currentTranscription != null && currentTranscription!!.isNotBlank()) {
+                // Current transcription dengan animasi yang lebih smooth
+                AnimatedVisibility(
+                    visible = isListening && currentTranscription != null && currentTranscription!!.isNotBlank(),
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
                     Text(
                         text = currentTranscription ?: "",
                         color = Color.White.copy(alpha = 0.8f),
@@ -481,18 +502,33 @@ fun N8nActiveCallScreen(
                         .padding(horizontal = 40.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Manual listen button
+                    val listenButtonEnabled = remember(isInitialized, isSpeaking, isLoading) {
+                        isInitialized && !isSpeaking && !isLoading
+                    }
+
+                    // Warna button yang menunjukkan state enabled/disabled
+                    val listenButtonColor = if (!listenButtonEnabled) {
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                    } else if (isListening) {
+                        Color(0xFF4CAF50)
+                    } else {
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                    }
+
                     CallControlButton(
                         icon = if (isListening) Icons.Filled.Mic else Icons.Filled.MicOff,
                         label = if (isListening) "Stop" else "Listen",
-                        backgroundColor = if (isListening) Color(0xFF4CAF50) else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
-                        iconTint = if (isListening) Color.White else Color.White,
+                        backgroundColor = listenButtonColor,
+                        iconTint = Color.White,
+                        enabled = listenButtonEnabled,
                         onClick = {
-                            if (isListening) {
-                                viewModel.stopListening()
-                                viewModel.submitCurrentTranscription()
-                            } else {
-                                viewModel.startListening()
+                            if (listenButtonEnabled) {
+                                if (isListening) {
+                                    viewModel.stopListening()
+                                    viewModel.submitCurrentTranscription()
+                                } else {
+                                    viewModel.startListening()
+                                }
                             }
                         }
                     )
@@ -512,11 +548,19 @@ fun N8nActiveCallScreen(
                     )
 
                     // Stop speaking button
+                    val speakButtonEnabled = remember(isSpeaking) { isSpeaking }
+                    val speakButtonColor = if (isSpeaking) {
+                        Color(0xFF2196F3)
+                    } else {
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                    }
+
                     CallControlButton(
                         icon = Icons.AutoMirrored.Filled.VolumeOff,
                         label = if (isSpeaking) "Stop Voice" else "Voice Off",
-                        backgroundColor = if (isSpeaking) Color(0xFF2196F3) else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
-                        iconTint = if (isSpeaking) Color.White else Color.White,
+                        backgroundColor = speakButtonColor,
+                        iconTint = Color.White,
+                        enabled = speakButtonEnabled,
                         onClick = {
                             if (isSpeaking) {
                                 viewModel.stopSpeaking()
@@ -587,7 +631,8 @@ fun CallControlButton(
     backgroundColor: Color,
     iconTint: Color,
     onClick: () -> Unit,
-    size: Dp = 60.dp
+    size: Dp = 60.dp,
+    enabled: Boolean = true
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -597,13 +642,16 @@ fun CallControlButton(
                 .size(size)
                 .clip(CircleShape)
                 .background(backgroundColor)
-                .clickable(onClick = onClick),
+                .clickable(
+                    onClick = onClick,
+                    enabled = enabled,
+                ),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                tint = iconTint,
+                tint = iconTint.copy(alpha = if (enabled) 1f else 0.5f),
                 modifier = Modifier.size(size * 0.5f)
             )
         }
@@ -612,7 +660,7 @@ fun CallControlButton(
 
         Text(
             text = label,
-            color = Color.White,
+            color = Color.White.copy(alpha = if (enabled) 1f else 0.5f),
             fontSize = 12.sp
         )
     }

@@ -1,13 +1,6 @@
 package gli.project.tripmate.presentation.ui.navigation.main
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,10 +8,10 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import gli.project.tripmate.presentation.ui.navigation.navitem.MainNavigation
 import gli.project.tripmate.presentation.ui.screen.call.N8nActiveCallScreen
-import gli.project.tripmate.presentation.ui.screen.call.component.CustomerServiceDialog
 import gli.project.tripmate.presentation.ui.screen.main.category.CategoryScreen
 import gli.project.tripmate.presentation.ui.screen.main.chat.ConversationScreen
 import gli.project.tripmate.presentation.ui.screen.main.detail.DetailScreen
+import gli.project.tripmate.presentation.ui.screen.main.home.MainActions
 import gli.project.tripmate.presentation.ui.screen.main.home.MainNavScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.favorite.FavoriteScreen
 import gli.project.tripmate.presentation.ui.screen.main.home.rating_collection.RatingCollectionScreen
@@ -40,7 +33,6 @@ fun MainNavHost(
     onUserLogout: () -> Unit,
     onCustomerServiceIntent: () -> Unit
 ) {
-    var showCustomerServiceDialog by remember { mutableStateOf(false) }
 
     NavHost(
         navController = navController,
@@ -51,60 +43,62 @@ fun MainNavHost(
         ) {
             composable<MainNavigation.Lobby> {
                 MainNavScreen(
-                    onSearchClick = {
-                        navController.navigate(
-                            MainNavigation.Search
-                        )
-                    },
-                    onDetailClick = { placeId, placeName ->
-                        navigateToDetail(navController, placeId, placeName)
-                    },
+                    mainActions = MainActions(
+                        onSearchClick = {
+                            navController.navigate(
+                                MainNavigation.Search
+                            )
+                        },
+                        onDetailClick = { placeId, placeName ->
+                            navigateToDetail(navController, placeId, placeName)
+                        },
+                        onChatAIClick = {
+                            navController.navigate(
+                                MainNavigation.ChatAI
+                            )
+                        },
+                        onCategoryDetailClick = { categoryName, categoryEndpoint ->
+                            navController.navigate(
+                                MainNavigation.DetailCategory(
+                                    categoryName = categoryName,
+                                    categoryEndpoint = categoryEndpoint
+                                )
+                            )
+                        },
+                        onSeeMoreClick = {
+                            navController.navigate(
+                                MainNavigation.MoreNearby
+                            )
+                        },
+                        onUserLogout = {
+                            onUserLogout()
+                        },
+                        onFavoriteClick = {
+                            navController.navigate(
+                                MainNavigation.Favorite
+                            )
+                        },
+                        onHistoryRatingClick = {
+                            navController.navigate(
+                                MainNavigation.RatingCollection
+                            )
+                        },
+                        onCustomerServiceCallClick = {
+                            navController.navigate(
+                                MainNavigation.Call
+                            )
+                        },
+                        onProductRecommendationClick = {
+                            navController.navigate(
+                                MainNavigation.ProductChat
+                            )
+                        },
+                        onLocationRequestPermission = onLocationRequestPermission,
+                    ),
                     placeViewModel = placeViewModel,
                     locationViewModel = locationViewModel,
                     recentViewViewModel = recentViewViewModel,
                     permissionResult = permissionResult,
-                    onLocationRequestPermission = onLocationRequestPermission,
-                    onChatAIClick = {
-                        navController.navigate(
-                            MainNavigation.ChatAI
-                        )
-                    },
-                    onCategoryDetailClick = { categoryName, categoryEndpoint ->
-                        navController.navigate(
-                            MainNavigation.DetailCategory(
-                                categoryName = categoryName,
-                                categoryEndpoint = categoryEndpoint
-                            )
-                        )
-                    },
-                    onSeeMoreClick = {
-                        navController.navigate(
-                            MainNavigation.MoreNearby
-                        )
-                    },
-                    onUserLogout = {
-                        onUserLogout()
-                    },
-                    onFavoriteClick = {
-                        navController.navigate(
-                            MainNavigation.Favorite
-                        )
-                    },
-                    onHistoryRatingClick = {
-                        navController.navigate(
-                            MainNavigation.RatingCollection
-                        )
-                    },
-                    onCustomerServiceCallClick = {
-                        navController.navigate(
-                            MainNavigation.Call
-                        )
-                    },
-                    onProductRecommendationClick = {
-                        navController.navigate(
-                            MainNavigation.ProductChat
-                        )
-                    }
                 )
             }
         }
@@ -136,9 +130,6 @@ fun MainNavHost(
                             navController.navigate(
                                 MainNavigation.Favorite
                             )
-                        }
-                        "customer_service" -> {
-                            showCustomerServiceDialog = true
                         }
                         else -> {}
                     }
@@ -234,19 +225,6 @@ fun MainNavHost(
                 }
             )
         }
-    }
-
-    AnimatedVisibility(
-        visible = showCustomerServiceDialog,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        CustomerServiceDialog(
-            onDismissRequest = { showCustomerServiceDialog = false },
-            onConnectConfirmed = {
-                onCustomerServiceIntent()
-            }
-        )
     }
 }
 

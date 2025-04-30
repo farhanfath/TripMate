@@ -2,11 +2,14 @@ package gli.project.tripmate.presentation.ui.screen.main.home.lobby.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,8 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import gli.project.tripmate.presentation.ui.component.common.CustomImageLoader
+import gli.project.tripmate.presentation.ui.component.common.CustomShimmer
 import gli.project.tripmate.presentation.ui.theme.padding_15
 import gli.project.tripmate.presentation.ui.theme.padding_20
 import gli.project.tripmate.presentation.ui.theme.padding_45
@@ -41,13 +46,22 @@ fun Greeting() {
             .fillMaxWidth()
     ) {
         Column {
-            Text(
-                text = "Hello, ${userState.currentUser?.userName}",
-                style = MaterialTheme.typography.displaySmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
+            if (userState.currentUser == null) {
+                CustomShimmer(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(200.dp)
                 )
-            )
+            } else {
+                Text(
+                    text = "Hello, ${userState.currentUser?.userName}",
+                    style = MaterialTheme.typography.displaySmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                )
+            }
+
             Text(
                 text = "Are you ready to explore the world",
                 style = MaterialTheme.typography.titleSmall.copy(

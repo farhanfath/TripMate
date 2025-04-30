@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -240,41 +241,41 @@ fun ConversationScreen(
                                 }
                             }
                         )
-                    }
-
-                    // Conversation Messages
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = PaddingValues(
-                            top = 16.dp,
-                            bottom = 24.dp,
-                            start = 16.dp,
-                            end = 16.dp
-                        ),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(conversation) { item ->
-                            MessageBubble(
-                                item = item,
-                                onTravelSpotClick = { travelSpot ->
-                                    // Handle click on travel spot item
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar("Selected: ${travelSpot.name}")
+                    } else {
+                        // Conversation Messages
+                        LazyColumn(
+                            state = listState,
+                            contentPadding = PaddingValues(
+                                top = 16.dp,
+                                bottom = 24.dp,
+                                start = 16.dp,
+                                end = 16.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(conversation) { item ->
+                                MessageBubble(
+                                    item = item,
+                                    onTravelSpotClick = { travelSpot ->
+                                        // Handle click on travel spot item
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar("Selected: ${travelSpot.name}")
+                                        }
+                                    },
+                                    onProductClick = { product ->
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar("Selected: ${product.productName}")
+                                        }
+                                    },
+                                    onFeatureActionRequest = onFeatureActionRequest
+                                )
+                            }
+                            when {
+                                isLoading -> {
+                                    item {
+                                        PulsatingDots()
                                     }
-                                },
-                                onProductClick = { product ->
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar("Selected: ${product.productName}")
-                                    }
-                                },
-                                onFeatureActionRequest = onFeatureActionRequest
-                            )
-                        }
-                        when {
-                            isLoading -> {
-                                item {
-                                    PulsatingDots()
                                 }
                             }
                         }
@@ -474,7 +475,8 @@ fun SuggestedQuestion(
         tonalElevation = if (isPressed) 0.dp else 1.dp
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(

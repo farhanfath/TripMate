@@ -23,7 +23,7 @@ import io.agora.rtc2.RtcEngineConfig
 class ActiveCallActivity : ComponentActivity() {
     private val myAppId = "ad51e95058144d25b0b6822ed2e6e193"
     private val channelName = "CrossPlatformCall"
-    private val token = "007eJxTYJCPKDJ/JDnjVrxHYPZa5/2llQcT/iR3n1wrpV83e+n3JS4KDIkppoaplqYGphaGJiYpRqZJBklmFkZGqSlGqWaphpbG+924MxoCGRmaLbmZGRkgEMQXZHAuyi8uDshJLEnLL8p1TszJYWAAANyEI1g="
+    private val token = "007eJxTYGD+z1Xp8Ciny+1VoPKJF6UhB0uVgtZ597ev+1IgLar0OUqBITHF1DDV0tTA1MLQxCTFyDTJIMnMwsgoNcUo1SzV0NL4hJlARkMgI4ORzDUWRgYIBPEFGZyL8ouLA3ISS9Lyi3KdE3NyGBgArOgi5A=="
 
     private var mRtcEngine: RtcEngine? = null
     private val mRtcEventHandler = object : IRtcEngineEventHandler() {

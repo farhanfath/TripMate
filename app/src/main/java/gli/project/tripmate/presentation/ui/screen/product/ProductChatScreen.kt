@@ -223,41 +223,41 @@ fun ProductChatScreen(
                                 }
                             }
                         )
-                    }
-
-                    // Conversation Messages
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = PaddingValues(
-                            top = 16.dp,
-                            bottom = 24.dp,
-                            start = 16.dp,
-                            end = 16.dp
-                        ),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(conversation) { item ->
-                            MessageBubble(
-                                item = item,
-                                onTravelSpotClick = { travelSpot ->
-                                    // Handle click on travel spot item
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar("Selected: ${travelSpot.name}")
+                    } else {
+                        // Conversation Messages
+                        LazyColumn(
+                            state = listState,
+                            contentPadding = PaddingValues(
+                                top = 16.dp,
+                                bottom = 24.dp,
+                                start = 16.dp,
+                                end = 16.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(conversation) { item ->
+                                MessageBubble(
+                                    item = item,
+                                    onTravelSpotClick = { travelSpot ->
+                                        // Handle click on travel spot item
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar("Selected: ${travelSpot.name}")
+                                        }
+                                    },
+                                    onProductClick = { product ->
+                                        coroutineScope.launch {
+                                            snackbarHostState.showSnackbar("Selected: ${product.productName}")
+                                        }
+                                    },
+                                    onFeatureActionRequest = { }
+                                )
+                            }
+                            when {
+                                isLoading -> {
+                                    item {
+                                        ProductLoadingAnimation()
                                     }
-                                },
-                                onProductClick = { product ->
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar("Selected: ${product.productName}")
-                                    }
-                                },
-                                onFeatureActionRequest = { }
-                            )
-                        }
-                        when {
-                            isLoading -> {
-                                item {
-                                    ProductLoadingAnimation()
                                 }
                             }
                         }
@@ -337,15 +337,15 @@ fun EmptyConversationState(
                 Spacer(modifier = Modifier.height(8.dp))
                 // sample suggestions with visual feedback
                 SuggestedQuestion(
-                    text = "Rekomendasi Susu Segar",
+                    text = "Rekomendasi Susu ada?",
                     onSelectedClick = onSuggestionSelected
                 )
                 SuggestedQuestion(
-                    text = "Produk skincare untuk kulit kering",
+                    text = "lagi pengen roti nih",
                     onSelectedClick = onSuggestionSelected
                 )
                 SuggestedQuestion(
-                    text = "Pembersih wajah untuk kulit sensitif",
+                    text = "produk sabun yang bagus",
                     onSelectedClick = onSuggestionSelected
                 )
             }
